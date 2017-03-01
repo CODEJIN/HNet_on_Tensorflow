@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>main_Dialog</class>
+ <widget class="QDialog" name="main_Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>860</width>
+    <height>334</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>HJ_Net with Tensorflow 0.9.0.0</string>
+  </property>
+  <widget class="QPushButton" name="structureSetup_Button">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>181</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Structure Setup</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="exit_Button">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>290</y>
+     <width>171</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="patternSetup_Button">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>50</y>
+     <width>250</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Pattern Setup</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="processSetup_Button">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>90</y>
+     <width>181</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Process Setup</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="learning_Button">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>210</y>
+     <width>250</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Learning</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="macro_Button">
+   <property name="geometry">
+    <rect>
+     <x>139</x>
+     <y>250</y>
+     <width>121</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Macro</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="about_Button">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>290</y>
+     <width>71</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>About</string>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="state_GroupBox">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>10</y>
+     <width>581</width>
+     <height>301</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Status</string>
+   </property>
+   <widget class="QLabel" name="connection_Label">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>16</y>
+      <width>100</width>
+      <height>15</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Connection</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="layer_Label">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>16</y>
+      <width>100</width>
+      <height>15</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Layer</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="process_Label">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>160</y>
+      <width>100</width>
+      <height>15</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Process</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="patternPack_Label">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>160</y>
+      <width>100</width>
+      <height>15</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Pattern Pack</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="layer_ListWidget">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>30</y>
+      <width>180</width>
+      <height>120</height>
+     </rect>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::NoSelection</enum>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="connection_ListWidget">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>30</y>
+      <width>180</width>
+      <height>120</height>
+     </rect>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::NoSelection</enum>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="process_ListWidget">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>174</y>
+      <width>180</width>
+      <height>120</height>
+     </rect>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::NoSelection</enum>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="patternPack_ListWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>174</y>
+      <width>180</width>
+      <height>120</height>
+     </rect>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::NoSelection</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="learningSetup_Label">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>160</y>
+      <width>100</width>
+      <height>15</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Learning Setup</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="learningSetup_ListWidget">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>174</y>
+      <width>181</width>
+      <height>120</height>
+     </rect>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::NoSelection</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="layer_Label_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>16</y>
+      <width>100</width>
+      <height>15</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Config Variables</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="configVariables_ListWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>30</y>
+      <width>181</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::NoSelection</enum>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="structureLock_Button">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>10</y>
+     <width>61</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Lock</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="processLock_Button">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>90</y>
+     <width>61</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Lock</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="weightAndBiasLoad_Button">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>170</y>
+     <width>251</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Weight &amp;&amp; Bias Load</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="copyright_Label">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>310</y>
+     <width>581</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="palette">
+    <palette>
+     <active>
+      <colorrole role="WindowText">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>200</red>
+         <green>200</green>
+         <blue>200</blue>
+        </color>
+       </brush>
+      </colorrole>
+     </active>
+     <inactive>
+      <colorrole role="WindowText">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>200</red>
+         <green>200</green>
+         <blue>200</blue>
+        </color>
+       </brush>
+      </colorrole>
+     </inactive>
+     <disabled>
+      <colorrole role="WindowText">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>120</red>
+         <green>120</green>
+         <blue>120</blue>
+        </color>
+       </brush>
+      </colorrole>
+     </disabled>
+    </palette>
+   </property>
+   <property name="text">
+    <string>Copyright(c) 2016-2017 Heejo You All rights reserved. </string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="learningSetup_Button">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>130</y>
+     <width>250</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Learning Setup</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="modelSaveforMacro_Button">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>250</y>
+     <width>121</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Model Save
+for Macro</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

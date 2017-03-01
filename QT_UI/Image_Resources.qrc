@@ -1,0 +1,10 @@
+<RCC>
+  <qresource prefix="example">
+    <file>ASF.png</file>
+    <file>GPLv3.png</file>
+    <file>MIT.png</file>
+    <file>BP.png</file>
+    <file>BPTT.png</file>
+    <file>SRN.png</file>
+  </qresource>
+</RCC>
