@@ -23,15 +23,15 @@ The PyQT is used for the GUI. This code was tested at Python 3.5 and Tensorflow 
 
 For using, it need to install several modules on Python 3.x.
 
-1. Tensorflow
+# 1. Tensorflow
 
-#GPU
+GPU
 pip install tensorflow-gpu
 
-#CPU only
+CPU only
 pip install tensorflow
 
-2. Matplotlib
+# 2. Matplotlib
 
 pip install matplotlib
 
