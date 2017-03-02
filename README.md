@@ -17,11 +17,14 @@ HNet_UI/PatternSetup.py<br>
 HNet_UI/ProcessSetup.py<br>
 HNet_UI/StructureSetup.py<br>
 
-#License
+# License
 The lincense of core and enum file is belong to Apache License 2.0.<br>
 THe lincense of GUI and UI files is belong to GPL 3.0.<br>
+
+# Compatibility
+This code was tested at Python 3.5 and Tensorflow 0.12.1.<br>
 The PyQT is used for the GUI.<br>
-This code was tested at Python 3.5 and Tensorflow 0.12.1. This program is not guaranteed to work in python 2.x.
+This program is not guaranteed to work in python 2.x.
 
 # Pre installed for using
 
