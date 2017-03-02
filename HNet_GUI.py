@@ -3054,8 +3054,11 @@ class HNet_GUI:
             self.simulator.WeightAndBias_Save(file_Path);
 
     def Learning_UI_weight_Display_Button_Clicked(self):
-        key = self.learning_UI.weightName_ComboBox.currentText().strip().split(" ");
-        self.learning_UI.weight_Graph.Update_Figure("From Layer", "To Layer", self.simulator.weight_Dict_for_Observation[(key[0], key[1])]);
+        try:
+            key = self.learning_UI.weightName_ComboBox.currentText().strip().split(" ");
+            self.learning_UI.weight_Graph.Update_Figure("From Layer", "To Layer", self.simulator.weight_Dict_for_Observation[(key[0], key[1])]);
+        except:
+            pass;
 
     def Learning_UI_result_Display_Button_Clicked(self):
         yAxis = [-0.01, 1.01];  #Prevent Error
