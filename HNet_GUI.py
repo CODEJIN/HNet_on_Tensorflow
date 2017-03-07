@@ -112,12 +112,12 @@ class HNet_GUI:
         guiFont.setFamily('Arial')
         guiFont.setFixedPitch(True)
         if sys.platform == "win32":
-            guiFont.setPointSize(9);
+            guiFont.setPointSize(8);
             #guiFont.setPointSize(4);
         elif sys.platform in ["linux", "linux2"]:
-            guiFont.setPointSize(8);
-        elif sys.platform == "darwin":
             guiFont.setPointSize(7);
+        elif sys.platform == "darwin":
+            guiFont.setPointSize(6);
         QtWidgets.QApplication.setFont(guiFont);
 
         self.simulator = HNet();
@@ -275,7 +275,7 @@ class HNet_GUI:
         self.process_Setup_UI.customWeightEqualizationConnectionAdd_Button.clicked.connect(self.Process_Setup_UI_customWeightEqualizationConnectionAdd_Button_Clicked);
         self.process_Setup_UI.customWeightEqualizationConnectionDelete_Button.clicked.connect(self.Process_Setup_UI_customWeightEqualizationConnectionDelete_Button_Clicked);
         self.process_Setup_UI.customWeightEqualization_Button.clicked.connect(self.Process_Setup_UI_customWeightEqualization_Button_Clicked);
-        self.process_Setup_UI.customCycleMaker_Button.clicked.connect(self.Process_Setup_UI_customCycleMaker_Button_Clicked);
+        self.process_Setup_UI.customCycleMarker_Button.clicked.connect(self.Process_Setup_UI_customCycleMarker_Button_Clicked);
         self.process_Setup_UI.customUniformRandomActivationInsert_Button.clicked.connect(self.Process_Setup_UI_customUniformRandomActivationInsert_Button_Clicked);
         self.process_Setup_UI.customNormalRandomActivationInsert_Button.clicked.connect(self.Process_Setup_UI_customNormalRandomActivationInsert_Button_Clicked);
         self.process_Setup_UI.customLayer1_ComboBox.currentIndexChanged.connect(self.Process_Setup_UI_customLayer1_ComboBox_Current_Index_Changed);
@@ -324,8 +324,7 @@ class HNet_GUI:
     def Learning_UI_Function_Setup(self):
         self.learning_UI.start_Button.clicked.connect(self.Learning_UI_start_Button_Clicked);
         self.learning_UI.pause_Button.clicked.connect(self.Learning_UI_pause_Button_Clicked);
-        self.learning_UI.testResultSave_Button.clicked.connect(self.Learning_UI_testResultSave_Button_Clicked);
-        self.learning_UI.weightAndBiasSave_Button.clicked.connect(self.Learning_UI_weightAndBiasSave_Button_Clicked);
+        self.learning_UI.resultSave_Button.clicked.connect(self.Learning_UI_resultSave_Button_Clicked);
         self.learning_UI.weight_Display_Button.clicked.connect(self.Learning_UI_weight_Display_Button_Clicked);
         self.learning_UI.result_Display_Button.clicked.connect(self.Learning_UI_result_Display_Button_Clicked);
         self.learning_UI.exit_Button.clicked.connect(self.Learning_UI_exit_Button_Clicked);
@@ -1322,7 +1321,7 @@ class HNet_GUI:
                 self.current_Process_Order_List.append((Order_Code.Layer_Initialize, [input_Layer], None, None));
                 self.current_Process_Order_List.append((Order_Code.Layer_Initialize, [hidden_Layer], None, None));
                 self.current_Process_Order_List.append((Order_Code.Layer_Initialize, [output_Layer], None, None));
-                self.current_Process_Order_List.append((Order_Code.Cycle_Maker, None, None, None));
+                self.current_Process_Order_List.append((Order_Code.Cycle_Marker, None, None, None));
         self.current_Process_Order_List.append((Order_Code.End_and_Initialize, None, None, None));
 
         self.Process_Setup_UI_Order_and_Control_Changed();
@@ -1371,7 +1370,7 @@ class HNet_GUI:
                 self.current_Process_Order_List.append((Order_Code.Layer_Initialize, [input_Layer], None, None));
                 self.current_Process_Order_List.append((Order_Code.Layer_Initialize, [hidden_Layer], None, None));
                 self.current_Process_Order_List.append((Order_Code.Layer_Initialize, [output_Layer], None, None));
-                self.current_Process_Order_List.append((Order_Code.Cycle_Maker, None, None, None));            
+                self.current_Process_Order_List.append((Order_Code.Cycle_Marker, None, None, None));            
         self.current_Process_Order_List.append((Order_Code.End_and_Initialize, None, None, None));
 
         self.Process_Setup_UI_Order_and_Control_Changed();
@@ -1383,7 +1382,7 @@ class HNet_GUI:
 
         self.current_Process_Linear_Forward_List.append(self.process_Setup_UI.linearForwardLayer_ComboBox.currentText());
         
-        self.Process_Setup_UI_linearForwardLayer_Changed();
+        self.Process_Setup_UI_Order_and_Control_Changed();
 
     def Process_Setup_UI_linearForwardDelete_Button_Clicked(self):
         if len(self.current_Process_Linear_Forward_List) < 1:
@@ -1391,7 +1390,7 @@ class HNet_GUI:
 
         del self.current_Process_Linear_Forward_List[-1];
 
-        self.Process_Setup_UI_linearForwardLayer_Changed();
+        self.Process_Setup_UI_Order_and_Control_Changed();
     
     def Process_Setup_UI_linearForwardApply_Button_Clicked(self):
         if len(self.current_Process_Linear_Forward_List) < 2:
@@ -1430,7 +1429,7 @@ class HNet_GUI:
 
         self.current_Process_Linear_Backward_List.append(self.process_Setup_UI.linearBackwardLayer_ComboBox.currentText());
         
-        self.Process_Setup_UI_linearBackwardLayer_Changed();
+        self.Process_Setup_UI_Order_and_Control_Changed();
 
     def Process_Setup_UI_linearBackwardDelete_Button_Clicked(self):
         if len(self.current_Process_Linear_Backward_List) < 1:
@@ -1438,7 +1437,7 @@ class HNet_GUI:
 
         del self.current_Process_Linear_Backward_List[-1];
 
-        self.Process_Setup_UI_linearBackwardLayer_Changed();
+        self.Process_Setup_UI_Order_and_Control_Changed();
 
     def Process_Setup_UI_linearBackwardApply_Button_Clicked(self):
         if len(self.current_Process_Linear_Backward_List) < 2:
@@ -1624,8 +1623,8 @@ class HNet_GUI:
 
         self.Process_Setup_UI_Order_and_Control_Changed();
 
-    def Process_Setup_UI_customCycleMaker_Button_Clicked(self):
-        self.current_Process_Order_List.append((Order_Code.Cycle_Maker, None, None, None));
+    def Process_Setup_UI_customCycleMarker_Button_Clicked(self):
+        self.current_Process_Order_List.append((Order_Code.Cycle_Marker, None, None, None));
         self.Process_Setup_UI_Order_and_Control_Changed();
 
     def Process_Setup_UI_customUniformRandomActivationInsert_Button_Clicked(self):
@@ -1859,6 +1858,8 @@ class HNet_GUI:
             elif self.current_Process_Connection_Control_Dict[connection][0] == Damage_Type.Damaged:
                 self.process_Setup_UI.connectionControl_ListWidget.addItem(str(connection) + " → Damaged(" + str(self.current_Process_Connection_Control_Dict[connection][1]) + ")");
 
+        self.Process_Setup_UI_linearForwardLayer_Changed();
+        self.Process_Setup_UI_linearBackwardLayer_Changed();
         self.Process_Setup_UI_customBiasEqualizationLayer_Changed();
         self.Process_Setup_UI_customWeightEqualizationConnection_Changed();
         self.Process_Setup_UI_customRandomAcitvation_Inserted();
@@ -2017,14 +2018,14 @@ class HNet_GUI:
         self.process_Setup_UI.customLayerDuplicate_Button.setEnabled(False);
         self.process_Setup_UI.customConnectionDuplicate_Button.setEnabled(False);
         self.process_Setup_UI.customTransposedConnectionDuplicate_Button.setEnabled(False);
-        self.process_Setup_UI.customCycleMaker_Button.setEnabled(False);
+        self.process_Setup_UI.customCycleMarker_Button.setEnabled(False);
         self.process_Setup_UI.customBiasEqualization_GroupBox.setEnabled(False);
         self.process_Setup_UI.customWeightEqualization_GroupBox.setEnabled(False);        
         self.process_Setup_UI.randomizeActivationInsert_GroupBox.setEnabled(False);
 
         #Always True
         self.process_Setup_UI.customEndInitialize_Button.setEnabled(True);
-        self.process_Setup_UI.customCycleMaker_Button.setEnabled(True);
+        self.process_Setup_UI.customCycleMarker_Button.setEnabled(True);
         self.process_Setup_UI.customBiasEqualization_GroupBox.setEnabled(True);
         self.process_Setup_UI.customWeightEqualization_GroupBox.setEnabled(True);
 
@@ -2038,7 +2039,7 @@ class HNet_GUI:
             self.process_Setup_UI.randomizeActivationInsert_GroupBox.setEnabled(True);
             if self.process_Setup_UI.customLayer2_ComboBox.currentIndex() > 0:
                 selected_Layer2 = self.process_Setup_UI.customLayer2_ComboBox.currentText();
-                if self.simulator.layer_Information_Dict[selected_Layer1]["Unit"] == self.simulator.layer_Information_Dict[selected_Layer2]["Unit"]:
+                if self.simulator.layer_Information_Dict[selected_Layer1]["Unit"] == self.simulator.layer_Information_Dict[selected_Layer2]["Unit"] and selected_Layer1 != selected_Layer2:
                     self.process_Setup_UI.customLayerDuplicate_Button.setEnabled(True);
 
             if self.Process_Setup_UI_Layer_Activation_Stroaged_Check(selected_Layer1):
@@ -2050,7 +2051,7 @@ class HNet_GUI:
                 self.process_Setup_UI.customOutputLayerErrorCalculationSigmoid_Button.setEnabled(True);
                 self.process_Setup_UI.customOutputLayerErrorCalculationSoftmax_Button.setEnabled(True);
                 self.process_Setup_UI.customActivationExtract_Button.setEnabled(True);
-                if self.process_Setup_UI.customLayer2_ComboBox.currentIndex() > 0:
+                if self.process_Setup_UI.customLayer2_ComboBox.currentIndex() > 0 and self.simulator.Extract_Connection(selected_Layer1, selected_Layer2):
                     self.process_Setup_UI.customLayerActivationSend_Button.setEnabled(True);
 
             if self.Process_Setup_UI_Layer_Error_Stroaged_Check(selected_Layer1):
@@ -2059,7 +2060,7 @@ class HNet_GUI:
                         
             if self.Process_Setup_UI_Layer_Error_Calculated_Check(selected_Layer1):
                 self.process_Setup_UI.customBiasRenewal_Button.setEnabled(True);
-                if self.process_Setup_UI.customLayer2_ComboBox.currentIndex() > 0:
+                if self.process_Setup_UI.customLayer2_ComboBox.currentIndex() > 0 and self.simulator.Extract_Connection(selected_Layer2, selected_Layer1):
                     self.process_Setup_UI.customErrorSend_Button.setEnabled(True);
 
         if self.process_Setup_UI.customConnection1_ComboBox.currentIndex() > 0:
@@ -2162,7 +2163,7 @@ class HNet_GUI:
             Order_Code.Bias_Equalization,
             Order_Code.Weight_Equalization,    
             Order_Code.Layer_Initialize,
-            Order_Code.Cycle_Maker,
+            Order_Code.Cycle_Marker,
             Order_Code.Uniform_Random_Activation_Insert,
             Order_Code.Normal_Random_Activation_Insert
         ]
@@ -2359,7 +2360,7 @@ class HNet_GUI:
         curren_Cycle = 1;
         for index in range(len(selected_Process["Order_List"])):            
             order_Code, layer_List, connection_List, order_Variable_List = selected_Process["Order_List"][index];
-            if order_Code == Order_Code.Cycle_Maker:
+            if order_Code == Order_Code.Cycle_Marker:
                 curren_Cycle += 1;
                 continue;
             elif index in self.current_Training_Matching_Information["Assign"].keys(): #Already Assigned
@@ -2499,7 +2500,7 @@ class HNet_GUI:
         curren_Cycle = 1;
         for index in range(len(selected_Process["Order_List"])):            
             order_Code, layer_List, connection_List, order_Variable_List = selected_Process["Order_List"][index];
-            if order_Code == Order_Code.Cycle_Maker:
+            if order_Code == Order_Code.Cycle_Marker:
                 curren_Cycle += 1;
                 continue;
             elif index in self.current_Test_Matching_Information["Assign"].keys(): #Already Assigned
@@ -3023,8 +3024,7 @@ class HNet_GUI:
     def Learning_UI_start_Button_Clicked(self):
         self.simulator.pause_Status = False;
         self.learning_UI.start_Button.setEnabled(False);
-        self.learning_UI.testResultSave_Button.setEnabled(False);
-        self.learning_UI.weightAndBiasSave_Button.setEnabled(False);
+        self.learning_UI.resultSave_Button.setEnabled(False);        
         self.learning_UI.exit_Button.setEnabled(False);
         self.learning_UI.pause_Button.setEnabled(True);
 
@@ -3036,22 +3036,15 @@ class HNet_GUI:
     def Learning_UI_pause_Button_Clicked(self):
         self.simulator.pause_Status = True;
         self.learning_UI.start_Button.setEnabled(True);
-        self.learning_UI.testResultSave_Button.setEnabled(True);
-        self.learning_UI.weightAndBiasSave_Button.setEnabled(True);
+        self.learning_UI.resultSave_Button.setEnabled(True);        
         self.learning_UI.exit_Button.setEnabled(True);
         self.learning_UI.pause_Button.setEnabled(False);
 
-    def Learning_UI_testResultSave_Button_Clicked(self):
+    def Learning_UI_resultSave_Button_Clicked(self):
         new_FileDialog = QtWidgets.QFileDialog();
         file_Path = new_FileDialog.getExistingDirectory()
         if file_Path != "":                    
             self.simulator.Test_Result_Save(file_Path);
-
-    def Learning_UI_weightAndBiasSave_Button_Clicked(self):
-        new_FileDialog = QtWidgets.QFileDialog();
-        file_Path = new_FileDialog.getSaveFileName(filter="Model File for HNet (*.HNet_Model)")[0]
-        if file_Path != "":
-            self.simulator.WeightAndBias_Save(file_Path);
 
     def Learning_UI_weight_Display_Button_Clicked(self):
         try:
@@ -3063,27 +3056,29 @@ class HNet_GUI:
     def Learning_UI_result_Display_Button_Clicked(self):
         yAxis = [-0.01, 1.01];  #Prevent Error
         #While yAxis' line_Edit modify  
-        try: yAxis = [float(self.learning_UI.yAxisMin_LineEdit.text()), float(self.learning_UI.yAxisMax_LineEdit.text())];
-        except: pass;
+        try:
+            yAxis = [float(self.learning_UI.yAxisMin_LineEdit.text()), float(self.learning_UI.yAxisMax_LineEdit.text())];
 
-        if not self.learning_UI.cycle_CheckBox.isChecked():
-            display_Mode_Index = self.learning_UI.displayMode_ComboBox.currentIndex();
-            if display_Mode_Index == 0:
-                xTicks, averaged_Result_Array = self.Learning_UI_Simulator_Extract_Mean_Squared_Error_for_Graph();
-            if display_Mode_Index == 1:
-                xTicks, averaged_Result_Array = self.Learning_UI_Simulator_Extract_Cross_Entropy_for_Graph();
-            if display_Mode_Index == 2:
-                xTicks, averaged_Result_Array = self.Learning_UI_Simulator_Extract_Semantic_Stress_for_Graph();
-            self.learning_UI.result_Graph.Update_Figure(xTicks, averaged_Result_Array, yAxis);
-        else:
-            display_Mode_Index = self.learning_UI.displayMode_ComboBox.currentIndex();
-            if display_Mode_Index == 0:
-                max_Cycle, xTicks, averaged_Result_Array = self.Learning_UI_Simulator_Extract_Mean_Squared_Error_by_Cycle_for_Graph();
-            if display_Mode_Index == 1:
-                max_Cycle, xTicks, averaged_Result_Array = self.Learning_UI_Simulator_Extract_Cross_Entropy_by_Cycle_for_Graph();
-            if display_Mode_Index == 2:
-                max_Cycle, xTicks, averaged_Result_Array = self.Learning_UI_Simulator_Extract_Semantic_Stress_by_Cycle_for_Graph();
-            self.learning_UI.result_Graph.Update_Figure_using_Cycle(xTicks, averaged_Result_Array, yAxis, max_Cycle);
+            if not self.learning_UI.cycle_CheckBox.isChecked():
+                display_Mode_Index = self.learning_UI.displayMode_ComboBox.currentIndex();
+                if display_Mode_Index == 0:
+                    xTicks, averaged_Result_Array = self.Learning_UI_Simulator_Extract_Mean_Squared_Error_for_Graph();
+                if display_Mode_Index == 1:
+                    xTicks, averaged_Result_Array = self.Learning_UI_Simulator_Extract_Cross_Entropy_for_Graph();
+                if display_Mode_Index == 2:
+                    xTicks, averaged_Result_Array = self.Learning_UI_Simulator_Extract_Semantic_Stress_for_Graph();
+                self.learning_UI.result_Graph.Update_Figure(xTicks, averaged_Result_Array, yAxis);
+            else:
+                display_Mode_Index = self.learning_UI.displayMode_ComboBox.currentIndex();
+                if display_Mode_Index == 0:
+                    max_Cycle, xTicks, averaged_Result_Array = self.Learning_UI_Simulator_Extract_Mean_Squared_Error_by_Cycle_for_Graph();
+                if display_Mode_Index == 1:
+                    max_Cycle, xTicks, averaged_Result_Array = self.Learning_UI_Simulator_Extract_Cross_Entropy_by_Cycle_for_Graph();
+                if display_Mode_Index == 2:
+                    max_Cycle, xTicks, averaged_Result_Array = self.Learning_UI_Simulator_Extract_Semantic_Stress_by_Cycle_for_Graph();
+                self.learning_UI.result_Graph.Update_Figure_using_Cycle(xTicks, averaged_Result_Array, yAxis, max_Cycle);
+
+        except: pass;
 
     def Learning_UI_exit_Button_Clicked(self):
         self.learning_Dialog.hide();
@@ -3864,6 +3859,7 @@ class HNet_GUI:
                     self.simulator = self.modified_Simulator_List[self.macro_Index];
                     self.simulator.Weight_and_Bias_Setup();
                     self.simulator.Process_To_Tensor();
+                    self.Learning_UI_ComboBox_Add_Item();
                 self.Learning_UI_start_Button_Clicked();
                 self.learning_UI.macro_LineEdit.setText("Macro " + str(self.macro_Index));
             else:

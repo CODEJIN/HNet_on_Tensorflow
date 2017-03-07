@@ -540,7 +540,7 @@ class HNet:
                         if layer_Name_List[0] in layer_Error_Dict.keys():
                             del layer_Error_Dict[layer_Name_List[0]];
 
-                    elif order_Code == Order_Code.Cycle_Maker:
+                    elif order_Code == Order_Code.Cycle_Marker:
                         current_Cycle += 1;
                     
                     elif order_Code == Order_Code.Uniform_Random_Activation_Insert:
@@ -590,8 +590,9 @@ class HNet:
                 self.current_Learning_Setup_Index += 1;
                 self.current_LearningSetup_Epoch = 0;
         
-        self.Test_Result_Save();    #Auto Save
-        self.pause_Status = True;
+        if not self.pause_Status:
+            self.Test_Result_Save();    #Auto Save
+            self.pause_Status = True;
 
     def Run_Training(self, learning_Setup):
         #Minibatch Making & Probability filter & Traning Sequence Randomize;
@@ -684,6 +685,7 @@ class HNet:
         self.Mean_Squared_Error_Save(save_Directory);
         self.Cross_Entropy_Save(save_Directory);
         self.Semantic_Stress_Save(save_Directory);
+        self.WeightAndBias_Save(save_Directory + "/Weight_and_Bias.HNet_Model")
     
     def Raw_Activation_Save(self, save_Directory):
         extract_Data_Row_List = [];
