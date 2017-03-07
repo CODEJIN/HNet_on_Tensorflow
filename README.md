@@ -5,6 +5,7 @@ HNet on Tensorflow is constructed by the below files.
 
 HNet_Core.py<br>
 HNet_Enum.py<br>
+HNet v1.0 Manual.pdf<br>
 HNet_GUI.py<br>
 HNet_UI/__ init __.py<br>
 HNet_UI/About.py<br>
