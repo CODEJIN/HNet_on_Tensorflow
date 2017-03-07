@@ -12,12 +12,11 @@ class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(1046, 507)
-        self.testResultSave_Button = QtWidgets.QPushButton(Dialog)
-        self.testResultSave_Button.setGeometry(QtCore.QRect(370, 460, 150, 40))
-        self.testResultSave_Button.setObjectName("testResultSave_Button")
-        self.weightAndBiasSave_Button = QtWidgets.QPushButton(Dialog)
-        self.weightAndBiasSave_Button.setGeometry(QtCore.QRect(530, 460, 150, 40))
-        self.weightAndBiasSave_Button.setObjectName("weightAndBiasSave_Button")
+        self.resultSave_Button = QtWidgets.QPushButton(Dialog)
+        self.resultSave_Button.setEnabled(False)
+        self.resultSave_Button.setGeometry(QtCore.QRect(330, 460, 150, 40))
+        self.resultSave_Button.setCheckable(False)
+        self.resultSave_Button.setObjectName("resultSave_Button")
         self.pause_Button = QtWidgets.QPushButton(Dialog)
         self.pause_Button.setEnabled(False)
         self.pause_Button.setGeometry(QtCore.QRect(170, 460, 150, 40))
@@ -123,8 +122,7 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.testResultSave_Button.setText(_translate("Dialog", "Test Result Save (TXT)"))
-        self.weightAndBiasSave_Button.setText(_translate("Dialog", "Weight && Bias Save"))
+        self.resultSave_Button.setText(_translate("Dialog", "Result Save"))
         self.pause_Button.setText(_translate("Dialog", "Pause"))
         self.Status_GroupBox.setTitle(_translate("Dialog", "Status"))
         self.displayMode_Label.setText(_translate("Dialog", "Progress Display"))

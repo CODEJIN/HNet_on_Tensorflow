@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(991, 636)
+        Dialog.resize(990, 636)
         self.fileLoad_GroupBox = QtWidgets.QGroupBox(Dialog)
         self.fileLoad_GroupBox.setGeometry(QtCore.QRect(10, 10, 391, 71))
         self.fileLoad_GroupBox.setObjectName("fileLoad_GroupBox")
@@ -37,7 +37,7 @@ class Ui_Dialog(object):
         self.modifyFactorDelete_Button.setGeometry(QtCore.QRect(10, 140, 211, 30))
         self.modifyFactorDelete_Button.setObjectName("modifyFactorDelete_Button")
         self.macroSize_Label = QtWidgets.QLabel(self.modifyFactor_GroupBox)
-        self.macroSize_Label.setGeometry(QtCore.QRect(230, 10, 51, 21))
+        self.macroSize_Label.setGeometry(QtCore.QRect(230, 10, 121, 21))
         self.macroSize_Label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.macroSize_Label.setObjectName("macroSize_Label")
         self.macroSize_LineEdit = QtWidgets.QLineEdit(self.modifyFactor_GroupBox)
