@@ -387,7 +387,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>4</number>
    </property>
    <widget class="QWidget" name="bp_Tap">
     <attribute name="title">
@@ -1974,7 +1974,7 @@ Calculation
 Extract</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="customCycleMaker_Button">
+    <widget class="QPushButton" name="customCycleMarker_Button">
      <property name="geometry">
       <rect>
        <x>230</x>
@@ -1984,7 +1984,7 @@ Extract</string>
       </rect>
      </property>
      <property name="text">
-      <string>Cycle Maker</string>
+      <string>Cycle Marker</string>
      </property>
     </widget>
     <widget class="QGroupBox" name="randomizeActivationInsert_GroupBox">

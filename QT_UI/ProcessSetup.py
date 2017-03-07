@@ -518,9 +518,9 @@ class Ui_Dialog(object):
         self.customActivationExtract_Button = QtWidgets.QPushButton(self.custom_Tap)
         self.customActivationExtract_Button.setGeometry(QtCore.QRect(10, 140, 100, 50))
         self.customActivationExtract_Button.setObjectName("customActivationExtract_Button")
-        self.customCycleMaker_Button = QtWidgets.QPushButton(self.custom_Tap)
-        self.customCycleMaker_Button.setGeometry(QtCore.QRect(230, 200, 100, 50))
-        self.customCycleMaker_Button.setObjectName("customCycleMaker_Button")
+        self.customCycleMarker_Button = QtWidgets.QPushButton(self.custom_Tap)
+        self.customCycleMarker_Button.setGeometry(QtCore.QRect(230, 200, 100, 50))
+        self.customCycleMarker_Button.setObjectName("customCycleMarker_Button")
         self.randomizeActivationInsert_GroupBox = QtWidgets.QGroupBox(self.custom_Tap)
         self.randomizeActivationInsert_GroupBox.setGeometry(QtCore.QRect(10, 330, 211, 101))
         self.randomizeActivationInsert_GroupBox.setObjectName("randomizeActivationInsert_GroupBox")
@@ -552,7 +552,7 @@ class Ui_Dialog(object):
         self.order_ListWidget.setObjectName("order_ListWidget")
 
         self.retranslateUi(Dialog)
-        self.order_TapWidget.setCurrentIndex(0)
+        self.order_TapWidget.setCurrentIndex(4)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
@@ -682,7 +682,7 @@ class Ui_Dialog(object):
         self.customErrorSend_Button.setText(_translate("Dialog", "Error Send"))
         self.customActivationExtract_Button.setText(_translate("Dialog", "Activation\n"
 "Extract"))
-        self.customCycleMaker_Button.setText(_translate("Dialog", "Cycle Maker"))
+        self.customCycleMarker_Button.setText(_translate("Dialog", "Cycle Marker"))
         self.randomizeActivationInsert_GroupBox.setTitle(_translate("Dialog", "Randomize Activation Input"))
         self.customUniformRandomActivationInsert_Button.setText(_translate("Dialog", "Uniform Rand.\n"
 "Act. Insert"))

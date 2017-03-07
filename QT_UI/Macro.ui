@@ -81,7 +81,7 @@
     </property>
    </widget>
   </widget>
-  <widget class="QGroupBox" name="groupBox_">
+  <widget class="QGroupBox" name="modifyFactor_GroupBox">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -114,7 +114,7 @@
      <rect>
       <x>230</x>
       <y>10</y>
-      <width>51</width>
+      <width>121</width>
       <height>21</height>
      </rect>
     </property>
