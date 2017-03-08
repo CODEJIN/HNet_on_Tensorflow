@@ -718,8 +718,9 @@ class HNet:
                     str(probability_List[index]) + "\t" + 
                     "\t".join([str(x) for x in raw_Data[index]]));
         
-        with open(save_Directory + "/Raw_Activation.txt", "w", encoding="utf8") as save_Stream:
-            save_Stream.write("\n".join(extract_Data_Row_List));        
+        if len(extract_Data_Row_List) > 1:
+            with open(save_Directory + "/Raw_Activation.txt", "w", encoding="utf8") as save_Stream:
+                save_Stream.write("\n".join(extract_Data_Row_List));        
 
     def Mean_Squared_Error_Save(self, save_Directory):
         extract_Data_Row_List = [];
@@ -754,8 +755,9 @@ class HNet:
                     str(probability_List[index]) + "\t" + 
                     str(mean_Squared_Error[index]));
         
-        with open(save_Directory + "/Mean_Squared_Error.txt", "w", encoding="utf8") as save_Stream:
-            save_Stream.write("\n".join(extract_Data_Row_List));
+        if len(extract_Data_Row_List) > 1:
+            with open(save_Directory + "/Mean_Squared_Error.txt", "w", encoding="utf8") as save_Stream:
+                save_Stream.write("\n".join(extract_Data_Row_List));
         
     def Cross_Entropy_Save(self, save_Directory):
         extract_Data_Row_List = [];
@@ -790,8 +792,9 @@ class HNet:
                     str(probability_List[index]) + "\t" + 
                     str(cross_Entropy[index]));
 
-        with open(save_Directory + "/Cross_Entropy.txt", "w", encoding="utf8") as save_Stream:
-            save_Stream.write("\n".join(extract_Data_Row_List));
+        if len(extract_Data_Row_List) > 1:
+            with open(save_Directory + "/Cross_Entropy.txt", "w", encoding="utf8") as save_Stream:
+                save_Stream.write("\n".join(extract_Data_Row_List));
 
     def Semantic_Stress_Save(self, save_Directory):
         extract_Data_Row_List = [];
@@ -825,8 +828,9 @@ class HNet:
                     str(probability_List[index]) + "\t" + 
                     str(semantic_Stress[index]));
 
-        with open(save_Directory + "/Semantic_Stress.txt", "w", encoding="utf8") as save_Stream:
-            save_Stream.write("\n".join(extract_Data_Row_List));
+        if len(extract_Data_Row_List) > 1:
+            with open(save_Directory + "/Semantic_Stress.txt", "w", encoding="utf8") as save_Stream:
+                save_Stream.write("\n".join(extract_Data_Row_List));
 
     
     def Extract_Simulator_Information(self):
