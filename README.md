@@ -19,21 +19,22 @@ HNet_UI/ProcessSetup.py<br>
 HNet_UI/StructureSetup.py<br>
 
 In addition, there are some example files at the 'examples' folder.
-Examples/BP/XOR5.HNet_Structure
-Examples/BP/XOR5.txt
-Examples/BP/XOR5.HNet_Process
-Examples/BP/XOR5.HNet_LearningSetup
-Examples/BPTT/BPTT.HNet_Structure
-Examples/BPTT/MoreLess.txt
-Examples/BPTT/BPTT.HNet_Process
-Examples/BPTT/BPTT.HNet_LearningSetup
-Examples/SRN/SRN.HNet_Structure
-Examples/SRN/MoreLess.txt
-Examples/SRN/SRN.HNet_Process
-Examples/SRN/SRN.HNet_LearningSetup
-Examples/Macro/XOR5.HNetGUI_Model_Data_for_Macro
-Examples/Macro/BPTT.HNetGUI_Model_Data_for_Macro
-Examples/Macro/SRN.HNetGUI_Model_Data_for_Macro
+
+Examples/BP/XOR5.HNet_Structure<br>
+Examples/BP/XOR5.txt<br>
+Examples/BP/XOR5.HNet_Process<br>
+Examples/BP/XOR5.HNet_LearningSetup<br>
+Examples/BPTT/BPTT.HNet_Structure<br>
+Examples/BPTT/MoreLess.txt<br>
+Examples/BPTT/BPTT.HNet_Process<br>
+Examples/BPTT/BPTT.HNet_LearningSetup<br>
+Examples/SRN/SRN.HNet_Structure<br>
+Examples/SRN/MoreLess.txt<br>
+Examples/SRN/SRN.HNet_Process<br>
+Examples/SRN/SRN.HNet_LearningSetup<br>
+Examples/Macro/XOR5.HNetGUI_Model_Data_for_Macro<br>
+Examples/Macro/BPTT.HNetGUI_Model_Data_for_Macro<br>
+Examples/Macro/SRN.HNetGUI_Model_Data_for_Macro<br>
 
 # License
 The lincense of core and enum file is belong to Apache License 2.0.<br>
