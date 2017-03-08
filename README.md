@@ -32,7 +32,7 @@ Examples/SRN/SRN.HNet_Structure<br>
 Examples/SRN/MoreLess.txt<br>
 Examples/SRN/SRN.HNet_Process<br>
 Examples/SRN/SRN.HNet_LearningSetup<br>
-Examples/Macro/XOR5.HNetGUI_Model_Data_for_Macro<br>
+Examples/Macro/BP.HNetGUI_Model_Data_for_Macro<br>
 Examples/Macro/BPTT.HNetGUI_Model_Data_for_Macro<br>
 Examples/Macro/SRN.HNetGUI_Model_Data_for_Macro<br>
 
