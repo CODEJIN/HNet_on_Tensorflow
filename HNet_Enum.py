@@ -51,7 +51,7 @@ class Order_Code(Enum):
     Bias_Equalization = 16;
     Weight_Equalization = 17;    
     Layer_Initialize = 18;
-    Cycle_Maker = 19
+    Cycle_Marker = 19
     Uniform_Random_Activation_Insert = 20;
     Normal_Random_Activation_Insert = 21;
     End_and_Initialize = 22;

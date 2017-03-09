@@ -796,6 +796,7 @@ class HNet_GUI:
         file_Path = new_FileDialog.getOpenFileName(filter="Pattern Data TXT File for HNet (*.txt)")[0];
         if file_Path != "":
             self.pattern_Setup_UI.filePath_LineEdit.setText(file_Path);
+            self.pattern_Setup_UI.packName_LineEdit.setText(file_Path.split("/")[-1][:-4]);
 
     def Pattern_Setup_UI_insert_Button_Clicked(self):
         if self.pattern_Setup_UI.filePath_LineEdit.text() == "":
