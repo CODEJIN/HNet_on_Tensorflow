@@ -34,7 +34,7 @@ import _pickle as pickle;
 from copy import deepcopy
 
 
-class Progress_Display_Canvas(FigureCanvas):    #Refer: https://www.boxcontrol.net/embedding-matplotlib-plot-on-pyqt5-gui.html    
+class Progress_Display_Canvas(FigureCanvas):    #Refer: https://www.boxcontrol.net/embedding-matplotlib-plot-on-pyqt5-gui.html
     def __init__(self, parent=None, width=5, height=3, dpi=100):
         self.fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = self.fig.add_subplot(111)
@@ -63,20 +63,20 @@ class Progress_Display_Canvas(FigureCanvas):    #Refer: https://www.boxcontrol.n
     """ Data's x-Axis: Cycle
         Data's y-Axis: Epoch
         Data Visualization: MSE, CE, SS, Activation, etc."""
-    def Update_Figure_using_Cycle(self, xTicks, averaged_Result_List, yAxis, max_Cycle):        
+    def Update_Figure_using_Cycle(self, xTicks, averaged_Result_List, yAxis, max_Cycle):
         self.fig.clear();
         self.axes = self.fig.add_subplot(111);
         self.axes.hold(False);
 
         imShow = self.axes.imshow(averaged_Result_List, interpolation='nearest', vmin=yAxis[0], vmax=yAxis[1], aspect='auto', cmap="coolwarm");
-        self.fig.colorbar(imShow);        
+        self.fig.colorbar(imShow);
         self.fig.gca().set_xticks(np.arange(max_Cycle + 1));
         self.fig.gca().set_yticks(np.arange(len(xTicks)));
         self.fig.gca().set_yticklabels(xTicks);
 
         self.draw();
 
-class Weight_Display_Canvas(FigureCanvas):    #Refer: https://www.boxcontrol.net/embedding-matplotlib-plot-on-pyqt5-gui.html    
+class Weight_Display_Canvas(FigureCanvas):    #Refer: https://www.boxcontrol.net/embedding-matplotlib-plot-on-pyqt5-gui.html
     def __init__(self, parent=None, width=5, height=3, dpi=100):
         self.fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = self.fig.add_subplot(111)
@@ -93,7 +93,7 @@ class Weight_Display_Canvas(FigureCanvas):    #Refer: https://www.boxcontrol.net
     """ Data's x-Axis: Cycle
         Data's y-Axis: Epoch
         Data Visualization: MSE, CE, SS, Activation, etc."""
-    def Update_Figure(self, fromLayerName, toLayerName, weightMatrix):        
+    def Update_Figure(self, fromLayerName, toLayerName, weightMatrix):
         self.fig.clear();
         self.axes = self.fig.add_subplot(111);
         self.axes.hold(False);
@@ -106,27 +106,27 @@ class Weight_Display_Canvas(FigureCanvas):    #Refer: https://www.boxcontrol.net
 
         self.draw();
 
-class HNet_GUI: 
+class HNet_GUI:
     def __init__(self):
-        guiFont = QtGui.QFont();
-        guiFont.setFamily('Arial')
-        guiFont.setFixedPitch(True)
-        if sys.platform == "win32":
-            guiFont.setPointSize(8);
-            #guiFont.setPointSize(4);
-        elif sys.platform in ["linux", "linux2"]:
-            guiFont.setPointSize(7);
-        elif sys.platform == "darwin":
-            guiFont.setPointSize(6);
-        QtWidgets.QApplication.setFont(guiFont);
+        # guiFont = QtGui.QFont();
+        # guiFont.setFamily('Arial')
+        # guiFont.setFixedPitch(True)
+        # if sys.platform == "win32":
+        #     guiFont.setPointSize(8);
+        # elif sys.platform in ["linux", "linux2"]:
+        #     guiFont.setPointSize(7);
+        # elif sys.platform == "darwin":
+        #     guiFont.setFamily("Lucida Grande");
+        #     guiFont.setPointSize(11);
+        # QtWidgets.QApplication.setFont(guiFont);
 
         self.simulator = HNet();
-        app = QtWidgets.QApplication(sys.argv)        
+        app = QtWidgets.QApplication(sys.argv)
         self.QT_Windows_Initialize();
         self.QT_Function_Initialize();
         self.QT_RegExp_Validator_Initialize();
         self.main_Dialog.show();
-        
+
         sys.exit(app.exec_());
 
     def QT_Windows_Initialize(self):
@@ -138,8 +138,8 @@ class HNet_GUI:
         self.learning_Dialog = QtWidgets.QDialog();
         self.macro_Dialog = QtWidgets.QDialog();
         self.about_Dialog = QtWidgets.QDialog();
-        
-        self.main_UI = Main.Ui_main_Dialog();        
+
+        self.main_UI = Main.Ui_main_Dialog();
         self.structure_Setup_UI = StructureSetup.Ui_Dialog();
         self.pattern_Setup_UI = PatternSetup.Ui_Dialog();
         self.process_Setup_UI = ProcessSetup.Ui_Dialog();
@@ -147,7 +147,7 @@ class HNet_GUI:
         self.learning_UI = Learning.Ui_Dialog();
         self.macro_UI = Macro.Ui_Dialog();
         self.about_UI = About.Ui_Dialog();
-        
+
         self.main_UI.setupUi(self.main_Dialog);
         self.structure_Setup_UI.setupUi(self.structure_Setup_Dialog);
         self.pattern_Setup_UI.setupUi(self.pattern_Setup_Dialog);
@@ -155,7 +155,37 @@ class HNet_GUI:
         self.learning_Setup_UI.setupUi(self.learning_Setup_Dialog);
         self.learning_UI.setupUi(self.learning_Dialog);
         self.macro_UI.setupUi(self.macro_Dialog);
-        self.about_UI.setupUi(self.about_Dialog);        
+        self.about_UI.setupUi(self.about_Dialog);
+
+        guiFont = QtGui.QFont();
+
+        guiFont.setFixedPitch(True)
+        if sys.platform == "win32":
+            guiFont.setFamily('Arial')
+            guiFont.setPointSize(8);
+        elif sys.platform in ["linux", "linux2"]:
+            guiFont.setPointSize(7);
+        elif sys.platform == "darwin":
+            guiFont.setFamily("Lucida Grande");
+            guiFont.setPointSize(9);
+
+        for widget in self.main_Dialog.findChildren(QtWidgets.QWidget):
+            widget.setFont(guiFont);
+        for widget in self.structure_Setup_Dialog.findChildren(QtWidgets.QWidget):
+            widget.setFont(guiFont);
+        for widget in self.pattern_Setup_Dialog.findChildren(QtWidgets.QWidget):
+            widget.setFont(guiFont);
+        for widget in self.process_Setup_Dialog.findChildren(QtWidgets.QWidget):
+            widget.setFont(guiFont);
+        for widget in self.learning_Setup_Dialog.findChildren(QtWidgets.QWidget):
+            widget.setFont(guiFont);
+        for widget in self.learning_Dialog.findChildren(QtWidgets.QWidget):
+            widget.setFont(guiFont);
+        for widget in self.macro_Dialog.findChildren(QtWidgets.QWidget):
+            widget.setFont(guiFont);
+        for widget in self.about_Dialog.findChildren(QtWidgets.QWidget):
+            widget.setFont(guiFont);
+
 
     def QT_Function_Initialize(self):
         self.Main_UI_Function_Setup();
@@ -166,7 +196,7 @@ class HNet_GUI:
         self.Learning_UI_Function_Setup();
         self.Macro_Function_Setup();
         self.About_UI_Function_Setup();
-            
+
     def QT_RegExp_Validator_Initialize(self):
         self.float_Validator = QtGui.QRegExpValidator(QtCore.QRegExp("[-+]?([0-9]+\.?[0-9]*|\.[0-9]+)([eE][-+]?[0-9]+)?"));
         self.positive_Float_Validator = QtGui.QRegExpValidator(QtCore.QRegExp("([0-9]+\.?[0-9]*|\.[0-9]+)([eE][-+]?[0-9]+)?"));
@@ -192,8 +222,8 @@ class HNet_GUI:
         self.main_UI.learningSetup_Button.clicked.connect(self.Main_UI_learningSetup_Button_Clicked);
         self.main_UI.learning_Button.clicked.connect(self.Main_UI_learning_Button_Clicked);
         self.main_UI.modelSaveforMacro_Button.clicked.connect(self.Main_UI_modelSaveforMacro_Button_Clicked);
-        self.main_UI.macro_Button.clicked.connect(self.Main_UI_macro_Button_Clicked);        
-        self.main_UI.about_Button.clicked.connect(self.Main_UI_about_Button_Clicked);        
+        self.main_UI.macro_Button.clicked.connect(self.Main_UI_macro_Button_Clicked);
+        self.main_UI.about_Button.clicked.connect(self.Main_UI_about_Button_Clicked);
         self.main_UI.exit_Button.clicked.connect(self.Main_UI_exit_Button_Clicked);
 
         self.Main_UI_Simulator_Changed();
@@ -208,16 +238,16 @@ class HNet_GUI:
         self.structure_Setup_UI.connectionAdd_Button.clicked.connect(self.Structure_Setup_UI_connectionAdd_Button_Clicked);
         self.structure_Setup_UI.connectionDelete_Button.clicked.connect(self.Structure_Setup_UI_connectionDelete_Button_Clicked);
         self.structure_Setup_UI.structureSave_Button.clicked.connect(self.Structure_Setup_UI_structureSave_Button_Clicked);
-        self.structure_Setup_UI.structureLoad_Button.clicked.connect(self.Structure_Setup_UI_structureLoad_Button_Clicked);        
+        self.structure_Setup_UI.structureLoad_Button.clicked.connect(self.Structure_Setup_UI_structureLoad_Button_Clicked);
         self.structure_Setup_UI.exit_Button.clicked.connect(self.Structure_Setup_UI_exit_Button_Clicked);
 
     def Pattern_Setup_UI_Function_Setup(self):
         self.pattern_Setup_UI.broswer_Button.clicked.connect(self.Pattern_Setup_UI_broswer_Button_Clicked);
         self.pattern_Setup_UI.insert_Button.clicked.connect(self.Pattern_Setup_UI_insert_Button_Clicked);
         self.pattern_Setup_UI.delete_Button.clicked.connect(self.Pattern_Setup_UI_delete_Button_Clicked);
-        self.pattern_Setup_UI.patternPack_ListWidget.currentItemChanged.connect(self.Pattern_Setup_UI_patternPack_ListWidget_Current_Item_Changed); 
+        self.pattern_Setup_UI.patternPack_ListWidget.currentItemChanged.connect(self.Pattern_Setup_UI_patternPack_ListWidget_Current_Item_Changed);
         self.pattern_Setup_UI.exit_Button.clicked.connect(self.Pattern_Setup_UI_exit_Button_Clicked);
-    
+
     def Process_Setup_UI_Function_Setup(self):
         self.process_Setup_UI.processMaking_Button.clicked.connect(self.Process_Setup_UI_processMaking_Button_Clicked);
         self.process_Setup_UI.processModify_Button.clicked.connect(self.Process_Setup_UI_processModify_Button_Clicked);
@@ -263,7 +293,7 @@ class HNet_GUI:
         self.process_Setup_UI.customHiddenLayerErrorCalculationSigmoid_Button.clicked.connect(self.Process_Setup_UI_customHiddenLayerErrorCalculationSigmoid_Button_Clicked);
         self.process_Setup_UI.customHiddenLayerErrorCalculationReLU_Button.clicked.connect(self.Process_Setup_UI_customHiddenLayerErrorCalculationReLU_Button_Clicked);
         self.process_Setup_UI.customErrorSend_Button.clicked.connect(self.Process_Setup_UI_customErrorSend_Button_Clicked);
-        self.process_Setup_UI.customActivationExtract_Button.clicked.connect(self.Process_Setup_UI_customActivationExtract_Button_Clicked); 
+        self.process_Setup_UI.customActivationExtract_Button.clicked.connect(self.Process_Setup_UI_customActivationExtract_Button_Clicked);
         self.process_Setup_UI.customBiasRenewal_Button.clicked.connect(self.Process_Setup_UI_customBiasRenewal_Button_Clicked);
         self.process_Setup_UI.customWeightRenewal_Button.clicked.connect(self.Process_Setup_UI_customWeightRenewal_Button_Clicked);
         self.process_Setup_UI.customLayerDuplicate_Button.clicked.connect(self.Process_Setup_UI_customLayerDuplicate_Button_Clicked);
@@ -296,7 +326,7 @@ class HNet_GUI:
         self.learning_Setup_UI.learningSetupDown_Button.clicked.connect(self.Learning_Setup_UI_learningSetupDown_Button_Clicked);
         self.learning_Setup_UI.trainingPatternMatchingMaking_Button.clicked.connect(self.Learning_Setup_UI_trainingPatternMatchingMaking_Button_Clicked);
         self.learning_Setup_UI.trainingPatternMatchingEnd_Button.clicked.connect(self.Learning_Setup_UI_trainingPatternMatchingEnd_Button_Clicked);
-        self.learning_Setup_UI.trainingPatternMatching_ListWidget.currentItemChanged.connect(self.Learning_Setup_UI_trainingPatternMatching_ListWidget_Current_Item_Changed);        
+        self.learning_Setup_UI.trainingPatternMatching_ListWidget.currentItemChanged.connect(self.Learning_Setup_UI_trainingPatternMatching_ListWidget_Current_Item_Changed);
         self.learning_Setup_UI.trainingPatternMatchingDelete_Button.clicked.connect(self.Learning_Setup_UI_trainingPatternMatchingDelete_Button_Clicked);
         self.learning_Setup_UI.trainingPatternMatchingUp_Button.clicked.connect(self.Learning_Setup_UI_trainingPatternMatchingUp_Button_Clicked);
         self.learning_Setup_UI.trainingPatternMatchingDown_Button.clicked.connect(self.Learning_Setup_UI_trainingPatternMatchingDown_Button_Clicked);
@@ -354,9 +384,9 @@ class HNet_GUI:
 
     def About_UI_Function_Setup(self):
         self.about_UI.exit_Button.clicked.connect(self.About_Setup_UI_exit_Button_Clicked);
-    
+
     # End Function Setup
-    
+
     # Start RegExp Setup
     def Structure_Setup_UI_RegExp_Setup(self):
         self.structure_Setup_UI.momentum_LineEdit.setValidator(self.positive_Float_Validator);
@@ -372,7 +402,7 @@ class HNet_GUI:
         self.structure_Setup_UI.structureBPTTTick_LineEdit.setValidator(self.positive_Int_Validator);
         self.structure_Setup_UI.structureSRNInputLayerSize_LineEdit.setValidator(self.positive_Int_Validator);
         self.structure_Setup_UI.structureSRNHiddenLayerSize_LineEdit.setValidator(self.positive_Int_Validator);
-        self.structure_Setup_UI.structureSRNOutputLayerSize_LineEdit.setValidator(self.positive_Int_Validator);        
+        self.structure_Setup_UI.structureSRNOutputLayerSize_LineEdit.setValidator(self.positive_Int_Validator);
         self.structure_Setup_UI.layerName_LineEdit.setValidator(self.letter_Validator);
         self.structure_Setup_UI.layerUnit_LineEdit.setValidator(self.positive_Int_Validator);
         self.structure_Setup_UI.connectionName_LineEdit.setValidator(self.letter_Validator);
@@ -415,10 +445,10 @@ class HNet_GUI:
         self.macro_UI.irregularMultiLayerSizeStep_LineEdit.setValidator(self.positive_Int_Validator);
         self.macro_UI.learningRateFrom_LineEdit.setValidator(self.positive_Float_Validator);
         self.macro_UI.learningRateTo_LineEdit.setValidator(self.positive_Float_Validator);
-        self.macro_UI.learningRateStep_LineEdit.setValidator(self.positive_Float_Validator);        
+        self.macro_UI.learningRateStep_LineEdit.setValidator(self.positive_Float_Validator);
         self.macro_UI.initialWeightSDFrom_LineEdit.setValidator(self.positive_Float_Validator);
         self.macro_UI.initialWeightSDTo_LineEdit.setValidator(self.positive_Float_Validator);
-        self.macro_UI.initialWeightSDStep_LineEdit.setValidator(self.positive_Float_Validator);        
+        self.macro_UI.initialWeightSDStep_LineEdit.setValidator(self.positive_Float_Validator);
         self.macro_UI.layerDamageSDFrom_LineEdit.setValidator(self.positive_Float_Validator);
         self.macro_UI.layerDamageSDTo_LineEdit.setValidator(self.positive_Float_Validator);
         self.macro_UI.layerDamageSDStep_LineEdit.setValidator(self.positive_Float_Validator);
@@ -441,10 +471,10 @@ class HNet_GUI:
             self.main_UI.weightAndBiasLoad_Button.setEnabled(True);
             self.main_UI.processSetup_Button.setEnabled(True);
             self.simulator.Weight_and_Bias_Setup();
-    
+
     def Main_UI_weightAndBiasLoad_Button_Clicked(self):
         new_FileDialog = QtWidgets.QFileDialog();
-        
+
         file_Path = new_FileDialog.getOpenFileName(filter="Model File for HNet (*.HNet_Model)")[0]
         if not file_Path == "":
             if not self.simulator.WeightAndBias_Load(file_Path):
@@ -466,13 +496,13 @@ class HNet_GUI:
         self.Process_Setup_UI_ComboBox_Add_Item();
         self.Process_Setup_UI_Process_Changed();
         self.main_Dialog.hide();
-    
+
     def Main_UI_processLock_Button_Clicked(self):
         reply = QtWidgets.QMessageBox.question(None, 'Notice', "Process will lock. Do you want proceed?");
         if reply == QtWidgets.QMessageBox.Yes:
             self.main_UI.processSetup_Button.setEnabled(False);
             self.main_UI.processLock_Button.setEnabled(False);
-            self.main_UI.learningSetup_Button.setEnabled(True);                    
+            self.main_UI.learningSetup_Button.setEnabled(True);
             self.simulator.Process_To_Tensor();
 
     def Main_UI_learningSetup_Button_Clicked(self):
@@ -491,7 +521,7 @@ class HNet_GUI:
         self.learning_UI.macro_Label.hide();
         self.learning_UI.macro_LineEdit.hide();
 
-        self.learning_Dialog.show();        
+        self.learning_Dialog.show();
         self.Learning_UI_ComboBox_Add_Item();
         self.main_Dialog.hide();
 
@@ -522,14 +552,14 @@ class HNet_GUI:
             file_Path += ".HNetGUI_Model_Data_for_Macro";
 
         with open(file_Path, "wb") as f:
-            pickle.dump(save_Dict, f);        
+            pickle.dump(save_Dict, f);
 
-    def Main_UI_about_Button_Clicked(self):        
+    def Main_UI_about_Button_Clicked(self):
         self.about_Dialog.show();
         self.main_Dialog.hide();
     def Main_UI_exit_Button_Clicked(self):
         sys.exit();
-        
+
     def Main_UI_Simulator_Changed(self):
         self.main_UI.configVariables_ListWidget.clear();
         self.main_UI.layer_ListWidget.clear();
@@ -549,13 +579,13 @@ class HNet_GUI:
             self.main_UI.layer_ListWidget.addItem(key + " (" + str(layer_Information["Unit"]) + ")");
 
         for key in self.simulator.connection_Information_Dict.keys():
-            connection_Information = self.simulator.connection_Information_Dict[key];            
+            connection_Information = self.simulator.connection_Information_Dict[key];
             self.main_UI.connection_ListWidget.addItem(key + " (" + str(connection_Information["From_Layer_Name"]) + "→" + str(connection_Information["To_Layer_Name"]) + ")");
 
-        for key in self.simulator.pattern_Pack_Dict.keys():            
+        for key in self.simulator.pattern_Pack_Dict.keys():
             self.main_UI.patternPack_ListWidget.addItem(key);
 
-        for key in self.simulator.process_Dict.keys():            
+        for key in self.simulator.process_Dict.keys():
             self.main_UI.process_ListWidget.addItem(key);
 
         for learning_Setup in self.simulator.learning_Setup_List:
@@ -563,7 +593,7 @@ class HNet_GUI:
 
     # End Main UI Functions
 
-    # Start Structure Setup Functions    
+    # Start Structure Setup Functions
     def Structure_Setup_UI_summit_Button_Clicked(self):
         if self.structure_Setup_UI.momentum_LineEdit.text() == "":
             self.structure_Setup_UI.momentum_LineEdit.setFocus();
@@ -577,20 +607,20 @@ class HNet_GUI:
         elif self.structure_Setup_UI.learningRate_LineEdit.text() == "":
             self.structure_Setup_UI.learningRate_LineEdit.setFocus();
             return;
-        
+
         momentum = float(self.structure_Setup_UI.momentum_LineEdit.text());
         decay_Rate = float(self.structure_Setup_UI.decayRate_LineEdit.text());
         initial_Weight_SD = float(self.structure_Setup_UI.initalWeightSD_LineEdit.text());
         learning_Rate = float(self.structure_Setup_UI.learningRate_LineEdit.text());
-        if self.structure_Setup_UI.deviceModeCPU_RadioButton.isChecked():            
+        if self.structure_Setup_UI.deviceModeCPU_RadioButton.isChecked():
             device_Mode = 'cpu'
-        elif self.structure_Setup_UI.deviceModeGPU_RadioButton.isChecked():            
+        elif self.structure_Setup_UI.deviceModeGPU_RadioButton.isChecked():
             device_Mode = 'gpu'
 
         self.simulator.Structure_Config_Variable_Setup(momentum=momentum, decay_Rate=decay_Rate, initial_Weight_SD=initial_Weight_SD, learning_Rate=learning_Rate, device_Mode = device_Mode);
 
         self.Structure_Setup_UI_Structure_Changed();
-    
+
     def Structure_Setup_UI_structureBPMake_Button_Clicked(self):
         if self.structure_Setup_UI.structureBPInputLayerSize_LineEdit.text() == "":
             self.structure_Setup_UI.structureBPInputLayerSize_LineEdit.setFocus();
@@ -612,10 +642,10 @@ class HNet_GUI:
         self.structure_Setup_UI.structureBPInputLayerSize_LineEdit.setText("");
         self.structure_Setup_UI.structureBPHiddenLayerSize_LineEdit.setText("");
         self.structure_Setup_UI.structureBPOutputLayerSize_LineEdit.setText("");
-        
+
         self.Structure_Setup_UI_Structure_Changed();
 
-    def Structure_Setup_UI_structureBPTTMake_Button_Clicked(self):        
+    def Structure_Setup_UI_structureBPTTMake_Button_Clicked(self):
         if self.structure_Setup_UI.structureBPTTInputLayerSize_LineEdit.text() == "":
             self.structure_Setup_UI.structureBPTTInputLayerSize_LineEdit.setFocus();
             return;
@@ -630,14 +660,14 @@ class HNet_GUI:
             return;
 
         max_Tick = int(self.structure_Setup_UI.structureBPTTTick_LineEdit.text());
-        
+
         for tick in range(1, max_Tick + 1):
             self.simulator.Structure_Layer_Assign(name="Input_" + str(tick), unit=int(self.structure_Setup_UI.structureBPTTInputLayerSize_LineEdit.text()));
             self.simulator.Structure_Layer_Assign(name="Hidden_" + str(tick), unit=int(self.structure_Setup_UI.structureBPTTHiddenLayerSize_LineEdit.text()));
         self.simulator.Structure_Layer_Assign(name="Output", unit=int(self.structure_Setup_UI.structureBPTTOutputLayerSize_LineEdit.text()));
 
         for tick in range(1, max_Tick + 1):
-            self.simulator.Structure_Connection_Assign(name = "I" + str(tick) + "H" + str(tick), from_Layer_Name = "Input_" + str(tick), to_Layer_Name = "Hidden_" + str(tick));        
+            self.simulator.Structure_Connection_Assign(name = "I" + str(tick) + "H" + str(tick), from_Layer_Name = "Input_" + str(tick), to_Layer_Name = "Hidden_" + str(tick));
         for tick in range(1, max_Tick):
             self.simulator.Structure_Connection_Assign(name = "H" + str(tick) + "H" + str(tick + 1), from_Layer_Name = "Hidden_" + str(tick), to_Layer_Name = "Hidden_" + str(tick + 1));
         self.simulator.Structure_Connection_Assign(name = "H" + str(max_Tick) + "O", from_Layer_Name = "Hidden_" + str(max_Tick), to_Layer_Name = "Output");
@@ -646,10 +676,10 @@ class HNet_GUI:
         self.structure_Setup_UI.structureBPTTHiddenLayerSize_LineEdit.setText("");
         self.structure_Setup_UI.structureBPTTOutputLayerSize_LineEdit.setText("");
         self.structure_Setup_UI.structureBPTTTick_LineEdit.setText("");
-        
+
         self.Structure_Setup_UI_Structure_Changed();
 
-    def Structure_Setup_UI_structureSRNMake_Button_Clicked(self):        
+    def Structure_Setup_UI_structureSRNMake_Button_Clicked(self):
         if self.structure_Setup_UI.structureSRNInputLayerSize_LineEdit.text() == "":
             self.structure_Setup_UI.structureSRNInputLayerSize_LineEdit.setFocus();
             return;
@@ -672,11 +702,11 @@ class HNet_GUI:
         self.structure_Setup_UI.structureSRNInputLayerSize_LineEdit.setText("");
         self.structure_Setup_UI.structureSRNHiddenLayerSize_LineEdit.setText("");
         self.structure_Setup_UI.structureSRNOutputLayerSize_LineEdit.setText("");
-        
+
         self.Structure_Setup_UI_Structure_Changed();
 
-    
-    def Structure_Setup_UI_layerAdd_Button_Clicked(self):        
+
+    def Structure_Setup_UI_layerAdd_Button_Clicked(self):
         if self.structure_Setup_UI.layerName_LineEdit.text() == "":
             self.structure_Setup_UI.layerName_LineEdit.setFocus();
             return;
@@ -690,9 +720,9 @@ class HNet_GUI:
 
         self.structure_Setup_UI.layerName_LineEdit.setText("");
         self.structure_Setup_UI.layerUnit_LineEdit.setText("");
-        
+
         self.Structure_Setup_UI_Structure_Changed();
-        
+
     def Structure_Setup_UI_layerDelete_Button_Clicked(self):
         if self.structure_Setup_UI.layer_ListWidget.currentRow() < 0:
             return;
@@ -701,18 +731,18 @@ class HNet_GUI:
         self.simulator.Structure_Layer_Delete(selected_Layer_Name);
 
         self.Structure_Setup_UI_Structure_Changed();
-        
+
     def Structure_Setup_UI_connectionAdd_Button_Clicked(self):
         if self.structure_Setup_UI.connectionName_LineEdit.text() == "":
             self.structure_Setup_UI.connectionName_LineEdit.setFocus();
             return;
 
         name = self.structure_Setup_UI.connectionName_LineEdit.text();
-        from_Layer_Name = self.structure_Setup_UI.connectionFrom_ComboBox.currentText(); 
+        from_Layer_Name = self.structure_Setup_UI.connectionFrom_ComboBox.currentText();
         to_Layer_Name = self.structure_Setup_UI.connectionTo_ComboBox.currentText();
 
         self.simulator.Structure_Connection_Assign(name = name, from_Layer_Name = from_Layer_Name, to_Layer_Name = to_Layer_Name)
-        
+
         self.structure_Setup_UI.connectionName_LineEdit.setText("");
         self.structure_Setup_UI.connectionFrom_ComboBox.setCurrentIndex(0);
         self.structure_Setup_UI.connectionTo_ComboBox.setCurrentIndex(0);
@@ -727,7 +757,7 @@ class HNet_GUI:
         self.simulator.Structure_Connection_Delete(selected_Connection_Name);
 
         self.Structure_Setup_UI_Structure_Changed();
-    
+
     def Structure_Setup_UI_structureSave_Button_Clicked(self):
         new_FileDialog = QtWidgets.QFileDialog();
         file_Path = new_FileDialog.getSaveFileName(filter="Structure File for HNet (*.HNet_Structure)")[0]
@@ -741,7 +771,7 @@ class HNet_GUI:
             self.simulator.Structure_Load(file_Path);
 
         self.Structure_Setup_UI_Structure_Changed();
-    
+
     def Structure_Setup_UI_exit_Button_Clicked(self):
         self.structure_Setup_Dialog.hide();
         if len(self.simulator.connection_Information_Dict) > 0:
@@ -764,10 +794,10 @@ class HNet_GUI:
         self.structure_Setup_UI.layer_ListWidget.clear();
 
         for key in self.simulator.layer_Information_Dict.keys():
-            layer_Information = self.simulator.layer_Information_Dict[key];            
+            layer_Information = self.simulator.layer_Information_Dict[key];
             self.structure_Setup_UI.layer_ListWidget.addItem(key + " (" + str(layer_Information["Unit"]) + ")");
 
-        self.structure_Setup_UI.connectionFrom_ComboBox.clear();        
+        self.structure_Setup_UI.connectionFrom_ComboBox.clear();
         self.structure_Setup_UI.connectionTo_ComboBox.clear();
         for key in self.simulator.layer_Information_Dict.keys():
             self.structure_Setup_UI.connectionFrom_ComboBox.addItem(key);
@@ -777,9 +807,9 @@ class HNet_GUI:
 
         for key in self.simulator.connection_Information_Dict.keys():
             connection_Information = self.simulator.connection_Information_Dict[key];
-            
+
             connection_Text_List = [];
-            connection_Text_List.append(key + " (" + str(connection_Information["From_Layer_Name"]) + "→" + str(connection_Information["To_Layer_Name"]) + ")");            
+            connection_Text_List.append(key + " (" + str(connection_Information["From_Layer_Name"]) + "→" + str(connection_Information["To_Layer_Name"]) + ")");
 
             self.structure_Setup_UI.connection_ListWidget.addItem("".join(connection_Text_List));
 
@@ -787,9 +817,9 @@ class HNet_GUI:
             self.structure_Setup_UI.deviceModeGPU_RadioButton.setEnabled(False);
         else:
             self.structure_Setup_UI.deviceModeGPU_RadioButton.setEnabled(True);
-        
+
     # End Structure Setup Functions
-    
+
     # Start Pattern Setup Functions
     def Pattern_Setup_UI_broswer_Button_Clicked(self):
         new_FileDialog = QtWidgets.QFileDialog();
@@ -800,9 +830,9 @@ class HNet_GUI:
 
     def Pattern_Setup_UI_insert_Button_Clicked(self):
         if self.pattern_Setup_UI.filePath_LineEdit.text() == "":
-            self.pattern_Setup_UI.broswer_Button.setFocus();            
+            self.pattern_Setup_UI.broswer_Button.setFocus();
             return;
-        elif self.pattern_Setup_UI.packName_LineEdit.text() == "": 
+        elif self.pattern_Setup_UI.packName_LineEdit.text() == "":
             self.pattern_Setup_UI.packName_LineEdit.setFocus();
             return;
 
@@ -817,9 +847,9 @@ class HNet_GUI:
         self.simulator.Pattern_Pack_Delete(selected_Pattern_Pack_Name);
         self.Pattern_Setup_UI_Pattern_Pack_Changed();
 
-    def Pattern_Setup_UI_patternPack_ListWidget_Current_Item_Changed(self):        
+    def Pattern_Setup_UI_patternPack_ListWidget_Current_Item_Changed(self):
         self.pattern_Setup_UI.patternPackInformation_TextEdit.setText("");
-        
+
         if self.pattern_Setup_UI.patternPack_ListWidget.currentRow() < 0:
             return
 
@@ -838,22 +868,22 @@ class HNet_GUI:
         self.pattern_Setup_Dialog.hide();
         self.Main_UI_Simulator_Changed();
         self.main_Dialog.exec_();
-    
+
     def Pattern_Setup_UI_Pattern_Pack_Changed(self):
         self.pattern_Setup_UI.filePath_LineEdit.setText("");
         self.pattern_Setup_UI.packName_LineEdit.setText("");
-        self.pattern_Setup_UI.patternPack_ListWidget.clear();        
+        self.pattern_Setup_UI.patternPack_ListWidget.clear();
 
-        for key in self.simulator.pattern_Pack_Dict.keys():            
+        for key in self.simulator.pattern_Pack_Dict.keys():
             self.pattern_Setup_UI.patternPack_ListWidget.addItem(key);
     # End Pattern Setup Functions
-    
+
     # Start Process Setup Functions
     def Process_Setup_UI_processMaking_Button_Clicked(self):
         if self.process_Setup_UI.processName_LineEdit.text() == "":
-            self.process_Setup_UI.processName_LineEdit.setFocus();            
+            self.process_Setup_UI.processName_LineEdit.setFocus();
             return;
-            
+
         self.current_Process_Order_List = [];
         self.current_Process_Layer_Control_Dict = {};
         self.current_Process_Connection_Control_Dict = {};
@@ -869,7 +899,7 @@ class HNet_GUI:
 
         self.Process_Setup_UI_Order_and_Control_Changed();
         self.Process_Setup_UI_Making_Mode_Widget_Enable();
-        
+
     def Process_Setup_UI_processModify_Button_Clicked(self):
         if self.process_Setup_UI.process_ListWidget.currentRow() < 0:
             return;
@@ -897,7 +927,7 @@ class HNet_GUI:
             return;
 
         self.simulator.Process_Assign(self.process_Setup_UI.processName_LineEdit.text(), self.current_Process_Order_List, self.current_Process_Layer_Control_Dict, self.current_Process_Connection_Control_Dict);
-        
+
         self.current_Process_Order_List = [];
         self.current_Process_Layer_Control_Dict = {};
         self.current_Process_Connection_Control_Dict = {};
@@ -923,7 +953,7 @@ class HNet_GUI:
             self.current_Process_Connection_Control_Dict = self.simulator.process_Dict[selected_Process_Name]["Connection_Control_Dict"];
 
         self.Process_Setup_UI_Order_and_Control_Changed();
-    
+
     def Process_Setup_UI_processDelete_Button_Clicked(self):
         if self.process_Setup_UI.process_ListWidget.currentRow() < 0:
             return;
@@ -991,29 +1021,29 @@ class HNet_GUI:
         if selected_Order_Index < 0:
             return;
 
-        deleted_Order = self.current_Process_Order_List[selected_Order_Index]; 
+        deleted_Order = self.current_Process_Order_List[selected_Order_Index];
 
         del self.current_Process_Order_List[selected_Order_Index];
 
         for order_Index in range(selected_Order_Index, len(self.current_Process_Order_List)):
             if not self.Process_Setup_UI_Order_Consistency_Check(order_Index):
-                self.current_Process_Order_List.insert(selected_Order_Index, deleted_Order)    #Undo                
+                self.current_Process_Order_List.insert(selected_Order_Index, deleted_Order)    #Undo
                 QtWidgets.QMessageBox.warning(None, 'Warning!', "This order deleting impairs the consistency of orders.");
                 break;
 
         self.Process_Setup_UI_Order_and_Control_Changed();
 
     def Process_Setup_UI_orderUp_Button_Clicked(self):
-        selected_Order_Index = self.process_Setup_UI.order_ListWidget.currentRow();        
+        selected_Order_Index = self.process_Setup_UI.order_ListWidget.currentRow();
         if not selected_Order_Index > 0:
             return;
-            
+
         self.current_Process_Order_List[selected_Order_Index], self.current_Process_Order_List[selected_Order_Index - 1] = self.current_Process_Order_List[selected_Order_Index - 1], self.current_Process_Order_List[selected_Order_Index];
 
         if not self.Process_Setup_UI_Order_Consistency_Check(selected_Order_Index - 1) or not self.Process_Setup_UI_Order_Consistency_Check(selected_Order_Index):
             self.current_Process_Order_List[selected_Order_Index], self.current_Process_Order_List[selected_Order_Index - 1] = self.current_Process_Order_List[selected_Order_Index - 1], self.current_Process_Order_List[selected_Order_Index];    #Undo
             self.process_Setup_UI.order_ListWidget.setCurrentRow(selected_Order_Index);
-            QtWidgets.QMessageBox.warning(None, 'Warning!', "This order move impairs the consistency of orders.");            
+            QtWidgets.QMessageBox.warning(None, 'Warning!', "This order move impairs the consistency of orders.");
 
         self.Process_Setup_UI_Order_and_Control_Changed();
 
@@ -1024,10 +1054,10 @@ class HNet_GUI:
 
         self.current_Process_Order_List[selected_Order_Index], self.current_Process_Order_List[selected_Order_Index + 1] = self.current_Process_Order_List[selected_Order_Index + 1], self.current_Process_Order_List[selected_Order_Index];
         self.process_Setup_UI.order_ListWidget.setCurrentRow(selected_Order_Index + 1);
-    
+
         if not self.Process_Setup_UI_Order_Consistency_Check(selected_Order_Index) or not self.Process_Setup_UI_Order_Consistency_Check(selected_Order_Index + 1):
             self.current_Process_Order_List[selected_Order_Index], self.current_Process_Order_List[selected_Order_Index + 1] = self.current_Process_Order_List[selected_Order_Index + 1], self.current_Process_Order_List[selected_Order_Index];    #Undo;
-            self.process_Setup_UI.order_ListWidget.setCurrentRow(selected_Order_Index);           
+            self.process_Setup_UI.order_ListWidget.setCurrentRow(selected_Order_Index);
             QtWidgets.QMessageBox.warning(None, 'Warning!', "This order move impairs the consistency of orders.");
 
         self.Process_Setup_UI_Order_and_Control_Changed();
@@ -1040,7 +1070,7 @@ class HNet_GUI:
         for connection, layer in extract_Information:
             self.process_Setup_UI.bpHiddenLayer_ComboBox.addItem(layer);
 
-    def Process_Setup_UI_bpHiddenLayer_ComboBox_Current_Index_Changed(self):        
+    def Process_Setup_UI_bpHiddenLayer_ComboBox_Current_Index_Changed(self):
         self.process_Setup_UI.bpOutputLayer_ComboBox.clear();
 
         extract_Information = self.simulator.Extract_Connection_List(self.process_Setup_UI.bpHiddenLayer_ComboBox.currentText());
@@ -1061,11 +1091,11 @@ class HNet_GUI:
         input_Layer = self.process_Setup_UI.bpInputLayer_ComboBox.currentText();
         hidden_Layer = self.process_Setup_UI.bpHiddenLayer_ComboBox.currentText();
         output_Layer = self.process_Setup_UI.bpOutputLayer_ComboBox.currentText();
-        
+
         input_to_Hidden_Connection = self.simulator.Extract_Connection(input_Layer, hidden_Layer);
         hidden_to_Output_Connection = self.simulator.Extract_Connection(hidden_Layer, output_Layer);
-        
-        self.current_Process_Order_List.append((Order_Code.Input_Layer_Acitvation_Insert, [input_Layer], None, None));        
+
+        self.current_Process_Order_List.append((Order_Code.Input_Layer_Acitvation_Insert, [input_Layer], None, None));
         self.current_Process_Order_List.append((Order_Code.Activation_Send, [input_Layer, hidden_Layer], None, None));
         self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Sigmoid, [hidden_Layer], None, None));
         self.current_Process_Order_List.append((Order_Code.Activation_Send, [hidden_Layer, output_Layer], None, None));
@@ -1099,24 +1129,24 @@ class HNet_GUI:
         input_Layer = self.process_Setup_UI.bpInputLayer_ComboBox.currentText();
         hidden_Layer = self.process_Setup_UI.bpHiddenLayer_ComboBox.currentText();
         output_Layer = self.process_Setup_UI.bpOutputLayer_ComboBox.currentText();
-        
+
         input_to_Hidden_Connection = self.simulator.Extract_Connection(input_Layer, hidden_Layer);
         hidden_to_Output_Connection = self.simulator.Extract_Connection(hidden_Layer, output_Layer);
-        
-        self.current_Process_Order_List.append((Order_Code.Input_Layer_Acitvation_Insert, [input_Layer], None, None));        
+
+        self.current_Process_Order_List.append((Order_Code.Input_Layer_Acitvation_Insert, [input_Layer], None, None));
         self.current_Process_Order_List.append((Order_Code.Activation_Send, [input_Layer, hidden_Layer], None, None));
         self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Sigmoid, [hidden_Layer], None, None));
         self.current_Process_Order_List.append((Order_Code.Activation_Send, [hidden_Layer, output_Layer], None, None));
         if self.process_Setup_UI.bpErrorSigmoid_RadioButton.isChecked():
-            self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Sigmoid, [output_Layer], None, None));            
+            self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Sigmoid, [output_Layer], None, None));
         elif self.process_Setup_UI.bpErrorSoftmax_RadioButton.isChecked():
-            self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Softmax, [output_Layer], None, None));            
+            self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Softmax, [output_Layer], None, None));
         self.current_Process_Order_List.append((Order_Code.Activation_Extract, [output_Layer], None, None));
         self.current_Process_Order_List.append((Order_Code.End_and_Initialize, None, None, None));
 
         self.Process_Setup_UI_Order_and_Control_Changed();
 
-    def Process_Setup_UI_bpttTrainingApply_Button_Clicked(self):        
+    def Process_Setup_UI_bpttTrainingApply_Button_Clicked(self):
         if self.process_Setup_UI.bpttInputLayer_LineEdit.text() == "":
             self.process_Setup_UI.bpttInputLayer_LineEdit.setFocus();
             return;
@@ -1133,23 +1163,23 @@ class HNet_GUI:
         input_Layer_Regular_Name = self.process_Setup_UI.bpttInputLayer_LineEdit.text();
         hidden_Layer_Regular_Name = self.process_Setup_UI.bpttHiddenLayer_LineEdit.text();
         max_Tick = int(self.process_Setup_UI.bpttTick_LineEdit.text());
-        
+
         input_Layer_List = [];
         hidden_Layer_List = [];
         for tick in range(1, max_Tick + 1):
             input_Layer_List.append(input_Layer_Regular_Name + str(tick));
-            hidden_Layer_List.append(hidden_Layer_Regular_Name + str(tick));                
+            hidden_Layer_List.append(hidden_Layer_Regular_Name + str(tick));
         if not all([x in self.simulator.layer_Information_Dict.keys() for x in input_Layer_List]) or not all([x in self.simulator.layer_Information_Dict.keys() for x in hidden_Layer_List]):
              QtWidgets.QMessageBox.warning(None, 'Warning!', "There is no layer. The prefix of layer name or tick maybe wrong");
-             return;             
+             return;
         output_Layer = self.process_Setup_UI.bpttOutputLayer_ComboBox.currentText();
-        
+
         input_to_Hidden_Connection_List = [];
         for index in range(max_Tick):
             input_to_Hidden_Connection_List.append(self.simulator.Extract_Connection(input_Layer_List[index], hidden_Layer_List[index]));
         hidden_to_Hidden_Connection_List = [];
         for index in range(max_Tick - 1):
-            hidden_to_Hidden_Connection_List.append(self.simulator.Extract_Connection(hidden_Layer_List[index], hidden_Layer_List[index + 1]));        
+            hidden_to_Hidden_Connection_List.append(self.simulator.Extract_Connection(hidden_Layer_List[index], hidden_Layer_List[index + 1]));
         hidden_to_Output_Connection = self.simulator.Extract_Connection(hidden_Layer_List[-1], output_Layer);
         if not hidden_to_Output_Connection:
             QtWidgets.QMessageBox.warning(None, 'Warning!', "There is no connection between the last hidden and output layers.");
@@ -1162,24 +1192,24 @@ class HNet_GUI:
             self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Sigmoid, [hidden_Layer_List[index]], None, None));
             self.current_Process_Order_List.append((Order_Code.Activation_Send, [hidden_Layer_List[index], hidden_Layer_List[index + 1]], None, None));
         self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Sigmoid, [hidden_Layer_List[-1]], None, None));
-        self.current_Process_Order_List.append((Order_Code.Activation_Send, [hidden_Layer_List[-1], output_Layer], None, None));                        
+        self.current_Process_Order_List.append((Order_Code.Activation_Send, [hidden_Layer_List[-1], output_Layer], None, None));
         if self.process_Setup_UI.bpErrorSigmoid_RadioButton.isChecked():
             self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Sigmoid, [output_Layer], None, None));
             self.current_Process_Order_List.append((Order_Code.Output_Layer_Error_Calculation_Sigmoid, [output_Layer], None, None));
         elif self.process_Setup_UI.bpErrorSoftmax_RadioButton.isChecked():
             self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Softmax, [output_Layer], None, None));
-            self.current_Process_Order_List.append((Order_Code.Output_Layer_Error_Calculation_Softmax, [output_Layer], None, None));        
+            self.current_Process_Order_List.append((Order_Code.Output_Layer_Error_Calculation_Softmax, [output_Layer], None, None));
         self.current_Process_Order_List.append((Order_Code.Error_Send, [output_Layer, hidden_Layer_List[-1]], None, None));
         for index in reversed(range(1, len(hidden_Layer_List))):
             self.current_Process_Order_List.append((Order_Code.Hidden_Layer_Error_Calculation_Sigmoid, [hidden_Layer_List[index]], None, None));
             self.current_Process_Order_List.append((Order_Code.Error_Send, [hidden_Layer_List[index], hidden_Layer_List[index - 1]], None, None));
-        self.current_Process_Order_List.append((Order_Code.Hidden_Layer_Error_Calculation_Sigmoid, [hidden_Layer_List[0]], None, None));        
+        self.current_Process_Order_List.append((Order_Code.Hidden_Layer_Error_Calculation_Sigmoid, [hidden_Layer_List[0]], None, None));
         for input_to_Hidden_Connection in input_to_Hidden_Connection_List:
             self.current_Process_Order_List.append((Order_Code.Weight_Renewal, None, [input_to_Hidden_Connection], None));
         for hidden_to_Hidden_Connection in hidden_to_Hidden_Connection_List:
             self.current_Process_Order_List.append((Order_Code.Weight_Renewal, None, [hidden_to_Hidden_Connection], None));
         for hidden_Layer in hidden_Layer_List:
-            self.current_Process_Order_List.append((Order_Code.Bias_Renewal, [hidden_Layer], None, None));    
+            self.current_Process_Order_List.append((Order_Code.Bias_Renewal, [hidden_Layer], None, None));
         self.current_Process_Order_List.append((Order_Code.Bias_Renewal, [output_Layer], None, None));
         self.current_Process_Order_List.append((Order_Code.Weight_Equalization, None, input_to_Hidden_Connection_List, None));
         self.current_Process_Order_List.append((Order_Code.Weight_Equalization, None, hidden_to_Hidden_Connection_List, None));
@@ -1202,27 +1232,27 @@ class HNet_GUI:
         elif self.process_Setup_UI.bpttOutputLayer_ComboBox.currentText() == "":
             self.process_Setup_UI.bpttOutputLayer_ComboBox.setFocus();
             return;
-            
+
         input_Layer_Regular_Name = self.process_Setup_UI.bpttInputLayer_LineEdit.text();
         hidden_Layer_Regular_Name = self.process_Setup_UI.bpttHiddenLayer_LineEdit.text();
         max_Tick = int(self.process_Setup_UI.bpttTick_LineEdit.text());
-        
+
         input_Layer_List = [];
         hidden_Layer_List = [];
         for tick in range(1, max_Tick + 1):
             input_Layer_List.append(input_Layer_Regular_Name + str(tick));
-            hidden_Layer_List.append(hidden_Layer_Regular_Name + str(tick));                
+            hidden_Layer_List.append(hidden_Layer_Regular_Name + str(tick));
         if not all([x in self.simulator.layer_Information_Dict.keys() for x in input_Layer_List]) or not all([x in self.simulator.layer_Information_Dict.keys() for x in hidden_Layer_List]):
              QtWidgets.QMessageBox.warning(None, 'Warning!', "There is no layer. The prefix of layer name or tick maybe wrong");
              return;
         output_Layer = self.process_Setup_UI.bpttOutputLayer_ComboBox.currentText();
-        
+
         input_to_Hidden_Connection_List = [];
         for index in range(max_Tick):
             input_to_Hidden_Connection_List.append(self.simulator.Extract_Connection(input_Layer_List[index], hidden_Layer_List[index]));
         hidden_to_Hidden_Connection_List = [];
         for index in range(max_Tick - 1):
-            hidden_to_Hidden_Connection_List.append(self.simulator.Extract_Connection(hidden_Layer_List[index], hidden_Layer_List[index + 1]));        
+            hidden_to_Hidden_Connection_List.append(self.simulator.Extract_Connection(hidden_Layer_List[index], hidden_Layer_List[index + 1]));
         hidden_to_Output_Connection = self.simulator.Extract_Connection(hidden_Layer_List[-1], output_Layer);
         if not hidden_to_Output_Connection:
             QtWidgets.QMessageBox.warning(None, 'Warning!', "There is no connection between the last hidden and output layers.");
@@ -1235,9 +1265,9 @@ class HNet_GUI:
             self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Sigmoid, [hidden_Layer_List[index]], None, None));
             self.current_Process_Order_List.append((Order_Code.Activation_Send, [hidden_Layer_List[index], hidden_Layer_List[index + 1]], None, None));
         self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Sigmoid, [hidden_Layer_List[-1]], None, None));
-        self.current_Process_Order_List.append((Order_Code.Activation_Send, [hidden_Layer_List[-1], output_Layer], None, None));                        
+        self.current_Process_Order_List.append((Order_Code.Activation_Send, [hidden_Layer_List[-1], output_Layer], None, None));
         if self.process_Setup_UI.bpErrorSigmoid_RadioButton.isChecked():
-            self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Sigmoid, [output_Layer], None, None));        
+            self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Sigmoid, [output_Layer], None, None));
         elif self.process_Setup_UI.bpErrorSoftmax_RadioButton.isChecked():
             self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Softmax, [output_Layer], None, None));
         self.current_Process_Order_List.append((Order_Code.Activation_Extract, [output_Layer], None, None));
@@ -1256,7 +1286,7 @@ class HNet_GUI:
             hidden_Candidate_from_Context = [x[1] for x in extract_Information_from_Context];
             layer_Candidate_List = list(set(hidden_Candidate_from_Input) & set(hidden_Candidate_from_Context));
             for layer in layer_Candidate_List:
-                if self.simulator.layer_Information_Dict[self.process_Setup_UI.srnContextLayer_ComboBox.currentText()]["Unit"] == self.simulator.layer_Information_Dict[layer]["Unit"]:  #Conext layer's unit amount has to be same to hidden layer's 
+                if self.simulator.layer_Information_Dict[self.process_Setup_UI.srnContextLayer_ComboBox.currentText()]["Unit"] == self.simulator.layer_Information_Dict[layer]["Unit"]:  #Conext layer's unit amount has to be same to hidden layer's
                     self.process_Setup_UI.srnHiddenLayer_ComboBox.addItem(layer);
 
     def Process_Setup_UI_srnContextLayer_ComboBox_Current_Index_Changed(self):
@@ -1291,13 +1321,13 @@ class HNet_GUI:
         hidden_Layer = self.process_Setup_UI.srnHiddenLayer_ComboBox.currentText();
         output_Layer = self.process_Setup_UI.srnOutputLayer_ComboBox.currentText();
         max_Cycle = int(self.process_Setup_UI.srnMaxCycle_LineEdit.text());
-        
+
         input_to_Hidden_Connection = self.simulator.Extract_Connection(input_Layer, hidden_Layer);
         context_to_Hidden_Connection = self.simulator.Extract_Connection(context_Layer, hidden_Layer);
         hidden_to_Output_Connection = self.simulator.Extract_Connection(hidden_Layer, output_Layer);
-        
+
         for cycle in range(max_Cycle):
-            self.current_Process_Order_List.append((Order_Code.Input_Layer_Acitvation_Insert, [input_Layer], None, None));        
+            self.current_Process_Order_List.append((Order_Code.Input_Layer_Acitvation_Insert, [input_Layer], None, None));
             self.current_Process_Order_List.append((Order_Code.Activation_Send, [input_Layer, hidden_Layer], None, None));
             if cycle != 0:
                 self.current_Process_Order_List.append((Order_Code.Activation_Send, [context_Layer, hidden_Layer], None, None));
@@ -1309,11 +1339,11 @@ class HNet_GUI:
             elif self.process_Setup_UI.srnErrorSoftmax_RadioButton.isChecked():
                 self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Softmax, [output_Layer], None, None));
                 self.current_Process_Order_List.append((Order_Code.Output_Layer_Error_Calculation_Softmax, [output_Layer], None, None));
-            self.current_Process_Order_List.append((Order_Code.Error_Send, [output_Layer, hidden_Layer], None, None));    
+            self.current_Process_Order_List.append((Order_Code.Error_Send, [output_Layer, hidden_Layer], None, None));
             self.current_Process_Order_List.append((Order_Code.Hidden_Layer_Error_Calculation_Sigmoid, [hidden_Layer], None, None));
             self.current_Process_Order_List.append((Order_Code.Weight_Renewal, None, [input_to_Hidden_Connection], None));
             if cycle != 0:
-                self.current_Process_Order_List.append((Order_Code.Weight_Renewal, None, [context_to_Hidden_Connection], None));        
+                self.current_Process_Order_List.append((Order_Code.Weight_Renewal, None, [context_to_Hidden_Connection], None));
             self.current_Process_Order_List.append((Order_Code.Weight_Renewal, None, [hidden_to_Output_Connection], None));
             self.current_Process_Order_List.append((Order_Code.Bias_Renewal, [hidden_Layer], None, None));
             self.current_Process_Order_List.append((Order_Code.Bias_Renewal, [output_Layer], None, None));
@@ -1349,13 +1379,13 @@ class HNet_GUI:
         hidden_Layer = self.process_Setup_UI.srnHiddenLayer_ComboBox.currentText();
         output_Layer = self.process_Setup_UI.srnOutputLayer_ComboBox.currentText();
         max_Cycle = int(self.process_Setup_UI.srnMaxCycle_LineEdit.text());
-        
+
         input_to_Hidden_Connection = self.simulator.Extract_Connection(input_Layer, hidden_Layer);
         context_to_Hidden_Connection = self.simulator.Extract_Connection(context_Layer, hidden_Layer);
         hidden_to_Output_Connection = self.simulator.Extract_Connection(hidden_Layer, output_Layer);
-        
+
         for cycle in range(max_Cycle):
-            self.current_Process_Order_List.append((Order_Code.Input_Layer_Acitvation_Insert, [input_Layer], None, None));        
+            self.current_Process_Order_List.append((Order_Code.Input_Layer_Acitvation_Insert, [input_Layer], None, None));
             self.current_Process_Order_List.append((Order_Code.Activation_Send, [input_Layer, hidden_Layer], None, None));
             if cycle != 0:
                 self.current_Process_Order_List.append((Order_Code.Activation_Send, [context_Layer, hidden_Layer], None, None));
@@ -1371,18 +1401,18 @@ class HNet_GUI:
                 self.current_Process_Order_List.append((Order_Code.Layer_Initialize, [input_Layer], None, None));
                 self.current_Process_Order_List.append((Order_Code.Layer_Initialize, [hidden_Layer], None, None));
                 self.current_Process_Order_List.append((Order_Code.Layer_Initialize, [output_Layer], None, None));
-                self.current_Process_Order_List.append((Order_Code.Cycle_Marker, None, None, None));            
+                self.current_Process_Order_List.append((Order_Code.Cycle_Marker, None, None, None));
         self.current_Process_Order_List.append((Order_Code.End_and_Initialize, None, None, None));
 
         self.Process_Setup_UI_Order_and_Control_Changed();
-    
+
     def Process_Setup_UI_linearForwardAdd_Button_Clicked(self):
         if self.process_Setup_UI.linearForwardLayer_ComboBox.currentText() == "":
             self.process_Setup_UI.linearForwardLayer_ComboBox.setFocus();
             return;
 
         self.current_Process_Linear_Forward_List.append(self.process_Setup_UI.linearForwardLayer_ComboBox.currentText());
-        
+
         self.Process_Setup_UI_Order_and_Control_Changed();
 
     def Process_Setup_UI_linearForwardDelete_Button_Clicked(self):
@@ -1392,7 +1422,7 @@ class HNet_GUI:
         del self.current_Process_Linear_Forward_List[-1];
 
         self.Process_Setup_UI_Order_and_Control_Changed();
-    
+
     def Process_Setup_UI_linearForwardApply_Button_Clicked(self):
         if len(self.current_Process_Linear_Forward_List) < 2:
             QtWidgets.QMessageBox.warning(None, 'Warning!', "At least, there are two layers in the list.");
@@ -1402,7 +1432,7 @@ class HNet_GUI:
         last_Layer = self.current_Process_Linear_Forward_List[-1];
 
         if self.process_Setup_UI.linearForwardFirstLayerTypeInput_RadioButton.isChecked():
-            self.current_Process_Order_List.append((Order_Code.Input_Layer_Acitvation_Insert, [first_Layer], None, None));            
+            self.current_Process_Order_List.append((Order_Code.Input_Layer_Acitvation_Insert, [first_Layer], None, None));
         elif self.process_Setup_UI.linearForwardFirstLayerTypeHidden_RadioButton.isChecked():
             if not self.Process_Setup_UI_Layer_Activated_Check(first_Layer) and self.Process_Setup_UI_Layer_Activation_Stroaged_Check(first_Layer):
                 self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Sigmoid, [first_Layer], None, None));
@@ -1418,8 +1448,8 @@ class HNet_GUI:
         if self.process_Setup_UI.linearForwardActivationExtractforTest_CheckBox.isChecked():
             self.current_Process_Order_List.append((Order_Code.Activation_Extract, [last_Layer], None, None));
 
-        self.current_Process_Linear_Forward_List = [];    
-        
+        self.current_Process_Linear_Forward_List = [];
+
         self.Process_Setup_UI_Order_and_Control_Changed();
         self.Process_Setup_UI_linearForwardLayer_Changed();
 
@@ -1429,7 +1459,7 @@ class HNet_GUI:
             return;
 
         self.current_Process_Linear_Backward_List.append(self.process_Setup_UI.linearBackwardLayer_ComboBox.currentText());
-        
+
         self.Process_Setup_UI_Order_and_Control_Changed();
 
     def Process_Setup_UI_linearBackwardDelete_Button_Clicked(self):
@@ -1451,13 +1481,13 @@ class HNet_GUI:
         if not self.Process_Setup_UI_Layer_Error_Calculated_Check(first_Layer):
             if self.process_Setup_UI.linearBackwardFirstLayerTypeHidden_RadioButton.isChecked():
                 if not self.Process_Setup_UI_Layer_Error_Stroaged_Check(first_Layer):
-                    raise Exception("Linear Backward Error Process");                
+                    raise Exception("Linear Backward Error Process");
                 self.current_Process_Order_List.append((Order_Code.Hidden_Layer_Error_Calculation_Sigmoid, [first_Layer], None, None));
             elif self.process_Setup_UI.linearBackwardFirstLayerTypeOutputSigmoid_RadioButton.isChecked():
                 self.current_Process_Order_List.append((Order_Code.Output_Layer_Error_Calculation_Sigmoid, [first_Layer], None, None));
             elif self.process_Setup_UI.linearBackwardFirstLayerTypeOutputSoftmax_RadioButton.isChecked():
                 self.current_Process_Order_List.append((Order_Code.Output_Layer_Error_Calculation_Softmax, [first_Layer], None, None));
-        self.current_Process_Order_List.append((Order_Code.Error_Send, [first_Layer, self.current_Process_Linear_Backward_List[1]], None, None));        
+        self.current_Process_Order_List.append((Order_Code.Error_Send, [first_Layer, self.current_Process_Linear_Backward_List[1]], None, None));
         for layer_Index in range(1, len(self.current_Process_Linear_Backward_List) - 2):
             layer = self.current_Process_Linear_Backward_List[layer_Index];
             self.current_Process_Order_List.append((Order_Code.Hidden_Layer_Error_Calculation_Sigmoid, [layer], None, None));
@@ -1475,13 +1505,13 @@ class HNet_GUI:
 
         if self.process_Setup_UI.linearBackwardLastLayerTypeInput_RadioButton.isChecked():
             for layer in self.current_Process_Linear_Backward_List[:-1]:
-                self.current_Process_Order_List.append((Order_Code.Bias_Renewal, [layer], None, None));        
+                self.current_Process_Order_List.append((Order_Code.Bias_Renewal, [layer], None, None));
         elif self.process_Setup_UI.linearBackwardLastLayerTypeHidden_RadioButton.isChecked():
             for layer in self.current_Process_Linear_Backward_List:
                 self.current_Process_Order_List.append((Order_Code.Bias_Renewal, [layer], None, None));
 
-        self.current_Process_Linear_Backward_List = [];    
-        
+        self.current_Process_Linear_Backward_List = [];
+
         self.Process_Setup_UI_Order_and_Control_Changed();
         self.Process_Setup_UI_linearBackwardLayer_Changed();
 
@@ -1495,7 +1525,7 @@ class HNet_GUI:
     def Process_Setup_UI_customInputLayerActivationInsert_Button_Clicked(self):
         self.current_Process_Order_List.append((Order_Code.Input_Layer_Acitvation_Insert, [self.process_Setup_UI.customLayer1_ComboBox.currentText()], None, None));
         self.Process_Setup_UI_Order_and_Control_Changed();
-    
+
     def Process_Setup_UI_customLayerActivationSend_Button_Clicked(self):
         self.current_Process_Order_List.append((Order_Code.Activation_Send, [self.process_Setup_UI.customLayer1_ComboBox.currentText(), self.process_Setup_UI.customLayer2_ComboBox.currentText()], None, None));
         self.Process_Setup_UI_Order_and_Control_Changed();
@@ -1534,7 +1564,7 @@ class HNet_GUI:
 
     def Process_Setup_UI_customErrorSend_Button_Clicked(self):
         self.current_Process_Order_List.append((Order_Code.Error_Send, [self.process_Setup_UI.customLayer1_ComboBox.currentText(), self.process_Setup_UI.customLayer2_ComboBox.currentText()], None, None));
-        self.Process_Setup_UI_Order_and_Control_Changed();    
+        self.Process_Setup_UI_Order_and_Control_Changed();
 
     def Process_Setup_UI_customActivationExtract_Button_Clicked(self):
         self.current_Process_Order_List.append((Order_Code.Activation_Extract, [self.process_Setup_UI.customLayer1_ComboBox.currentText()], None, None));
@@ -1543,18 +1573,18 @@ class HNet_GUI:
     def Process_Setup_UI_customBiasRenewal_Button_Clicked(self):
         self.current_Process_Order_List.append((Order_Code.Bias_Renewal, [self.process_Setup_UI.customLayer1_ComboBox.currentText()], None, None));
         self.Process_Setup_UI_Order_and_Control_Changed();
-        
+
     def Process_Setup_UI_customWeightRenewal_Button_Clicked(self):
         self.current_Process_Order_List.append((Order_Code.Weight_Renewal, None, [self.process_Setup_UI.customConnection1_ComboBox.currentText()], None));
         self.Process_Setup_UI_Order_and_Control_Changed();
-    
+
     def Process_Setup_UI_customLayerDuplicate_Button_Clicked(self):
         self.current_Process_Order_List.append((Order_Code.Layer_Duplication, [self.process_Setup_UI.customLayer1_ComboBox.currentText(), self.process_Setup_UI.customLayer2_ComboBox.currentText()], None, None));
         self.Process_Setup_UI_Order_and_Control_Changed();
 
     def Process_Setup_UI_customConnectionDuplicate_Button_Clicked(self):
         self.current_Process_Order_List.append((Order_Code.Connection_Duplication, None, [self.process_Setup_UI.customConnection1_ComboBox.currentText(), self.process_Setup_UI.customConnection2_ComboBox.currentText()], None));
-        self.Process_Setup_UI_Order_and_Control_Changed();  
+        self.Process_Setup_UI_Order_and_Control_Changed();
 
     def Process_Setup_UI_customTransposedConnectionDuplicate_Button_Clicked(self):
         self.current_Process_Order_List.append((Order_Code.Transposed_Connection_Duplication, None, [self.process_Setup_UI.customConnection1_ComboBox.currentText(), self.process_Setup_UI.customConnection2_ComboBox.currentText()], None));
@@ -1570,7 +1600,7 @@ class HNet_GUI:
             return;
 
         self.current_Process_Custom_Bias_Equalization_Layer_List.append(selected_Layer);
-    
+
         self.Process_Setup_UI_customBiasEqualizationLayer_Changed();
 
     def Process_Setup_UI_customBiasEqualizationDelete_Button_Clicked(self):
@@ -1587,11 +1617,11 @@ class HNet_GUI:
             QtWidgets.QMessageBox.warning(None, 'Warning!', "At least, there are two layers in the list.");
             return;
 
-        self.current_Process_Order_List.append((Order_Code.Bias_Equalization, self.current_Process_Custom_Bias_Equalization_Layer_List, None, None));        
+        self.current_Process_Order_List.append((Order_Code.Bias_Equalization, self.current_Process_Custom_Bias_Equalization_Layer_List, None, None));
         self.current_Process_Custom_Bias_Equalization_Layer_List = [];
 
         self.Process_Setup_UI_Order_and_Control_Changed();
-        
+
     def Process_Setup_UI_customWeightEqualizationConnectionAdd_Button_Clicked(self):
         selected_Connection = self.process_Setup_UI.customWeightEqualizationConnection_ComboBox.currentText()
         if selected_Connection == "":
@@ -1602,9 +1632,9 @@ class HNet_GUI:
             return;
 
         self.current_Process_Custom_Weight_Equalization_Connection_List.append(selected_Connection);
-    
+
         self.Process_Setup_UI_customWeightEqualizationConnection_Changed();
-        
+
     def Process_Setup_UI_customWeightEqualizationConnectionDelete_Button_Clicked(self):
         selected_Connection_Index = self.process_Setup_UI.customWeightEqualization_ListWidget.currentRow();
         if selected_Connection_Index < 0:
@@ -1613,13 +1643,13 @@ class HNet_GUI:
         del self.current_Process_Custom_Weight_Equalization_Connection_List[selected_Connection_Index];
 
         self.Process_Setup_UI_customWeightEqualizationConnection_Changed();
-        
+
     def Process_Setup_UI_customWeightEqualization_Button_Clicked(self):
         if len(self.current_Process_Custom_Weight_Equalization_Connection_List) < 2:
             QtWidgets.QMessageBox.warning(None, 'Warning!', "At least, there are two connections in the list.");
             return;
 
-        self.current_Process_Order_List.append((Order_Code.Weight_Equalization, None, self.current_Process_Custom_Weight_Equalization_Connection_List, None));        
+        self.current_Process_Order_List.append((Order_Code.Weight_Equalization, None, self.current_Process_Custom_Weight_Equalization_Connection_List, None));
         self.current_Process_Custom_Weight_Equalization_Connection_List = [];
 
         self.Process_Setup_UI_Order_and_Control_Changed();
@@ -1647,8 +1677,8 @@ class HNet_GUI:
 
         if not self.process_Setup_UI.customLayer1_ComboBox.currentIndex() > 0:
             return;
-            
-        self.process_Setup_UI.customLayer2_ComboBox.setEnabled(True);            
+
+        self.process_Setup_UI.customLayer2_ComboBox.setEnabled(True);
         self.process_Setup_UI.customConnection1_ComboBox.setCurrentIndex(0);
         self.process_Setup_UI.customConnection2_ComboBox.setCurrentIndex(0);
         self.process_Setup_UI.customConnection2_ComboBox.setEnabled(False);
@@ -1660,14 +1690,14 @@ class HNet_GUI:
             return;
 
         self.Process_Setup_UI_customTap_Enable();
-            
+
     def Process_Setup_UI_customConnection1_ComboBox_Current_Index_Changed(self):
         self.process_Setup_UI.customConnection2_ComboBox.setCurrentIndex(0);
 
         if not self.process_Setup_UI.customConnection1_ComboBox.currentIndex() > 0:
             return;
-            
-        self.process_Setup_UI.customConnection2_ComboBox.setEnabled(True);            
+
+        self.process_Setup_UI.customConnection2_ComboBox.setEnabled(True);
         self.process_Setup_UI.customLayer1_ComboBox.setCurrentIndex(0);
         self.process_Setup_UI.customLayer2_ComboBox.setCurrentIndex(0);
         self.process_Setup_UI.customLayer2_ComboBox.setEnabled(False);
@@ -1707,7 +1737,7 @@ class HNet_GUI:
             self.main_UI.processLock_Button.setEnabled(False);
         self.Main_UI_Simulator_Changed();
         self.main_Dialog.exec_();
-    
+
     def Process_Setup_UI_ComboBox_Add_Item(self):
         self.process_Setup_UI.bpInputLayer_ComboBox.clear();
         self.process_Setup_UI.bpttOutputLayer_ComboBox.clear();
@@ -1717,8 +1747,8 @@ class HNet_GUI:
         self.process_Setup_UI.linearBackwardLayer_ComboBox.clear();
         self.process_Setup_UI.customLayer1_ComboBox.clear();
         self.process_Setup_UI.customLayer2_ComboBox.clear();
-        self.process_Setup_UI.customBiasEqualizationLayer_ComboBox.clear();    
-    
+        self.process_Setup_UI.customBiasEqualizationLayer_ComboBox.clear();
+
         self.process_Setup_UI.customConnection1_ComboBox.clear();
         self.process_Setup_UI.customConnection2_ComboBox.clear();
         self.process_Setup_UI.customWeightEqualizationConnection_ComboBox.clear();
@@ -1731,7 +1761,7 @@ class HNet_GUI:
         self.process_Setup_UI.linearBackwardLayer_ComboBox.addItem("");
         self.process_Setup_UI.customLayer1_ComboBox.addItem("");
         self.process_Setup_UI.customLayer2_ComboBox.addItem("");
-        self.process_Setup_UI.customBiasEqualizationLayer_ComboBox.addItem("");    
+        self.process_Setup_UI.customBiasEqualizationLayer_ComboBox.addItem("");
         self.process_Setup_UI.customConnection1_ComboBox.addItem("");
         self.process_Setup_UI.customConnection2_ComboBox.addItem("");
         self.process_Setup_UI.customWeightEqualizationConnection_ComboBox.addItem("");
@@ -1746,7 +1776,7 @@ class HNet_GUI:
             self.process_Setup_UI.customLayer1_ComboBox.addItem(layer);
             self.process_Setup_UI.customLayer2_ComboBox.addItem(layer);
             self.process_Setup_UI.customBiasEqualizationLayer_ComboBox.addItem(layer);
-        
+
         for connection in self.simulator.connection_Information_Dict.keys():
             self.process_Setup_UI.customConnection1_ComboBox.addItem(connection);
             self.process_Setup_UI.customConnection2_ComboBox.addItem(connection);
@@ -1759,7 +1789,7 @@ class HNet_GUI:
         self.process_Setup_UI.processMaking_Button.setEnabled(True);
         self.process_Setup_UI.processModify_Button.setEnabled(True);
         self.process_Setup_UI.processEnd_Button.setEnabled(False);
-        
+
         self.process_Setup_UI.layerOn_Button.setEnabled(False);
         self.process_Setup_UI.layerOff_Button.setEnabled(False);
         self.process_Setup_UI.layerDamage_Button.setEnabled(False);
@@ -1783,7 +1813,7 @@ class HNet_GUI:
         self.process_Setup_UI.processMaking_Button.setEnabled(False);
         self.process_Setup_UI.processModify_Button.setEnabled(False);
         self.process_Setup_UI.processEnd_Button.setEnabled(True);
-        
+
         self.process_Setup_UI.layerOn_Button.setEnabled(True);
         self.process_Setup_UI.layerOff_Button.setEnabled(True);
         self.process_Setup_UI.layerDamage_Button.setEnabled(True);
@@ -1799,33 +1829,33 @@ class HNet_GUI:
         self.process_Setup_UI.orderDown_Button.setEnabled(True);
 
         self.process_Setup_UI.order_TapWidget.setEnabled(True);
-    
-    
+
+
     def Process_Setup_UI_Process_Changed(self):
         self.process_Setup_UI.processName_LineEdit.setText("");
         self.process_Setup_UI.process_ListWidget.clear();
 
-        for key in self.simulator.process_Dict.keys():            
+        for key in self.simulator.process_Dict.keys():
             self.process_Setup_UI.process_ListWidget.addItem(key);
 
         self.process_Setup_UI.bpInputLayer_ComboBox.setCurrentIndex(0);
         self.process_Setup_UI.bpttInputLayer_LineEdit.setText("");
         self.process_Setup_UI.bpttHiddenLayer_LineEdit.setText("");
         self.process_Setup_UI.bpttTick_LineEdit.setText("");
-        self.process_Setup_UI.bpttOutputLayer_ComboBox.setCurrentIndex(0);        
+        self.process_Setup_UI.bpttOutputLayer_ComboBox.setCurrentIndex(0);
         self.process_Setup_UI.srnInputLayer_ComboBox.setCurrentIndex(0);
         self.process_Setup_UI.srnContextLayer_ComboBox.setCurrentIndex(0);
         self.process_Setup_UI.linearForwardLayer_ComboBox.setCurrentIndex(0);
         self.process_Setup_UI.linearBackwardLayer_ComboBox.setCurrentIndex(0);
         self.process_Setup_UI.customLayer1_ComboBox.setCurrentIndex(0);
-        self.process_Setup_UI.customConnection1_ComboBox.setCurrentIndex(0);        
-        
+        self.process_Setup_UI.customConnection1_ComboBox.setCurrentIndex(0);
+
         self.Process_Setup_UI_Order_and_Control_Changed();
 
     def Process_Setup_UI_Order_and_Control_Changed(self):
         self.process_Setup_UI.order_ListWidget.clear();
         self.process_Setup_UI.layerControl_ListWidget.clear();
-        self.process_Setup_UI.connectionControl_ListWidget.clear();        
+        self.process_Setup_UI.connectionControl_ListWidget.clear();
 
         #Order_List
         for order_Code, layer_Name_List, connection_Name_List, order_Variable_List in self.current_Process_Order_List:
@@ -1834,13 +1864,13 @@ class HNet_GUI:
             else:
                 variable_Text = "";
 
-            if not layer_Name_List is None:                
+            if not layer_Name_List is None:
                 self.process_Setup_UI.order_ListWidget.addItem(str(order_Code)[11:] + " (" + ", ".join([layer for layer in layer_Name_List]) + ")" + variable_Text);
-            elif not connection_Name_List is None:                
+            elif not connection_Name_List is None:
                 self.process_Setup_UI.order_ListWidget.addItem(str(order_Code)[11:] + " (" + ", ".join([connection for connection in connection_Name_List]) + ")" + variable_Text);
             else:
-                self.process_Setup_UI.order_ListWidget.addItem(str(order_Code)[11:] + variable_Text);            
-            
+                self.process_Setup_UI.order_ListWidget.addItem(str(order_Code)[11:] + variable_Text);
+
         #Layer_Control_List
         for layer in self.current_Process_Layer_Control_Dict.keys():
             if self.current_Process_Layer_Control_Dict[layer][0] == Damage_Type.On:
@@ -1849,7 +1879,7 @@ class HNet_GUI:
                 self.process_Setup_UI.layerControl_ListWidget.addItem(str(layer) + " → Off");
             elif self.current_Process_Layer_Control_Dict[layer][0] == Damage_Type.Damaged:
                 self.process_Setup_UI.layerControl_ListWidget.addItem(str(layer) + " → Damaged(" + str(self.current_Process_Layer_Control_Dict[layer][1]) + ")");
-            
+
         #Connection_Control_List
         for connection in self.current_Process_Connection_Control_Dict.keys():
             if self.current_Process_Connection_Control_Dict[connection][0] == Damage_Type.On:
@@ -1869,7 +1899,7 @@ class HNet_GUI:
         self.Process_Setup_UI_srnTap_Enable();
         self.Process_Setup_UI_linearTap_Enable();
         self.Process_Setup_UI_customTap_Enable();
-    
+
     def Process_Setup_UI_linearForwardLayer_Changed(self):
         self.process_Setup_UI.linearForwardLayer_ComboBox.clear();
         self.process_Setup_UI.linearForwardLayer_ListWidget.clear();
@@ -1878,7 +1908,7 @@ class HNet_GUI:
             self.process_Setup_UI.linearForwardLayer_ComboBox.addItem("");
             for layer in self.simulator.layer_Information_Dict.keys():
                 self.process_Setup_UI.linearForwardLayer_ComboBox.addItem(layer);
-        else:            
+        else:
             last_Layer = self.current_Process_Linear_Forward_List[-1];
             extract_Information = self.simulator.Extract_Connection_List(last_Layer);
             for connection, layer in extract_Information:
@@ -1917,8 +1947,8 @@ class HNet_GUI:
         self.process_Setup_UI.customWeightEqualization_ListWidget.clear();
 
         for connection in self.current_Process_Custom_Weight_Equalization_Connection_List:
-            self.process_Setup_UI.customWeightEqualization_ListWidget.addItem(connection);    
-    
+            self.process_Setup_UI.customWeightEqualization_ListWidget.addItem(connection);
+
     def Process_Setup_UI_customRandomAcitvation_Inserted(self):
         self.process_Setup_UI.customRandomActivationCriteria_LineEdit.setText("");
 
@@ -1956,11 +1986,11 @@ class HNet_GUI:
             first_Layer = self.current_Process_Linear_Backward_List[0];
             all_False_Check = True;
             if not self.Process_Setup_UI_Layer_Error_Stroaged_Check(first_Layer):
-                
+
                 self.process_Setup_UI.linearBackwardFirstLayerTypeHidden_RadioButton.setEnabled(False);
             else:
                 self.process_Setup_UI.linearBackwardFirstLayerTypeHidden_RadioButton.setEnabled(True);
-                all_False_Check = False;            
+                all_False_Check = False;
             if not self.Process_Setup_UI_Layer_Activated_Check(first_Layer) and not self.Process_Setup_UI_Layer_Error_Calculated_Check(first_Layer):
                 self.process_Setup_UI.linearBackwardFirstLayerTypeOutputSigmoid_RadioButton.setEnabled(False);
                 self.process_Setup_UI.linearBackwardFirstLayerTypeOutputSoftmax_RadioButton.setEnabled(False);
@@ -1968,11 +1998,11 @@ class HNet_GUI:
                 self.process_Setup_UI.linearBackwardFirstLayerTypeOutputSigmoid_RadioButton.setEnabled(True);
                 self.process_Setup_UI.linearBackwardFirstLayerTypeOutputSoftmax_RadioButton.setEnabled(True);
                 all_False_Check = False;
-            
-            if all_False_Check:                
+
+            if all_False_Check:
                 self.process_Setup_UI.linearBackwardApply_Button.setEnabled(False);
             else:
-                if self.process_Setup_UI.linearBackwardFirstLayerTypeHidden_RadioButton.isChecked() and not self.process_Setup_UI.linearBackwardFirstLayerTypeHidden_RadioButton.isEnabled():  
+                if self.process_Setup_UI.linearBackwardFirstLayerTypeHidden_RadioButton.isChecked() and not self.process_Setup_UI.linearBackwardFirstLayerTypeHidden_RadioButton.isEnabled():
                     self.process_Setup_UI.linearBackwardFirstLayerTypeHidden_RadioButton.setChecked(False);
                     self.process_Setup_UI.linearBackwardFirstLayerTypeOutputSigmoid_RadioButton.setChecked(True);
                 if self.process_Setup_UI.linearBackwardFirstLayerTypeOutputSigmoid_RadioButton.isChecked() and not self.process_Setup_UI.linearBackwardFirstLayerTypeOutputSigmoid_RadioButton.isEnabled():
@@ -1981,7 +2011,7 @@ class HNet_GUI:
                 if self.process_Setup_UI.linearBackwardFirstLayerTypeOutputSoftmax_RadioButton.isChecked() and not self.process_Setup_UI.linearBackwardFirstLayerTypeOutputSoftmax_RadioButton.isEnabled():
                     self.process_Setup_UI.linearBackwardFirstLayerTypeOutputSoftmax_RadioButton.setChecked(False);
                     self.process_Setup_UI.linearBackwardFirstLayerTypeHidden_RadioButton.setChecked(True);
-                
+
                 self.process_Setup_UI.linearBackwardApply_Button.setEnabled(True);
         else:
             self.process_Setup_UI.linearBackwardFirstLayerTypeHidden_RadioButton.setEnabled(True);
@@ -1989,11 +2019,11 @@ class HNet_GUI:
             self.process_Setup_UI.linearBackwardFirstLayerTypeOutputSoftmax_RadioButton.setEnabled(True);
             self.process_Setup_UI.linearBackwardApply_Button.setEnabled(True);
 
-        if len(self.current_Process_Order_List) > 0 and self.current_Process_Order_List[-1][0] == Order_Code.End_and_Initialize:            
+        if len(self.current_Process_Order_List) > 0 and self.current_Process_Order_List[-1][0] == Order_Code.End_and_Initialize:
             self.process_Setup_UI.linear_Tap.setEnabled(False);
         else:
             self.process_Setup_UI.linear_Tap.setEnabled(True);
-        
+
     def Process_Setup_UI_customTap_Enable(self):
         if len(self.current_Process_Order_List) > 0 and self.current_Process_Order_List[-1][0] == Order_Code.End_and_Initialize:
             self.process_Setup_UI.custom_Tap.setEnabled(False);
@@ -2021,7 +2051,7 @@ class HNet_GUI:
         self.process_Setup_UI.customTransposedConnectionDuplicate_Button.setEnabled(False);
         self.process_Setup_UI.customCycleMarker_Button.setEnabled(False);
         self.process_Setup_UI.customBiasEqualization_GroupBox.setEnabled(False);
-        self.process_Setup_UI.customWeightEqualization_GroupBox.setEnabled(False);        
+        self.process_Setup_UI.customWeightEqualization_GroupBox.setEnabled(False);
         self.process_Setup_UI.randomizeActivationInsert_GroupBox.setEnabled(False);
 
         #Always True
@@ -2031,7 +2061,7 @@ class HNet_GUI:
         self.process_Setup_UI.customWeightEqualization_GroupBox.setEnabled(True);
 
         #Layer
-        #None, Initial, Stroaged, Activated, CleanupActivated, ConnectedLayer_ErrorCalculated, ErrorCalculated Status        
+        #None, Initial, Stroaged, Activated, CleanupActivated, ConnectedLayer_ErrorCalculated, ErrorCalculated Status
         if self.process_Setup_UI.customLayer1_ComboBox.currentIndex() > 0:
             selected_Layer1 = self.process_Setup_UI.customLayer1_ComboBox.currentText();
 
@@ -2048,7 +2078,7 @@ class HNet_GUI:
                 self.process_Setup_UI.customLayerActivationCalculationSoftmax_Button.setEnabled(True);
                 self.process_Setup_UI.customLayerActivationCalculationReLU_Button.setEnabled(True);
 
-            if self.Process_Setup_UI_Layer_Activated_Check(selected_Layer1):                
+            if self.Process_Setup_UI_Layer_Activated_Check(selected_Layer1):
                 self.process_Setup_UI.customOutputLayerErrorCalculationSigmoid_Button.setEnabled(True);
                 self.process_Setup_UI.customOutputLayerErrorCalculationSoftmax_Button.setEnabled(True);
                 self.process_Setup_UI.customActivationExtract_Button.setEnabled(True);
@@ -2058,7 +2088,7 @@ class HNet_GUI:
             if self.Process_Setup_UI_Layer_Error_Stroaged_Check(selected_Layer1):
                 self.process_Setup_UI.customHiddenLayerErrorCalculationSigmoid_Button.setEnabled(True);
                 self.process_Setup_UI.customHiddenLayerErrorCalculationReLU_Button.setEnabled(True);
-                        
+
             if self.Process_Setup_UI_Layer_Error_Calculated_Check(selected_Layer1):
                 self.process_Setup_UI.customBiasRenewal_Button.setEnabled(True);
                 if self.process_Setup_UI.customLayer2_ComboBox.currentIndex() > 0 and self.simulator.Extract_Connection(selected_Layer2, selected_Layer1):
@@ -2075,11 +2105,11 @@ class HNet_GUI:
                     self.process_Setup_UI.customTransposedConnectionDuplicate_Button.setEnabled(True);
 
             if self.Process_Setup_UI_Connection_From_Activated_To_Error_Calculated_Check(selected_Connection1):
-                self.process_Setup_UI.customWeightRenewal_Button.setEnabled(True);            
+                self.process_Setup_UI.customWeightRenewal_Button.setEnabled(True);
 
     def Process_Setup_UI_Layer_Activation_Stroaged_Check(self, layer, check_Index = None):
         if check_Index == None:
-            check_Index = len(self.current_Process_Order_List); 
+            check_Index = len(self.current_Process_Order_List);
 
         activation_Storaged = False;
         current_Index = 0;
@@ -2110,10 +2140,10 @@ class HNet_GUI:
                 activated = False;
             current_Index += 1;
         return activated;
-    
+
     def Process_Setup_UI_Layer_Error_Stroaged_Check(self, layer, check_Index = None):
         if check_Index == None:
-            check_Index = len(self.current_Process_Order_List); 
+            check_Index = len(self.current_Process_Order_List);
 
         error_Storaged = False;
         current_Index = 0;
@@ -2130,7 +2160,7 @@ class HNet_GUI:
 
     def Process_Setup_UI_Layer_Error_Calculated_Check(self, layer, check_Index = None):
         if check_Index == None:
-            check_Index = len(self.current_Process_Order_List); 
+            check_Index = len(self.current_Process_Order_List);
 
         errorCalculated = False;
         current_Index = 0;
@@ -2152,17 +2182,17 @@ class HNet_GUI:
         from_Layer = self.simulator.connection_Information_Dict[connection]["From_Layer_Name"];
         to_Layer = self.simulator.connection_Information_Dict[connection]["To_Layer_Name"];
         return self.Process_Setup_UI_Layer_Activated_Check(from_Layer, check_Index) and self.Process_Setup_UI_Layer_Error_Calculated_Check(to_Layer, check_Index);
-    
-    def Process_Setup_UI_Order_Consistency_Check(self, order_Index):        
+
+    def Process_Setup_UI_Order_Consistency_Check(self, order_Index):
         check_Order = self.current_Process_Order_List[order_Index];
-        
+
         always_Fine_Order_Code_List = [
             Order_Code.Input_Layer_Acitvation_Insert,
             Order_Code.Layer_Duplication,
             Order_Code.Connection_Duplication,
             Order_Code.Transposed_Connection_Duplication,
             Order_Code.Bias_Equalization,
-            Order_Code.Weight_Equalization,    
+            Order_Code.Weight_Equalization,
             Order_Code.Layer_Initialize,
             Order_Code.Cycle_Marker,
             Order_Code.Uniform_Random_Activation_Insert,
@@ -2189,12 +2219,12 @@ class HNet_GUI:
         ]
         need_From_Activated_To_Error_Calculated_Order_Code_List = [
             Order_Code.Weight_Renewal
-        ]        
+        ]
         always_Impossible_Order_Code_List = [
             Order_Code.End_and_Initialize
         ]
-        
-        if check_Order[0] in always_Fine_Order_Code_List:            
+
+        if check_Order[0] in always_Fine_Order_Code_List:
             return True;
         elif check_Order[0] in need_Activation_Stroaged_Order_Code_List and self.Process_Setup_UI_Layer_Activation_Stroaged_Check(check_Order[1][0], order_Index):
             return True;
@@ -2205,13 +2235,13 @@ class HNet_GUI:
         elif check_Order[0] in need_Error_Stroaged_Order_Code_List and self.Process_Setup_UI_Layer_Error_Stroaged_Check(check_Order[1][0], order_Index):
             return True;
         elif check_Order[0] in need_From_Activated_To_Error_Calculated_Order_Code_List and self.Process_Setup_UI_Connection_From_Activated_To_Error_Calculated_Check(check_Order[2][0], order_Index):
-            return True;        
+            return True;
         else:
             return False;
-            
+
     #End Process Setup Functions
-    
-    # Start Learning Setup Functions    
+
+    # Start Learning Setup Functions
     def Learning_Setup_UI_learningSetupMaking_Button_Clicked(self):
         learning_Setup_Name = self.learning_Setup_UI.learningSetupName_LineEdit.text()
         if learning_Setup_Name == "":
@@ -2223,12 +2253,12 @@ class HNet_GUI:
                 return;
 
         self.learning_Setup_UI.learningSetup_ListWidget.setCurrentRow(-1);
-        
+
         self.Learning_Setup_UI_Current_Learning_Setup_Changed();
         self.Learning_Setup_UI_Making_Mode_Widget_Enable();
-    
+
     def Learning_Setup_UI_learningSetupModify_Button_Clicked(self):
-        selected_Index = self.learning_Setup_UI.learningSetup_ListWidget.currentRow();        
+        selected_Index = self.learning_Setup_UI.learningSetup_ListWidget.currentRow();
         if selected_Index < 0:
             return;
 
@@ -2253,16 +2283,16 @@ class HNet_GUI:
         test_Timing = int(self.learning_Setup_UI.testTiming_LineEdit.text());
         mini_Batch_Size = int(self.learning_Setup_UI.miniBatchSize_LineEdit.text());
         shuffle_Mode = Shuffle_Mode(self.learning_Setup_UI.shufflingMethod_ComboBox.currentIndex());
-        
+
         self.simulator.Learning_Setup_Assign(name, self.current_Training_Matching_List, self.current_Test_Matching_List, training_Epoch, test_Timing, mini_Batch_Size, shuffle_Mode);
-        
+
         self.Learning_Setup_UI_Learning_Setup_Changed();
-        self.Learning_Setup_UI_Viewing_Mode_Widget_Enable();        
+        self.Learning_Setup_UI_Viewing_Mode_Widget_Enable();
 
     def Learning_Setup_UI_learningSetup_ListWidget_Current_Item_Changed(self):
         self.Learning_Setup_UI_Current_Learning_Setup_Changed();
 
-    def Learning_Setup_UI_learningSetupDelete_Button_Clicked(self):        
+    def Learning_Setup_UI_learningSetupDelete_Button_Clicked(self):
         selected_Index = self.learning_Setup_UI.learningSetup_ListWidget.currentRow();
         if selected_Index < 0:
             return;
@@ -2272,19 +2302,19 @@ class HNet_GUI:
         self.Learning_Setup_UI_Learning_Setup_Changed();
 
     def Learning_Setup_UI_learningSetupUp_Button_Clicked(self):
-        selected_Index = self.learning_Setup_UI.learningSetup_ListWidget.currentRow();        
+        selected_Index = self.learning_Setup_UI.learningSetup_ListWidget.currentRow();
         if selected_Index < 1:
             return;
 
         self.simulator.learning_Setup_List[selected_Index], self.simulator.learning_Setup_List[selected_Index - 1] = self.simulator.learning_Setup_List[selected_Index - 1], self.simulator.learning_Setup_List[selected_Index];
 
         self.Learning_Setup_UI_Learning_Setup_Changed();
-        
+
     def Learning_Setup_UI_learningSetupDown_Button_Clicked(self, index):
         selected_Index = self.learning_Setup_UI.learningSetup_ListWidget.currentRow();
         if selected_Index < 0 and selected_Index > len(self.learning_Setup_List) - 2:
             return;
-            
+
         self.simulator.learning_Setup_List[selected_Index], self.simulator.learning_Setup_List[selected_Index + 1] = self.simulator.learning_Setup_List[selected_Index + 1], self.simulator.learning_Setup_List[selected_Index];
 
         self.Learning_Setup_UI_Learning_Setup_Changed();
@@ -2316,13 +2346,13 @@ class HNet_GUI:
         selected_Index = self.learning_Setup_UI.trainingPatternMatching_ListWidget.currentRow();
         if selected_Index < 0:
             return;
-            
+
         del self.current_Training_Matching_List[selected_Index];
 
         self.Learning_Setup_UI_Current_Training_Matching_List_Changed();
 
     def Learning_Setup_UI_trainingPatternMatchingUp_Button_Clicked(self):
-        selected_Index = self.learning_Setup_UI.trainingPatternMatching_ListWidget.currentRow();        
+        selected_Index = self.learning_Setup_UI.trainingPatternMatching_ListWidget.currentRow();
         if selected_Index < 1:
             return;
 
@@ -2331,10 +2361,10 @@ class HNet_GUI:
         self.Learning_Setup_UI_Current_Training_Matching_List_Changed();
 
     def Learning_Setup_UI_trainingPatternMatchingDown_Button_Clicked(self):
-        selected_Index = self.learning_Setup_UI.trainingPatternMatching_ListWidget.currentRow();        
+        selected_Index = self.learning_Setup_UI.trainingPatternMatching_ListWidget.currentRow();
         if selected_Index > len(self.current_Training_Matching_List) - 2:
             return;
-            
+
         self.current_Training_Matching_List[selected_Index], self.current_Training_Matching_List[selected_Index + 1] = self.current_Training_Matching_List[selected_Index + 1], self.current_Training_Matching_List[selected_Index];
 
         self.Learning_Setup_UI_Current_Training_Matching_List_Changed();
@@ -2342,7 +2372,7 @@ class HNet_GUI:
     def Learning_Setup_UI_trainingPatternPack_ComboBox_Current_Index_Changed(self):
         self.Learning_Setup_UI_Current_Training_Matching_Pattern_Pack_and_Process_Changed();
 
-    def Learning_Setup_UI_trainingProcess_ComboBox_Current_Index_Changed(self):        
+    def Learning_Setup_UI_trainingProcess_ComboBox_Current_Index_Changed(self):
         self.Learning_Setup_UI_Current_Training_Matching_Pattern_Pack_and_Process_Changed();
 
     def Learning_Setup_UI_trainingAutoAssign_Button_Clicked(self):
@@ -2359,7 +2389,7 @@ class HNet_GUI:
 
         assign_Fail_Index_List = [];
         curren_Cycle = 1;
-        for index in range(len(selected_Process["Order_List"])):            
+        for index in range(len(selected_Process["Order_List"])):
             order_Code, layer_List, connection_List, order_Variable_List = selected_Process["Order_List"][index];
             if order_Code == Order_Code.Cycle_Marker:
                 curren_Cycle += 1;
@@ -2406,7 +2436,7 @@ class HNet_GUI:
             else:
                 assign_Fail_Index_List.append(index);
 
-        if len(assign_Fail_Index_List) > 0:  
+        if len(assign_Fail_Index_List) > 0:
             QtWidgets.QMessageBox.warning(None, 'Warning!', "Some patterns could not be assined. It is recommanded that both of layer and pattern names are related with each other.");
 
         self.Learning_Setup_UI_Current_Training_Matching_Assign_Changed();
@@ -2424,11 +2454,11 @@ class HNet_GUI:
         elif self.learning_Setup_UI.trainingOrder_ComboBox.currentText()=="":
             self.learning_Setup_UI.trainingOrder_ComboBox.setFocus();
             return;
-        
+
         pattern_Pack_Name = self.learning_Setup_UI.trainingPatternPack_ComboBox.currentText();
         process_Name = self.learning_Setup_UI.trainingProcess_ComboBox.currentText();
         order_Index = int(self.learning_Setup_UI.trainingOrder_ComboBox.currentText().split(":")[0]);
-        pattern_Name = self.learning_Setup_UI.trainingPattern_ComboBox.currentText();        
+        pattern_Name = self.learning_Setup_UI.trainingPattern_ComboBox.currentText();
         layer_Name = self.simulator.process_Dict[process_Name]["Order_List"][order_Index][1][0];
 
         if self.simulator.layer_Information_Dict[layer_Name]["Unit"] != self.simulator.pattern_Pack_Dict[pattern_Pack_Name][pattern_Name].shape[1]:
@@ -2442,7 +2472,7 @@ class HNet_GUI:
     def Learning_Setup_UI_trainingPatternToOrderDelete_Button_Clicked(self):
         if self.learning_Setup_UI.trainingPatternToOrderInformation_ListWidget.currentRow() < 0:
             return;
-            
+
         del self.current_Training_Matching_Information["Assign"][int(self.learning_Setup_UI.trainingPatternToOrderInformation_ListWidget.currentItem().text().split(":")[0])];
 
         self.Learning_Setup_UI_Current_Training_Matching_Assign_Changed();
@@ -2482,10 +2512,10 @@ class HNet_GUI:
     def Learning_Setup_UI_testPatternPack_ComboBox_Current_Index_Changed(self):
         self.Learning_Setup_UI_Current_Test_Matching_Pattern_Pack_and_Process_Changed();
 
-    def Learning_Setup_UI_testProcess_ComboBox_Current_Index_Changed(self):        
+    def Learning_Setup_UI_testProcess_ComboBox_Current_Index_Changed(self):
         self.Learning_Setup_UI_Current_Test_Matching_Pattern_Pack_and_Process_Changed();
 
-    def Learning_Setup_UI_testAutoAssign_Button_Clicked(self):        
+    def Learning_Setup_UI_testAutoAssign_Button_Clicked(self):
         if self.learning_Setup_UI.testPatternPack_ComboBox.currentText() == "":
             self.learning_Setup_UI.testPatternPack_ComboBox.setFocus();
             return;
@@ -2499,7 +2529,7 @@ class HNet_GUI:
 
         assign_Fail_Index_List = [];
         curren_Cycle = 1;
-        for index in range(len(selected_Process["Order_List"])):            
+        for index in range(len(selected_Process["Order_List"])):
             order_Code, layer_List, connection_List, order_Variable_List = selected_Process["Order_List"][index];
             if order_Code == Order_Code.Cycle_Marker:
                 curren_Cycle += 1;
@@ -2546,7 +2576,7 @@ class HNet_GUI:
             else:
                 assign_Fail_Index_List.append(index);
 
-        if len(assign_Fail_Index_List) > 0:  
+        if len(assign_Fail_Index_List) > 0:
             QtWidgets.QMessageBox.warning(None, 'Warning!', "Some patterns could not be assined. It is recommanded that both of layer and pattern names are related with each other.");
 
         self.Learning_Setup_UI_Current_Test_Matching_Assign_Changed();
@@ -2564,11 +2594,11 @@ class HNet_GUI:
         elif self.learning_Setup_UI.testOrder_ComboBox.currentText()=="":
             self.learning_Setup_UI.testOrder_ComboBox.setFocus();
             return;
-        
+
         pattern_Pack_Name = self.learning_Setup_UI.testPatternPack_ComboBox.currentText();
         process_Name = self.learning_Setup_UI.testProcess_ComboBox.currentText();
         order_Index = int(self.learning_Setup_UI.testOrder_ComboBox.currentText().split(":")[0]);
-        pattern_Name = self.learning_Setup_UI.testPattern_ComboBox.currentText();        
+        pattern_Name = self.learning_Setup_UI.testPattern_ComboBox.currentText();
         layer_Name = self.simulator.process_Dict[process_Name]["Order_List"][order_Index][1][0];
 
         if self.simulator.layer_Information_Dict[layer_Name]["Unit"] != self.simulator.pattern_Pack_Dict[pattern_Pack_Name][pattern_Name].shape[1]:
@@ -2582,25 +2612,25 @@ class HNet_GUI:
     def Learning_Setup_UI_testPatternToOrderDelete_Button_Clicked(self):
         if self.learning_Setup_UI.testPatternToOrderInformation_ListWidget.currentRow() < 0:
             return;
-            
+
         del self.current_Test_Matching_Information["Assign"][int(self.learning_Setup_UI.testPatternToOrderInformation_ListWidget.currentItem().text().split(":")[0])];
 
         self.Learning_Setup_UI_Current_Test_Matching_Assign_Changed();
-    
+
     def Learning_Setup_UI_extractDataType_ComboBox_Current_Index_Changed(self):
         if Extract_Data_Type(self.learning_Setup_UI.extractDataType_ComboBox.currentIndex()) in [Extract_Data_Type.Raw_Activation, Extract_Data_Type.Semantic_Stress]:
             self.learning_Setup_UI.extractDataPattern_ComboBox.setEnabled(False);
         else:
             self.learning_Setup_UI.extractDataPattern_ComboBox.setEnabled(True);
 
-    def Learning_Setup_UI_extractDataAssign_Button_Clicked(self):        
+    def Learning_Setup_UI_extractDataAssign_Button_Clicked(self):
         if self.learning_Setup_UI.testPatternPack_ComboBox.currentText() == "":
             self.learning_Setup_UI.testPatternPack_ComboBox.setFocus();
             return;
         elif self.learning_Setup_UI.testProcess_ComboBox.currentText() == "":
             self.learning_Setup_UI.testProcess_ComboBox.setFocus();
             return;
-            
+
         selected_Index = self.learning_Setup_UI.extractDataType_ComboBox.currentIndex();
         if Extract_Data_Type(selected_Index) in [Extract_Data_Type.Raw_Activation, Extract_Data_Type.Semantic_Stress]:
             pattern = None;
@@ -2614,11 +2644,11 @@ class HNet_GUI:
     def Learning_Setup_UI_extractDataDelete_Button_Clicked(self):
         if self.learning_Setup_UI.extractData_ListWidget.currentRow() < 0:
             return;
-            
+
         del self.current_Test_Matching_Information["Extract_Data"][self.learning_Setup_UI.extractData_ListWidget.currentRow()];
 
         self.Learning_Setup_UI_Current_Test_Extract_Data_Changed();
-        
+
     def Learning_Setup_UI_save_Button_Clicked(self):
         new_FileDialog = QtWidgets.QFileDialog();
         file_Path = new_FileDialog.getSaveFileName(filter="Learning Setup File for HNet (*.HNet_Learning_Setup)")[0]
@@ -2632,14 +2662,14 @@ class HNet_GUI:
 
         if file_Path == "":
             return;
-        
+
         load_Result = self.simulator.Learning_Setup_Load(file_Path);
 
         if not load_Result:
             QtWidgets.QMessageBox.warning(None, 'Warning!', "Current structure or process is not compatiable with this learning setup file.");
 
         self.Learning_Setup_UI_Learning_Setup_Changed();
-        self.Learning_Setup_UI_Viewing_Mode_Widget_Enable();        
+        self.Learning_Setup_UI_Viewing_Mode_Widget_Enable();
 
     def Learning_Setup_UI_exit_Button_Clicked(self):
         self.learning_Setup_Dialog.hide();
@@ -2659,7 +2689,7 @@ class HNet_GUI:
         self.learning_Setup_UI.testPatternPack_ComboBox.clear();
         self.learning_Setup_UI.trainingProcess_ComboBox.clear();
         self.learning_Setup_UI.testProcess_ComboBox.clear();
-        
+
         self.learning_Setup_UI.trainingPatternPack_ComboBox.addItem("");
         self.learning_Setup_UI.testPatternPack_ComboBox.addItem("");
         for pattern_Pack in self.simulator.pattern_Pack_Dict.keys():
@@ -2717,7 +2747,7 @@ class HNet_GUI:
 
         self.learning_Setup_UI.testPatternMatchingMaking_Button.setEnabled(True);
         self.learning_Setup_UI.testPatternMatchingDelete_Button.setEnabled(True);
-    
+
     def Learning_Setup_UI_Training_Viewing_Mode_Widget_Enable(self):
         self.learning_Setup_UI.trainingPatternMatchingMaking_Button.setEnabled(True);
         self.learning_Setup_UI.trainingPatternMatchingEnd_Button.setEnabled(False);
@@ -2763,7 +2793,7 @@ class HNet_GUI:
         self.learning_Setup_UI.testPatternMatchingEnd_Button.setEnabled(False);
         self.learning_Setup_UI.testPatternMatching_ListWidget.setEnabled(True);
         self.learning_Setup_UI.testPatternMatchingDelete_Button.setEnabled(True);
-        
+
         self.learning_Setup_UI.testPatternPack_ComboBox.setEnabled(False);
         self.learning_Setup_UI.testProcess_ComboBox.setEnabled(False);
         self.learning_Setup_UI.testAutoAssign_Button.setEnabled(False);
@@ -2787,7 +2817,7 @@ class HNet_GUI:
         self.learning_Setup_UI.testPatternMatchingEnd_Button.setEnabled(True);
         self.learning_Setup_UI.testPatternMatching_ListWidget.setEnabled(False);
         self.learning_Setup_UI.testPatternMatchingDelete_Button.setEnabled(False);
-        
+
         self.learning_Setup_UI.testPatternPack_ComboBox.setEnabled(True);
         self.learning_Setup_UI.testProcess_ComboBox.setEnabled(True);
         self.learning_Setup_UI.testAutoAssign_Button.setEnabled(True);
@@ -2809,7 +2839,7 @@ class HNet_GUI:
         self.learning_Setup_UI.learningSetupName_LineEdit.setText("");
         self.learning_Setup_UI.learningSetup_ListWidget.clear();
 
-        for learning_Setup in self.simulator.learning_Setup_List:            
+        for learning_Setup in self.simulator.learning_Setup_List:
             self.learning_Setup_UI.learningSetup_ListWidget.addItem(learning_Setup["Name"]);
 
         self.Learning_Setup_UI_Current_Learning_Setup_Changed();
@@ -2842,9 +2872,9 @@ class HNet_GUI:
 
         self.Learning_Setup_UI_Current_Training_Matching_List_Changed();
         self.Learning_Setup_UI_Current_Test_Matching_List_Changed();
-    
+
     def Learning_Setup_UI_Current_Training_Matching_List_Changed(self):
-        self.learning_Setup_UI.trainingPatternMatching_ListWidget.clear(); 
+        self.learning_Setup_UI.trainingPatternMatching_ListWidget.clear();
 
         for training_Matching_Information in self.current_Training_Matching_List:
             matching_Information = "PP: " + training_Matching_Information["Pattern_Pack_Name"] + " ↔ Pr: " + training_Matching_Information["Process_Name"];
@@ -2853,30 +2883,30 @@ class HNet_GUI:
         self.Learning_Setup_UI_Current_Training_Matching_Changed();
 
     def Learning_Setup_UI_Current_Test_Matching_List_Changed(self):
-        self.learning_Setup_UI.testPatternMatching_ListWidget.clear(); 
+        self.learning_Setup_UI.testPatternMatching_ListWidget.clear();
 
         for test_Matching_Information in self.current_Test_Matching_List:
             matching_Information = "PP: " + test_Matching_Information["Pattern_Pack_Name"] + " ↔ Pr: " + test_Matching_Information["Process_Name"];
             self.learning_Setup_UI.testPatternMatching_ListWidget.addItem(matching_Information);
 
         self.Learning_Setup_UI_Current_Test_Matching_Changed();
-        
-    def Learning_Setup_UI_Current_Training_Matching_Changed(self):        
+
+    def Learning_Setup_UI_Current_Training_Matching_Changed(self):
         self.current_Training_Matching_Information = {};
         self.current_Training_Matching_Information["Pattern_Pack_Name"] = "";
         self.current_Training_Matching_Information["Process_Name"] = "";
         self.current_Training_Matching_Information["Assign"] = {};
         self.learning_Setup_UI.trainingPatternPack_ComboBox.setCurrentIndex(0);
-        self.learning_Setup_UI.trainingProcess_ComboBox.setCurrentIndex(0);        
+        self.learning_Setup_UI.trainingProcess_ComboBox.setCurrentIndex(0);
 
-        selected_Pattern_Matching_Index = self.learning_Setup_UI.trainingPatternMatching_ListWidget.currentRow();        
+        selected_Pattern_Matching_Index = self.learning_Setup_UI.trainingPatternMatching_ListWidget.currentRow();
         if selected_Pattern_Matching_Index > -1:
             self.learning_Setup_UI.trainingPatternPack_ComboBox.setCurrentText(self.current_Training_Matching_List[selected_Pattern_Matching_Index]["Pattern_Pack_Name"])
             self.learning_Setup_UI.trainingProcess_ComboBox.setCurrentText(self.current_Training_Matching_List[selected_Pattern_Matching_Index]["Process_Name"]);
             self.current_Training_Matching_Information = self.current_Training_Matching_List[selected_Pattern_Matching_Index];
 
         self.Learning_Setup_UI_Current_Training_Matching_Assign_Changed();
-            
+
     def Learning_Setup_UI_Current_Training_Matching_Pattern_Pack_and_Process_Changed(self):
         self.current_Training_Matching_Information["Pattern_Pack_Name"] = self.learning_Setup_UI.trainingPatternPack_ComboBox.currentText();
         self.current_Training_Matching_Information["Process_Name"] = self.learning_Setup_UI.trainingProcess_ComboBox.currentText();
@@ -2895,14 +2925,14 @@ class HNet_GUI:
         self.learning_Setup_UI.testProcess_ComboBox.setCurrentIndex(0);
 
         selected_Pattern_Matching_Index = self.learning_Setup_UI.testPatternMatching_ListWidget.currentRow();
-        if selected_Pattern_Matching_Index > -1:            
+        if selected_Pattern_Matching_Index > -1:
             self.learning_Setup_UI.testPatternPack_ComboBox.setCurrentText(self.current_Test_Matching_List[selected_Pattern_Matching_Index]["Pattern_Pack_Name"])
             self.learning_Setup_UI.testProcess_ComboBox.setCurrentText(self.current_Test_Matching_List[selected_Pattern_Matching_Index]["Process_Name"]);
             self.current_Test_Matching_Information = self.current_Test_Matching_List[selected_Pattern_Matching_Index];
 
         self.Learning_Setup_UI_Current_Test_Matching_Assign_Changed();
         self.Learning_Setup_UI_Current_Test_Extract_Data_Changed();
-            
+
     def Learning_Setup_UI_Current_Test_Matching_Pattern_Pack_and_Process_Changed(self):
         self.current_Test_Matching_Information["Pattern_Pack_Name"] = self.learning_Setup_UI.testPatternPack_ComboBox.currentText();
         self.current_Test_Matching_Information["Process_Name"] = self.learning_Setup_UI.testProcess_ComboBox.currentText();
@@ -2922,22 +2952,22 @@ class HNet_GUI:
             selected_Process = self.simulator.process_Dict[self.current_Training_Matching_Information["Process_Name"]];
 
             display_Assign_List = [];
-            for order_Index in self.current_Training_Matching_Information["Assign"].keys():                        
+            for order_Index in self.current_Training_Matching_Information["Assign"].keys():
                 if selected_Process["Order_List"][order_Index][0] == Order_Code.Input_Layer_Acitvation_Insert:
                     display_Assign_List.append(str(order_Index) + ": Act. In ← " + self.current_Training_Matching_Information["Assign"][order_Index]);
                 elif selected_Process["Order_List"][order_Index][0] == Order_Code.Output_Layer_Error_Calculation_Sigmoid:
                     display_Assign_List.append(str(order_Index) + ": Error Calc. Sigmoid ← " + self.current_Training_Matching_Information["Assign"][order_Index]);
                 elif selected_Process["Order_List"][order_Index][0] == Order_Code.Output_Layer_Error_Calculation_Softmax:
-                    display_Assign_List.append(str(order_Index) + ": Error Calc. Softmax ← " + self.current_Training_Matching_Information["Assign"][order_Index]);                
+                    display_Assign_List.append(str(order_Index) + ": Error Calc. Softmax ← " + self.current_Training_Matching_Information["Assign"][order_Index]);
             for display_Line in display_Assign_List:
-                self.learning_Setup_UI.trainingPatternToOrderInformation_ListWidget.addItem(display_Line);        
-        
+                self.learning_Setup_UI.trainingPatternToOrderInformation_ListWidget.addItem(display_Line);
+
             for pattern_Name in selected_Pattern_Pack.keys():
                 if pattern_Name in ["Name", "Probability", "Cycle", "Count"]:
                     continue;
                 self.learning_Setup_UI.trainingPattern_ComboBox.addItem(pattern_Name);
 
-            for order_Index in range(len(selected_Process["Order_List"])):            
+            for order_Index in range(len(selected_Process["Order_List"])):
                 order_Code, layer_List, connection_List, order_Variable_List = selected_Process["Order_List"][order_Index];
                 if order_Index in self.current_Training_Matching_Information["Assign"].keys():
                     continue;
@@ -2948,7 +2978,7 @@ class HNet_GUI:
                 self.learning_Setup_UI.trainingPatternToOrderAssign_Button.setEnabled(False);
             else:
                 self.learning_Setup_UI.trainingPatternToOrderAssign_Button.setEnabled(True);
-        
+
     def Learning_Setup_UI_Current_Test_Matching_Assign_Changed(self):
         self.learning_Setup_UI.testPatternToOrderInformation_ListWidget.clear();
         self.learning_Setup_UI.testPattern_ComboBox.clear();
@@ -2959,22 +2989,22 @@ class HNet_GUI:
             selected_Process = self.simulator.process_Dict[self.current_Test_Matching_Information["Process_Name"]];
 
             display_Assign_List = [];
-            for order_Index in self.current_Test_Matching_Information["Assign"].keys():                        
+            for order_Index in self.current_Test_Matching_Information["Assign"].keys():
                 if selected_Process["Order_List"][order_Index][0] == Order_Code.Input_Layer_Acitvation_Insert:
                     display_Assign_List.append(str(order_Index) + ": Act. In ← " + self.current_Test_Matching_Information["Assign"][order_Index]);
                 elif selected_Process["Order_List"][order_Index][0] == Order_Code.Output_Layer_Error_Calculation_Sigmoid:
                     display_Assign_List.append(str(order_Index) + ": Error Calc. Sigmoid ← " + self.current_Test_Matching_Information["Assign"][order_Index]);
                 elif selected_Process["Order_List"][order_Index][0] == Order_Code.Output_Layer_Error_Calculation_Softmax:
-                    display_Assign_List.append(str(order_Index) + ": Error Calc. Softmax ← " + self.current_Test_Matching_Information["Assign"][order_Index]);                
+                    display_Assign_List.append(str(order_Index) + ": Error Calc. Softmax ← " + self.current_Test_Matching_Information["Assign"][order_Index]);
             for display_Line in display_Assign_List:
-                self.learning_Setup_UI.testPatternToOrderInformation_ListWidget.addItem(display_Line);        
-        
+                self.learning_Setup_UI.testPatternToOrderInformation_ListWidget.addItem(display_Line);
+
             for pattern_Name in selected_Pattern_Pack.keys():
                 if pattern_Name in ["Name", "Probability", "Cycle", "Count"]:
                     continue;
                 self.learning_Setup_UI.testPattern_ComboBox.addItem(pattern_Name);
 
-            for order_Index in range(len(selected_Process["Order_List"])):            
+            for order_Index in range(len(selected_Process["Order_List"])):
                 order_Code, layer_List, connection_List, order_Variable_List = selected_Process["Order_List"][order_Index];
                 if order_Index in self.current_Test_Matching_Information["Assign"].keys():
                     continue;
@@ -2998,7 +3028,7 @@ class HNet_GUI:
 
             display_Extract_List = [];
             for pattern, order_Index, extract_Type in self.current_Test_Matching_Information["Extract_Data"]:
-                extract_Layer_Name = selected_Process["Order_List"][order_Index][1][0];                
+                extract_Layer_Name = selected_Process["Order_List"][order_Index][1][0];
                 if extract_Type == Extract_Data_Type.Raw_Activation:
                     display_Extract_List.append("Raw Activation(L: " + extract_Layer_Name + "(" + str(order_Index) + ")" +")");
                 elif extract_Type == Extract_Data_Type.Mean_Squared_Error:
@@ -3015,36 +3045,36 @@ class HNet_GUI:
                     continue;
                 self.learning_Setup_UI.extractDataPattern_ComboBox.addItem(pattern_Name);
 
-            for order_Index in range(len(selected_Process["Order_List"])):            
-                order_Code, layer_List, connection_List, order_Variable_List = selected_Process["Order_List"][order_Index];                
+            for order_Index in range(len(selected_Process["Order_List"])):
+                order_Code, layer_List, connection_List, order_Variable_List = selected_Process["Order_List"][order_Index];
                 if order_Code == Order_Code.Activation_Extract:
                     self.learning_Setup_UI.extractDataOrder_ComboBox.addItem(str(order_Index) + ": " + layer_List[0]);
     # End Learning Setup Functions
-    
+
     # Start Learning Functions
     def Learning_UI_start_Button_Clicked(self):
         self.simulator.pause_Status = False;
         self.learning_UI.start_Button.setEnabled(False);
-        self.learning_UI.resultSave_Button.setEnabled(False);        
+        self.learning_UI.resultSave_Button.setEnabled(False);
         self.learning_UI.exit_Button.setEnabled(False);
         self.learning_UI.pause_Button.setEnabled(True);
 
         thread.start_new_thread(self.simulator.Learn, ());
-        thread.start_new_thread(self.Learning_UI_Simulator_Learning_Display, ());                    
+        thread.start_new_thread(self.Learning_UI_Simulator_Learning_Display, ());
         thread.start_new_thread(self.Learning_UI_Simulator_Weight_Graph_Display, ());
         thread.start_new_thread(self.Learning_UI_Simulator_Result_Graph_Display, ());
 
     def Learning_UI_pause_Button_Clicked(self):
         self.simulator.pause_Status = True;
         self.learning_UI.start_Button.setEnabled(True);
-        self.learning_UI.resultSave_Button.setEnabled(True);        
+        self.learning_UI.resultSave_Button.setEnabled(True);
         self.learning_UI.exit_Button.setEnabled(True);
         self.learning_UI.pause_Button.setEnabled(False);
 
     def Learning_UI_resultSave_Button_Clicked(self):
         new_FileDialog = QtWidgets.QFileDialog();
         file_Path = new_FileDialog.getExistingDirectory()
-        if file_Path != "":                    
+        if file_Path != "":
             self.simulator.Test_Result_Save(file_Path);
 
     def Learning_UI_weight_Display_Button_Clicked(self):
@@ -3056,7 +3086,7 @@ class HNet_GUI:
 
     def Learning_UI_result_Display_Button_Clicked(self):
         yAxis = [-0.01, 1.01];  #Prevent Error
-        #While yAxis' line_Edit modify  
+        #While yAxis' line_Edit modify
         try:
             yAxis = [float(self.learning_UI.yAxisMin_LineEdit.text()), float(self.learning_UI.yAxisMax_LineEdit.text())];
 
@@ -3084,7 +3114,7 @@ class HNet_GUI:
     def Learning_UI_exit_Button_Clicked(self):
         self.learning_Dialog.hide();
         self.main_Dialog.exec_();
-    
+
     def Learning_UI_ComboBox_Add_Item(self):
         self.learning_UI.weightName_ComboBox.clear();
         self.learning_UI.weightName_ComboBox.addItem("");
@@ -3097,7 +3127,7 @@ class HNet_GUI:
         while not self.simulator.pause_Status:
             time.sleep(0.01);
             self.learning_UI.totalEpoch_LineEdit.setText(str(self.simulator.current_Total_Epoch));
-            if self.simulator.current_Learning_Setup_Index < len(self.simulator.learning_Setup_List):                    
+            if self.simulator.current_Learning_Setup_Index < len(self.simulator.learning_Setup_List):
                 self.learning_UI.currentLearningSetup_LineEdit.setText(str(self.simulator.learning_Setup_List[self.simulator.current_Learning_Setup_Index]["Name"]));
             self.learning_UI.currentEpoch_LineEdit.setText(str(self.simulator.current_LearningSetup_Epoch));
         self.learning_UI.totalEpoch_LineEdit.setText(str(self.simulator.current_Total_Epoch));
@@ -3106,15 +3136,15 @@ class HNet_GUI:
 
     def Learning_UI_Simulator_Weight_Graph_Display(self):
         while not self.simulator.pause_Status:
-            time.sleep(0.1);            
-            try:    #Macro conflict                
+            time.sleep(0.1);
+            try:    #Macro conflict
                 self.Learning_UI_weight_Display_Button_Clicked();
             except:
                 continue;
 
     def Learning_UI_Simulator_Result_Graph_Display(self):
         while not self.simulator.pause_Status:
-            time.sleep(1.0);            
+            time.sleep(1.0);
             try:    #Macro conflict
                 self.Learning_UI_result_Display_Button_Clicked();
             except:
@@ -3124,18 +3154,18 @@ class HNet_GUI:
         raw_Mean_Squared_Error_Dict = {};
         for extract_Data_Type, total_Epoch, learning_Setup_Name, learning_Setup_Epoch, cycle, pattern_Pack_Name, pattern_Name, process_Name, order_Index in self.simulator.extract_Result_Dict.keys():
             if not extract_Data_Type == Extract_Data_Type.Mean_Squared_Error:
-                continue; 
+                continue;
             data_Key = (extract_Data_Type, total_Epoch, learning_Setup_Name, learning_Setup_Epoch, cycle, pattern_Pack_Name, pattern_Name, process_Name, order_Index);
             raw_Data = self.simulator.extract_Result_Dict[data_Key];
             target_Pattern = self.simulator.pattern_Pack_Dict[pattern_Pack_Name][pattern_Name];
-                        
+
             if not total_Epoch in raw_Mean_Squared_Error_Dict.keys():
                 #The reason which data is list: At same epoch, multi test can be occurred.
                 raw_Mean_Squared_Error_Dict[total_Epoch] = [];
             raw_Mean_Squared_Error_Dict[total_Epoch].append(np.sqrt(np.mean((target_Pattern - raw_Data) ** 2)));
-        
+
         xTick_List = self.Learning_UI_Simulator_Extract_All_Test_Timing_for_Graph();
-        
+
         averaged_Result_List = [];
         for epoch in xTick_List:
             if epoch in raw_Mean_Squared_Error_Dict.keys():
@@ -3143,7 +3173,7 @@ class HNet_GUI:
             else:
                 averaged_Result_List.append(None);
 
-        return np.array(xTick_List), np.array(averaged_Result_List);        
+        return np.array(xTick_List), np.array(averaged_Result_List);
 
     def Learning_UI_Simulator_Extract_Cross_Entropy_for_Graph(self):
         raw_Cross_Entropy_Dict = {};
@@ -3153,13 +3183,13 @@ class HNet_GUI:
             data_Key = (extract_Data_Type, total_Epoch, learning_Setup_Name, learning_Setup_Epoch, cycle, pattern_Pack_Name, pattern_Name, process_Name, order_Index);
             raw_Data = self.simulator.extract_Result_Dict[data_Key];
             target_Pattern = self.simulator.pattern_Pack_Dict[pattern_Pack_Name][pattern_Name];
-            
+
             if not total_Epoch in raw_Cross_Entropy_Dict.keys():
                 raw_Cross_Entropy_Dict[total_Epoch] = [];
             raw_Cross_Entropy_Dict[total_Epoch].append(-(np.mean(target_Pattern * np.log(raw_Data) + (1 - target_Pattern) * np.log(1 - raw_Data))));
 
         xTick_List = self.Learning_UI_Simulator_Extract_All_Test_Timing_for_Graph();
-        
+
         averaged_Result_List = [];
         for epoch in xTick_List:
             if epoch in raw_Cross_Entropy_Dict.keys():
@@ -3167,7 +3197,7 @@ class HNet_GUI:
             else:
                 averaged_Result_List.append(None);
 
-        return np.array(xTick_List), np.array(averaged_Result_List);       
+        return np.array(xTick_List), np.array(averaged_Result_List);
 
     def Learning_UI_Simulator_Extract_Semantic_Stress_for_Graph(self):
         raw_Semantic_Stress_Dict = {};
@@ -3176,13 +3206,13 @@ class HNet_GUI:
                 continue;
             data_Key = (extract_Data_Type, total_Epoch, learning_Setup_Name, learning_Setup_Epoch, cycle, pattern_Pack_Name, pattern_Name, process_Name, order_Index);
             raw_Data = self.simulator.extract_Result_Dict[data_Key];
-            
+
             if not total_Epoch in raw_Semantic_Stress_Dict.keys():
                 raw_Semantic_Stress_Dict[total_Epoch] = [];
             raw_Semantic_Stress_Dict[total_Epoch].append(np.mean(raw_Data * np.log2(raw_Data) + (1-raw_Data) * np.log2(1-raw_Data) + 1));
-            
+
         xTick_List = self.Learning_UI_Simulator_Extract_All_Test_Timing_for_Graph();
-        
+
         averaged_Result_List = [];
         for epoch in xTick_List:
             if epoch in raw_Semantic_Stress_Dict.keys():
@@ -3194,23 +3224,23 @@ class HNet_GUI:
 
     def Learning_UI_Simulator_Extract_Mean_Squared_Error_by_Cycle_for_Graph(self):
         max_Cycle = 0;
-        raw_Mean_Squared_Error_Dict = {};        
+        raw_Mean_Squared_Error_Dict = {};
         for extract_Data_Type, total_Epoch, learning_Setup_Name, learning_Setup_Epoch, cycle, pattern_Pack_Name, pattern_Name, process_Name, order_Index in self.simulator.extract_Result_Dict.keys():
             if not extract_Data_Type == Extract_Data_Type.Mean_Squared_Error:
-                continue; 
+                continue;
             if max_Cycle < cycle:
                 max_Cycle = cycle;
             data_Key = (extract_Data_Type, total_Epoch, learning_Setup_Name, learning_Setup_Epoch, cycle, pattern_Pack_Name, pattern_Name, process_Name, order_Index);
             raw_Data = self.simulator.extract_Result_Dict[data_Key];
             target_Pattern = self.simulator.pattern_Pack_Dict[pattern_Pack_Name][pattern_Name];
-            
+
             if not total_Epoch in raw_Mean_Squared_Error_Dict.keys():
                 #The reason which data is list: At same epoch, multi test can be occurred.
                 raw_Mean_Squared_Error_Dict[(total_Epoch, cycle)] = [];
             raw_Mean_Squared_Error_Dict[(total_Epoch, cycle)].append(np.sqrt(np.mean((target_Pattern - raw_Data) ** 2)));
-        
+
         xTick_List = self.Learning_UI_Simulator_Extract_All_Test_Timing_for_Graph();
-        
+
         epoch_Row_Index_Dict = {};
         current_Row_Index = 0;
         for epoch in xTick_List:
@@ -3225,7 +3255,7 @@ class HNet_GUI:
                 else:
                     averaged_Result_Array[epoch_Row_Index_Dict[epoch], cycle] = None;
 
-        return max_Cycle, np.array(xTick_List), averaged_Result_Array;        
+        return max_Cycle, np.array(xTick_List), averaged_Result_Array;
 
     def Learning_UI_Simulator_Extract_Cross_Entropy_by_Cycle_for_Graph(self):
         max_Cycle = 0;
@@ -3238,13 +3268,13 @@ class HNet_GUI:
             data_Key = (extract_Data_Type, total_Epoch, learning_Setup_Name, learning_Setup_Epoch, cycle, pattern_Pack_Name, pattern_Name, process_Name, order_Index);
             raw_Data = self.simulator.extract_Result_Dict[data_Key];
             target_Pattern = self.simulator.pattern_Pack_Dict[pattern_Pack_Name][pattern_Name];
-            
+
             if not total_Epoch in raw_Cross_Entropy_Dict.keys():
                 raw_Cross_Entropy_Dict[(total_Epoch, cycle)] = [];
             raw_Cross_Entropy_Dict[(total_Epoch, cycle)].append(-(np.mean(target_Pattern * np.log(raw_Data) + (1 - target_Pattern) * np.log(1 - raw_Data))));
 
         xTick_List = self.Learning_UI_Simulator_Extract_All_Test_Timing_for_Graph();
-        
+
         epoch_Row_Index_Dict = {};
         current_Row_Index = 0;
         for epoch in xTick_List:
@@ -3259,7 +3289,7 @@ class HNet_GUI:
                 else:
                     averaged_Result_Array[epoch_Row_Index_Dict[epoch], cycle] = None;
 
-        return max_Cycle, np.array(xTick_List), averaged_Result_Array;        
+        return max_Cycle, np.array(xTick_List), averaged_Result_Array;
 
     def Learning_UI_Simulator_Extract_Semantic_Stress_by_Cycle_for_Graph(self):
         max_Cycle = 0;
@@ -3271,13 +3301,13 @@ class HNet_GUI:
                 max_Cycle = cycle;
             data_Key = (extract_Data_Type, total_Epoch, learning_Setup_Name, learning_Setup_Epoch, cycle, pattern_Pack_Name, pattern_Name, process_Name, order_Index);
             raw_Data = self.simulator.extract_Result_Dict[data_Key];
-            
+
             if not total_Epoch in raw_Semantic_Stress_Dict.keys():
                 raw_Semantic_Stress_Dict[(total_Epoch, cycle)] = [];
             raw_Semantic_Stress_Dict[(total_Epoch, cycle)].append(np.mean(raw_Data * np.log2(raw_Data) + (1-raw_Data) * np.log2(1-raw_Data) + 1));
-            
+
         xTick_List = self.Learning_UI_Simulator_Extract_All_Test_Timing_for_Graph();
-        
+
         epoch_Row_Index_Dict = {};
         current_Row_Index = 0;
         for epoch in xTick_List:
@@ -3305,15 +3335,15 @@ class HNet_GUI:
         xTick_List = list(set(xTick_List)); #When a learning Setup is changed, epoch will be overlapped.
         xTick_List.sort();
 
-        return xTick_List; 
-            
+        return xTick_List;
+
     # End Learning Functions
-    
+
     # Start Macro Functions
     #Add function problem
     def Macro_UI_baseModelDataFileBroswer_Button_Clicked(self):
         new_FileDialog = QtWidgets.QFileDialog();
-        file_Path = new_FileDialog.getOpenFileName(filter="Structure File for HNet (*.HNetGUI_Model_Data_for_Macro)")[0]        
+        file_Path = new_FileDialog.getOpenFileName(filter="Structure File for HNet (*.HNetGUI_Model_Data_for_Macro)")[0]
         if file_Path == "":
             return;
 
@@ -3327,9 +3357,9 @@ class HNet_GUI:
 
         with open(file_Path, "rb") as f:
             self.macro_Base_Dict = pickle.load(f);
-        
+
         self.Macro_UI_base_Model_Changed();
-    
+
     def Macro_UI_macroAdd_Button_Clicked(self):
         modified_Dict_List = [self.macro_Base_Dict];
         for modify_Factor in self.current_Modify_Factor_List:
@@ -3345,7 +3375,7 @@ class HNet_GUI:
             new_Simulator.learning_Setup_List = modified_Dict["Learning_Setup_List"];
             self.modified_Simulator_List.append(new_Simulator);
 
-        self.current_Modify_Factor_List = [];        
+        self.current_Modify_Factor_List = [];
         self.Macro_UI_Modified_Simulator_Changed();
         self.Macro_UI_Modify_Factor_Changed();
 
@@ -3366,7 +3396,7 @@ class HNet_GUI:
             return;
 
         self.macro_UI.macroInformation_TextEdit.setText(self.modified_Simulator_List[select_Index].Extract_Simulator_Information());
-    
+
     def Macro_UI_modifyFactorDelete_Button_Clicked(self):
         selected_Index = self.macro_UI.modifyFactor_ListWidget.currentRow();
         if selected_Index < 0:
@@ -3387,7 +3417,7 @@ class HNet_GUI:
             self.macro_UI.layerSizeStep_LineEdit.setFocus();
             return;
 
-        selected_Layer = self.macro_UI.layerSizeLayer_ComboBox.currentText();        
+        selected_Layer = self.macro_UI.layerSizeLayer_ComboBox.currentText();
         for process_Key in self.macro_Base_Dict["Process_Dict"].keys():
             process = self.macro_Base_Dict["Process_Dict"][process_Key];
             for order_Code, layer_Name_List, connection_Name_List, order_Variable_List in process["Order_List"]:
@@ -3404,7 +3434,7 @@ class HNet_GUI:
                     return;
                 elif order_Code == Order_Code.Layer_Duplication and selected_Layer in layer_Name_List:
                     QtWidgets.QMessageBox.warning(None, 'Warning!', "The layer which used at 'Layer Duplication' in a process cannot be modified. Try to use 'Multi layer size'.");
-                    return;                
+                    return;
                 elif order_Code == Order_Code.Bias_Equalization and selected_Layer in layer_Name_List:
                     QtWidgets.QMessageBox.warning(None, 'Warning!', "The layer which used at 'Bias Equalization' in a process cannot be modified. Try to use 'Multi layer size'.");
                     return;
@@ -3442,7 +3472,7 @@ class HNet_GUI:
         layer_Regular_Name = self.macro_UI.regularMultiLayerSizeLayerPrefix_LineEdit.text();
         max_MaxSuffix = int(self.macro_UI.regularMultiLayerSizeMaxSuffix_LineEdit.text());
 
-        selected_Layer_Name_List = [];        
+        selected_Layer_Name_List = [];
         for maxSuffix in range(1, max_MaxSuffix + 1):
             selected_Layer_Name_List.append(layer_Regular_Name + str(maxSuffix));
 
@@ -3459,7 +3489,7 @@ class HNet_GUI:
                     for connection_Name in connection_Name_List:
                         connection = self.macro_Base_Dict["Connection_Dict"][connection_Name];
                         from_Layer_Set.add(connection["From_Layer_Name"]);
-                        to_Layer_Set.add(connection["To_Layer_Name"]);                    
+                        to_Layer_Set.add(connection["To_Layer_Name"]);
                     if not (set(selected_Layer_Name_List) & from_Layer_Set) in [set(), from_Layer_Set] or not (set(selected_Layer_Name_List) & to_Layer_Set) in [set(), to_Layer_Set]:
                         QtWidgets.QMessageBox.warning(None, 'Warning!', "There is a layer which is used at a weight control order (Weight Equalization or Duplication), but not controlled.");
                         return;
@@ -3502,7 +3532,7 @@ class HNet_GUI:
             self.macro_UI.layerSizeStep_LineEdit.setFocus();
             return;
 
-        selected_Layer_Name_List = [];        
+        selected_Layer_Name_List = [];
         selected_Layer_Name_List = self.macro_UI.irregularMultiLayerSizeLayer_LineEdit.text().strip().split(" ");
 
         if set(selected_Layer_Name_List) & set(self.macro_Base_Dict["Layer_Dict"].keys()) != set(selected_Layer_Name_List):
@@ -3518,7 +3548,7 @@ class HNet_GUI:
                     for connection_Name in connection_Name_List:
                         connection = self.macro_Base_Dict["Connection_Dict"][connection_Name];
                         from_Layer_Set.add(connection["From_Layer_Name"]);
-                        to_Layer_Set.add(connection["To_Layer_Name"]);                    
+                        to_Layer_Set.add(connection["To_Layer_Name"]);
                     if not (set(selected_Layer_Name_List) & from_Layer_Set) in [set(), from_Layer_Set] or not (set(selected_Layer_Name_List) & to_Layer_Set) in [set(), to_Layer_Set]:
                         QtWidgets.QMessageBox.warning(None, 'Warning!', "There is a layer which is used at a weight control order (Weight Equalization or Duplication), but not controlled.");
                         return;
@@ -3594,7 +3624,7 @@ class HNet_GUI:
         self.current_Modify_Factor_List.append(("Initial_Weight_SD", None, modified_Variable_List));
 
         self.Macro_UI_Modify_Factor_Changed();
-        
+
     def Macro_UI_layerDamageSDAdd_Button_Clicked(self):
         if self.macro_UI.layerDamageSDFrom_LineEdit.text() == "":
             self.macro_UI.layerDamageSDFrom_LineEdit.setFocus();
@@ -3625,7 +3655,7 @@ class HNet_GUI:
         self.current_Modify_Factor_List.append(("Layer_Damage_SD", (selected_Process, selected_Layer), modified_Variable_List));
 
         self.Macro_UI_Modify_Factor_Changed();
-        
+
     def Macro_UI_connectionDamageSDAdd_Button_Clicked(self):
         if self.macro_UI.connectionDamageSDFrom_LineEdit.text() == "":
             self.macro_UI.connectionDamageSDFrom_LineEdit.setFocus();
@@ -3656,7 +3686,7 @@ class HNet_GUI:
         self.current_Modify_Factor_List.append(("Connection_Damage_SD", (selected_Process, selected_Connection), modified_Variable_List));
 
         self.Macro_UI_Modify_Factor_Changed();
-        
+
     def Macro_UI_learning_Button_Clicked(self):
         self.macro_Dialog.hide();
         self.learning_Dialog.show();
@@ -3665,17 +3695,17 @@ class HNet_GUI:
         self.simulator.Weight_and_Bias_Setup();
         self.simulator.Process_To_Tensor();
         self.Learning_UI_start_Button_Clicked();
-        self.learning_UI.macro_LineEdit.setText("Macro 0");        
+        self.learning_UI.macro_LineEdit.setText("Macro 0");
         self.learning_UI.macro_Label.show();
         self.learning_UI.macro_LineEdit.show();
-        
+
         self.tf_graph = tf.get_default_graph();
         thread.start_new_thread(self.Macro_UI_Simulator_Finished_Check, ());
-    
+
     def Macro_UI_exit_Button_Clicked(self):
         self.macro_Dialog.hide();
         self.main_Dialog.exec_();
-        
+
     def Macro_UI_base_Model_Changed(self):
         self.modified_Simulator_List = [];
         self.current_Modify_Factor_List = [];
@@ -3701,7 +3731,7 @@ class HNet_GUI:
 
         for key in self.macro_Base_Dict["Layer_Dict"].keys():
             layer_Information = self.macro_Base_Dict["Layer_Dict"][key];
-            self.macro_UI.layer_ListWidget.addItem(key + " (" + str(layer_Information["Unit"]) + ")");            
+            self.macro_UI.layer_ListWidget.addItem(key + " (" + str(layer_Information["Unit"]) + ")");
 
         for key in self.macro_Base_Dict["Connection_Dict"].keys():
             connection_Information = self.macro_Base_Dict["Connection_Dict"][key];
@@ -3730,12 +3760,12 @@ class HNet_GUI:
 
         for key in self.macro_Base_Dict["Connection_Dict"].keys():
             self.macro_UI.connectionDamageSDConnection_ComboBox.addItem(key);
-        
+
         self.macro_UI.macroInformation_GroupBox.setEnabled(True);
         self.macro_UI.modifyFactor_GroupBox.setEnabled(True);
 
         self.Macro_UI_Modify_Factor_Changed();
-    
+
     def Macro_UI_Modified_Simulator_Changed(self):
         self.macro_UI.macro_ListWidget.clear();
 
@@ -3744,7 +3774,7 @@ class HNet_GUI:
 
     def Macro_UI_Modify_Factor_Changed(self):
         self.macro_UI.modifyFactor_ListWidget.clear();
-        self.macro_UI.macroSize_LineEdit.setText("");        
+        self.macro_UI.macroSize_LineEdit.setText("");
         self.macro_UI.layerSizeLayer_ComboBox.setCurrentIndex(0);
         self.macro_UI.layerDamageSDProcess_ComboBox.setCurrentIndex(0);
         self.macro_UI.layerDamageSDLayer_ComboBox.setCurrentIndex(0);
@@ -3783,9 +3813,9 @@ class HNet_GUI:
         size_Text_List = [];
         size_Value = 1;
         for modify_Factor in self.current_Modify_Factor_List:
-            if modify_Factor[0] == "Layer_Size":                
+            if modify_Factor[0] == "Layer_Size":
                 self.macro_UI.modifyFactor_ListWidget.addItem("Layer Size: " + modify_Factor[1] + "(" + ", ".join([str(x) for x in modify_Factor[2]]) + ")");
-            elif modify_Factor[0] == "Multi_Layer_Size":                
+            elif modify_Factor[0] == "Multi_Layer_Size":
                 self.macro_UI.modifyFactor_ListWidget.addItem("Layer Size: " + str(modify_Factor[1]) + "(" + ", ".join([str(x) for x in modify_Factor[2]]) + ")");
             elif modify_Factor[0] == "Learning_Rate":
                 self.macro_UI.modifyFactor_ListWidget.addItem("Learning Rate: (" + ", ".join([str(x) for x in modify_Factor[2]]) + ")");
@@ -3798,7 +3828,7 @@ class HNet_GUI:
 
             size_Text_List.append(str(len(modify_Factor[2])));
             size_Value *= len(modify_Factor[2]);
-        
+
         if len(size_Text_List) == 0:
             self.macro_UI.macroSize_LineEdit.setText("0");
         else:
@@ -3824,7 +3854,7 @@ class HNet_GUI:
                             if new_Data["Connection_Dict"][connection_Key]["From_Layer_Name"] == layer_Name:
                                 new_Data["Connection_Dict"][connection_Key]["From_Layer_Unit"] = modified_Variable;
                             if new_Data["Connection_Dict"][connection_Key]["To_Layer_Name"] == layer_Name:
-                                new_Data["Connection_Dict"][connection_Key]["To_Layer_Unit"] = modified_Variable;                    
+                                new_Data["Connection_Dict"][connection_Key]["To_Layer_Unit"] = modified_Variable;
                 elif modify_Factor[0] == "Learning_Rate":
                     new_Data["Config_Dict"]["Learning_Rate"] = modified_Variable;
                 elif modify_Factor[0] == "Initial_Weight_SD":
@@ -3834,29 +3864,29 @@ class HNet_GUI:
                         new_Data["Process_Dict"][modify_Factor[1][0]]["Layer_Control_Dict"][modify_Factor[1][1]] = (Damage_Type.On, None)
                     elif modified_Variable == "Off":
                         new_Data["Process_Dict"][modify_Factor[1][0]]["Layer_Control_Dict"][modify_Factor[1][1]] = (Damage_Type.Off, None)
-                    else:                    
+                    else:
                         new_Data["Process_Dict"][modify_Factor[1][0]]["Layer_Control_Dict"][modify_Factor[1][1]] = (Damage_Type.Damaged, modified_Variable)
                 elif modify_Factor[0] == "Connection_Damage_SD":
                     if modified_Variable == "On":
                         new_Data["Process_Dict"][modify_Factor[1][0]]["Connection_Control_Dict"][modify_Factor[1][1]] = (Damage_Type.On, None)
                     elif modified_Variable == "Off":
                         new_Data["Process_Dict"][modify_Factor[1][0]]["Connection_Control_Dict"][modify_Factor[1][1]] = (Damage_Type.Off, None)
-                    else:                    
-                        new_Data["Process_Dict"][modify_Factor[1][0]]["Connection_Control_Dict"][modify_Factor[1][1]] = (Damage_Type.Damaged, modified_Variable)                
+                    else:
+                        new_Data["Process_Dict"][modify_Factor[1][0]]["Connection_Control_Dict"][modify_Factor[1][1]] = (Damage_Type.Damaged, modified_Variable)
                 modified_Dict_List.append(new_Data);
-        
+
         return modified_Dict_List;
-        
+
     def Macro_UI_Simulator_Finished_Check(self):
         while True:
             time.sleep(1.0);
-            if self.simulator.current_Learning_Setup_Index < len(self.simulator.learning_Setup_List):                    
+            if self.simulator.current_Learning_Setup_Index < len(self.simulator.learning_Setup_List):
                 continue;
 
             self.macro_Index += 1;
-            if self.macro_Index < len(self.modified_Simulator_List):                
+            if self.macro_Index < len(self.modified_Simulator_List):
                 tf.reset_default_graph();
-                with self.tf_graph.as_default():                    
+                with self.tf_graph.as_default():
                     self.simulator = self.modified_Simulator_List[self.macro_Index];
                     self.simulator.Weight_and_Bias_Setup();
                     self.simulator.Process_To_Tensor();
