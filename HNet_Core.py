@@ -31,7 +31,7 @@ from HNet_Enum import *;
 import numpy as np;
 import tensorflow as tf;
 import time, os, io;
-from random import shuffle; 
+from random import shuffle;
 import _pickle as pickle;
 from tensorflow.python.client import device_lib;
 
@@ -45,7 +45,7 @@ class HNet:
         self.pattern_Pack_Dict = {};
         self.process_Dict = {};
         self.learning_Setup_List = [];
-        
+
         self.Structure_Config_Variable_Setup(0.9, 0.0, 0.1, 0.01, 'cpu');
 
         self.extract_Result_Dict = {};
@@ -62,9 +62,10 @@ class HNet:
         self.config_Variables_Dict["Learning_Rate"] = learning_Rate;
         self.config_Variables_Dict["Device_Mode"] = device_Mode #'cpu' or 'gpu'
 
-    def Structure_Layer_Assign(self, name, unit):
+    def Structure_Layer_Assign(self, name, unit, reset = True):
         new_Layer_Inforamtion_Dict = {};
         new_Layer_Inforamtion_Dict["Unit"] = unit;
+        new_Layer_Inforamtion_Dict["Reset"] = reset;
 
         self.layer_Information_Dict[name] = new_Layer_Inforamtion_Dict;
 
@@ -74,7 +75,7 @@ class HNet:
         new_Connection_Information_Dict["To_Layer_Name"] = to_Layer_Name;
         new_Connection_Information_Dict["From_Layer_Unit"] = self.layer_Information_Dict[from_Layer_Name]["Unit"];
         new_Connection_Information_Dict["To_Layer_Unit"] = self.layer_Information_Dict[to_Layer_Name]["Unit"];
-        
+
         self.connection_Information_Dict[name] = new_Connection_Information_Dict;
 
     def Structure_Layer_Delete(self, name):
@@ -94,7 +95,7 @@ class HNet:
         save_Dict = {};
 
         save_Dict["Config_Variables_Dict"] = self.config_Variables_Dict;
-        save_Dict["Layer_Dict"] = self.layer_Information_Dict;         
+        save_Dict["Layer_Dict"] = self.layer_Information_Dict;
         save_Dict["Connection_Dict"] = self.connection_Information_Dict;
 
         if file_Path[-15:] != ".HNet_Structure":
@@ -112,51 +113,129 @@ class HNet:
         self.layer_Information_Dict = load_Dict["Layer_Dict"];
         self.connection_Information_Dict = load_Dict["Connection_Dict"];
 
-        if len([x for x in device_lib.list_local_devices() if x.device_type == 'GPU']) < 1 and self.config_Variables_Dict["Device_Mode"] == 'gpu':            
+        if len([x for x in device_lib.list_local_devices() if x.device_type == 'GPU']) < 1 and self.config_Variables_Dict["Device_Mode"] == 'gpu':
             if __name__ == "__main__":
                 print("This enviroment cannot support 'GPU'. Device mode was changed to 'CPU''");
-            self.config_Variables_Dict["Device_Mode"] = 'cpu';            
+            self.config_Variables_Dict["Device_Mode"] = 'cpu';
 
-    def Pattern_Pack_Load(self, name, file_Path):
-        new_Pattern_Pack_Dict = {};
+    def Pattern_Pack_Load(self, name, file_Path, file_Type = "Wide"):
+        if file_Type == "Wide":
+            new_Pattern_Pack_Dict = {};
 
-        with open(file_Path, "r", encoding="utf8") as f:
-            readLines = f.readlines();
+            with open(file_Path, "r", encoding="utf8") as f:
+                readLines = f.readlines();
 
-        column_Name_List = readLines[0].replace("\n", "").strip().split("\t");
-        column_Name_Dict = {};
-        for column_Index in range(len(column_Name_List)):
-            column_Name_Dict[column_Index] = column_Name_List[column_Index];
-            new_Pattern_Pack_Dict[column_Name_List[column_Index]] = [];
+            column_Name_List = readLines[0].replace("\n", "").strip().split("\t");
+            column_Name_Dict = {};
+            for column_Index in range(len(column_Name_List)):
+                column_Name_Dict[column_Index] = column_Name_List[column_Index];
+                new_Pattern_Pack_Dict[column_Name_List[column_Index]] = [];
 
-        new_Pattern_Pack_Dict["Count"] = len(readLines[1:]);
+            new_Pattern_Pack_Dict["Count"] = len(readLines[1:]);
 
-        for readLine in readLines[1:]:
-            pattern_Data = readLine.replace("\n", "").strip().split("\t");
-            for column_Index in range(len(pattern_Data)):                
-                column_Name = column_Name_Dict[column_Index];
-                pattern = pattern_Data[column_Index];
+            for readLine in readLines[1:]:
+                pattern_Data = readLine.replace("\n", "").strip().split("\t");
+                for column_Index in range(len(pattern_Data)):
+                    column_Name = column_Name_Dict[column_Index];
+                    pattern = pattern_Data[column_Index];
 
-                if column_Name == "Name":
-                    new_Pattern_Pack_Dict[column_Name].append(pattern);
-                elif column_Name == "Probability" or column_Name == "Cycle":
-                    new_Pattern_Pack_Dict[column_Name].append(float(pattern));
-                else:                    
-                    new_Pattern_Pack_Dict[column_Name].append(np.array([float(x) for x in pattern.strip().split(" ")]));
+                    if column_Name == "Name":
+                        new_Pattern_Pack_Dict[column_Name].append(pattern);
+                    elif column_Name == "Probability" or column_Name == "Cycle":
+                        new_Pattern_Pack_Dict[column_Name].append(float(pattern));
+                    else:
+                        new_Pattern_Pack_Dict[column_Name].append(np.array([float(x) for x in pattern.strip().split(" ")]));
 
-        for pattern_Key in new_Pattern_Pack_Dict.keys():
-            if pattern_Key == "Name" or pattern_Key == "Count":
+            for pattern_Key in new_Pattern_Pack_Dict.keys():
+                if pattern_Key == "Name" or pattern_Key == "Count":
+                    continue;
+                elif pattern_Key == "Probability" or pattern_Key == "Cycle":
+                    new_Pattern_Pack_Dict[pattern_Key] = np.array(new_Pattern_Pack_Dict[pattern_Key]).reshape(len(new_Pattern_Pack_Dict[pattern_Key]), 1);
+                else:
+                    new_Pattern_Pack_Dict[pattern_Key] = np.array(new_Pattern_Pack_Dict[pattern_Key]);
+
+        elif file_Type == "Long":
+            new_Pattern_Pack_Dict = {};
+            new_Pattern_Pack_Dict["Name"] =[];
+            new_Pattern_Pack_Dict["Probability"] = [];
+            new_Pattern_Pack_Dict["Cycle"] = [];
+            new_Pattern_Pack_Dict["Count"] = 0;
+
+            with open(file_Path, "r", encoding="utf8") as f:
+                readLines = f.readlines();
+
+            column_Name_List = readLines[0].replace("\n", "").strip().split("\t");
+            column_Name_Dict = {};
+            for column_Index in range(len(column_Name_List)):
+                column_Name_Dict[column_Index] = column_Name_List[column_Index];
+
+            name_Index = column_Name_List.index("Name");
+            probability_Index = column_Name_List.index("Probability");
+            cycle_Index = column_Name_List.index("Cycle");
+            suffix_Index = column_Name_List.index("Suffix");
+
+            for column_Name in column_Name_Dict.values():
+                for suffix in list(set([x.replace("\n", "").strip().split("\t")[suffix_Index] for x in readLines[1:]])):
+                    if not column_Name in ["Name", "Probability", "Cycle", "Suffix"]:
+                        new_Pattern_Pack_Dict[column_Name + "_" + suffix] = [];
+
+            current_Name = "";
+            current_Probability = 0;
+            current_Cycle = 0;
+            for readLine in readLines[1:]:
+                pattern_Data = readLine.replace("\n", "").strip().split("\t");
+                if pattern_Data[name_Index] != current_Name:
+                    new_Pattern_Pack_Dict["Name"].append(current_Name);
+                    new_Pattern_Pack_Dict["Probability"].append(float(current_Probability));
+                    new_Pattern_Pack_Dict["Cycle"].append(float(current_Cycle));
+                    new_Pattern_Pack_Dict["Count"] += 1;
+                    current_Name = pattern_Data[name_Index];
+                    current_Probability = pattern_Data[probability_Index];
+                    current_Cycle = pattern_Data[cycle_Index];
+
+                for column_Index in range(len(pattern_Data)):
+                    if column_Index in [name_Index, probability_Index, cycle_Index, suffix_Index]:
+                        continue;
+
+                    pattern_Name = column_Name_Dict[column_Index] + "_" + pattern_Data[suffix_Index];
+                    new_Pattern_Pack_Dict[pattern_Name].append(np.array([float(x) for x in pattern_Data[column_Index].strip().split(" ")]));
+
+            new_Pattern_Pack_Dict["Name"].append(current_Name);
+            new_Pattern_Pack_Dict["Probability"].append(float(current_Probability));
+            new_Pattern_Pack_Dict["Cycle"].append(float(current_Cycle));
+            del new_Pattern_Pack_Dict["Name"][0]
+            del new_Pattern_Pack_Dict["Probability"][0]
+            del new_Pattern_Pack_Dict["Cycle"][0]
+
+            for pattern_Key in new_Pattern_Pack_Dict.keys():
+                if pattern_Key == "Name" or pattern_Key == "Count":
+                    continue;
+                elif pattern_Key == "Probability" or pattern_Key == "Cycle":
+                    new_Pattern_Pack_Dict[pattern_Key] = np.array(new_Pattern_Pack_Dict[pattern_Key]).reshape(len(new_Pattern_Pack_Dict[pattern_Key]), 1);
+                else:
+                    new_Pattern_Pack_Dict[pattern_Key] = np.array(new_Pattern_Pack_Dict[pattern_Key]);
+
+        elif file_Type == "Pickle":
+            with open(file_Path, "rb") as f:
+                new_Pattern_Pack_Dict = pickle.load(f);
+
+        # consistency check
+        if not set(["Name", "Probability", "Cycle", "Count"]).issubset(new_Pattern_Pack_Dict.keys()):
+            return False;
+        for pattern_Name in new_Pattern_Pack_Dict.keys():
+            if pattern_Name in ["Name", "Probability", "Cycle", "Count"]:
                 continue;
-            elif pattern_Key == "Probability" or pattern_Key == "Cycle":            
-                new_Pattern_Pack_Dict[pattern_Key] = np.array(new_Pattern_Pack_Dict[pattern_Key]).reshape(len(new_Pattern_Pack_Dict[pattern_Key]), 1);
-            else:
-                new_Pattern_Pack_Dict[pattern_Key] = np.array(new_Pattern_Pack_Dict[pattern_Key]);
+            elif new_Pattern_Pack_Dict[pattern_Name].shape[0] != new_Pattern_Pack_Dict["Count"]:
+                print(new_Pattern_Pack_Dict[pattern_Name].shape);
+                print(new_Pattern_Pack_Dict["Count"]);
+                return False;
 
         self.pattern_Pack_Dict[name] = new_Pattern_Pack_Dict;
+        return True;
 
     def Pattern_Pack_Delete(self, name):
         del self.pattern_Pack_Dict[name];
-        
+
     def Process_Assign(self, name, order_List, layer_Control_Dict, connection_Control_Dict):
         new_process_Dict = {};
         new_process_Dict["Order_List"] = order_List; #(order_Code, layer_Name_List, connection_Name_List)
@@ -230,8 +309,8 @@ class HNet:
             load_Dict = pickle.load(f);
 
         consistency = True;
-        for learning_Setup in load_Dict["Learning_Setup_List"]:            
-            for matching_Information in learning_Setup["Training_Matching_List"]:                
+        for learning_Setup in load_Dict["Learning_Setup_List"]:
+            for matching_Information in learning_Setup["Training_Matching_List"]:
                 process_Name = matching_Information["Process_Name"];
                 pattern_Pack_Name = matching_Information["Pattern_Pack_Name"];
                 assign_Dict = matching_Information["Assign"];
@@ -245,7 +324,7 @@ class HNet:
                 for order_Index in assign_Dict.keys():
                     if not assign_Dict[order_Index] in self.pattern_Pack_Dict[pattern_Pack_Name]:
                         consistency = False;
-                        break;                    
+                        break;
                     order_Code, layer_Name_List, connection_Name_List, order_Variable_List = self.process_Dict[process_Name]["Order_List"][order_Index];
                     if not order_Code in [Order_Code.Input_Layer_Acitvation_Insert, Order_Code.Output_Layer_Error_Calculation_Sigmoid, Order_Code.Output_Layer_Error_Calculation_Softmax]:
                         consistency = False;
@@ -272,7 +351,7 @@ class HNet:
                 for order_Index in assign_Dict.keys():
                     if not assign_Dict[order_Index] in self.pattern_Pack_Dict[pattern_Pack_Name]:
                         consistency = False;
-                        break;                    
+                        break;
                     order_Code, layer_Name_List, connection_Name_List, order_Variable_List = self.process_Dict[process_Name]["Order_List"][order_Index];
                     if not order_Code in [Order_Code.Input_Layer_Acitvation_Insert, Order_Code.Output_Layer_Error_Calculation_Sigmoid, Order_Code.Output_Layer_Error_Calculation_Softmax]:
                         consistency = False;
@@ -307,14 +386,14 @@ class HNet:
         self.learning_Setup_List = load_Dict["Learning_Setup_List"];
         return True;
 
-    def WeightAndBias_Save(self, file_Path):        
+    def WeightAndBias_Save(self, file_Path):
         save_Dict = {};
         save_Dict["Weight_Dict"] = {};
         save_Dict["Bias_Dict"] = {};
 
         for key in self.weightMatrix_Dict.keys():
             save_Dict["Weight_Dict"][key], = self.tf_Session.run([self.weightMatrix_Dict[key]]);
-        
+
         for key in self.biasMatrix_Dict.keys():
             save_Dict["Bias_Dict"][key], = self.tf_Session.run([self.biasMatrix_Dict[key]]);
 
@@ -341,7 +420,7 @@ class HNet:
             return False;
 
         for layer_Key in self.layer_Information_Dict.keys():
-            layer_Information = self.layer_Information_Dict[layer_Key];            
+            layer_Information = self.layer_Information_Dict[layer_Key];
             if not layer_Key in load_Dict["Bias_Dict"].keys() or not load_Dict["Bias_Dict"][layer_Key].shape == (1, layer_Information["Unit"]):
                 return False;
 
@@ -357,32 +436,39 @@ class HNet:
                 self.tf_Session.run([tf.assign(self.biasMatrix_Dict[layer_Key], placeHolder)], feed_dict = {placeHolder: saved_Bias.astype("float32")});
 
         return True;
-    
+
     def Weight_and_Bias_Setup(self):
+        self.NoResetLayer_Dict = {};
         self.weightMatrix_Dict = {};
         self.biasMatrix_Dict = {};
-        
+
         with tf.device('/' + self.config_Variables_Dict["Device_Mode"]):
+            for layer_Key in self.layer_Information_Dict.keys():
+                layer_Information = self.layer_Information_Dict[layer_Key];
+                if not layer_Information["Reset"]:
+                    self.NoResetLayer_Dict[layer_Key] = tf.Variable(tf.zeros((1, layer_Information["Unit"])));
+                    self.tf_Session.run(tf.variables_initializer([self.NoResetLayer_Dict[layer_Key]]));
+
             for connection_Key in self.connection_Information_Dict.keys():
                 connection_Information = self.connection_Information_Dict[connection_Key];
                 self.weightMatrix_Dict[connection_Key] = tf.Variable(tf.random_normal((connection_Information["From_Layer_Unit"], connection_Information["To_Layer_Unit"]), 0, self.config_Variables_Dict["Initial_Weight_SD"]));
                 self.tf_Session.run(tf.variables_initializer([self.weightMatrix_Dict[connection_Key]]));
 
             for layer_Key in self.layer_Information_Dict.keys():
-                layer_Information = self.layer_Information_Dict[layer_Key];            
+                layer_Information = self.layer_Information_Dict[layer_Key];
                 self.biasMatrix_Dict[layer_Key] = tf.Variable(tf.random_normal((1, layer_Information["Unit"]), 0, self.config_Variables_Dict["Initial_Weight_SD"]));
                 self.tf_Session.run(tf.variables_initializer([self.biasMatrix_Dict[layer_Key]]));
-    
+
     def Process_To_Tensor(self):
-        with tf.device('/' + self.config_Variables_Dict["Device_Mode"]):        
+        with tf.device('/' + self.config_Variables_Dict["Device_Mode"]):
             for process_Key in self.process_Dict.keys():
                 process = self.process_Dict[process_Key];
-                
+
                 process["PlaceHolder_Dict"] = {};
                 process["Tensor_List"] = [];
                 process["Extract_Activation_Tensor_Index_Dict"] = {};
                 process["Extract_Activation_Tensor_Cycle_Dict"] = {};
-                
+
                 process["PlaceHolder_Dict"]["Probability_Filter"] = tf.placeholder(tf.float32);
                 process["PlaceHolder_Dict"]["Cycle_Filter"] = tf.placeholder(tf.float32);
                 current_Cycle = 0;
@@ -392,62 +478,69 @@ class HNet:
                 layer_Error_Stroage_Dict = {};
                 layer_Error_Dict = {};
 
+                # For no-reset
+                for layer_Key in self.layer_Information_Dict.keys():
+                    layer_Information = self.layer_Information_Dict[layer_Key];
+                    if not layer_Information["Reset"]:
+                        layer_Activation_Dict[layer_Key] = tf.zeros((tf.shape(process["PlaceHolder_Dict"]["Probability_Filter"])[0], self.layer_Information_Dict[layer_Key]["Unit"])) + self.NoResetLayer_Dict[layer_Key];
+
+                #Process
                 for order_Index in range(len(process["Order_List"])):
                     order_Code, layer_Name_List, connection_Name_List, order_Variable_List = process["Order_List"][order_Index];
                     if order_Code == Order_Code.Input_Layer_Acitvation_Insert:
                         process["PlaceHolder_Dict"][order_Index] = tf.placeholder(tf.float32);
                         damage_Type, SD = process["Layer_Control_Dict"][layer_Name_List[0]];
                         if damage_Type == Damage_Type.On:
-                            layer_Activation_Dict[layer_Name_List[0]] = process["PlaceHolder_Dict"][order_Index] * process["PlaceHolder_Dict"]["Probability_Filter"] * tf.clip_by_value(process["PlaceHolder_Dict"]["Cycle_Filter"] - current_Cycle, 0, 1);
+                            layer_Activation_Dict[layer_Name_List[0]] = process["PlaceHolder_Dict"][order_Index] * process["PlaceHolder_Dict"]["Probability_Filter"];
                         elif damage_Type == Damage_Type.Off:
                             layer_Activation_Dict[layer_Name_List[0]] = tf.zeros(tf.shape(process["PlaceHolder_Dict"][order_Index]));
                         elif damage_Type == Damage_Type.Damaged:
-                            layer_Activation_Dict[layer_Name_List[0]] = tf.clip_by_value(process["PlaceHolder_Dict"][order_Index] + tf.random_normal(tf.shape(process["PlaceHolder_Dict"][order_Index]), 0, SD), 0, 1) * process["PlaceHolder_Dict"]["Probability_Filter"] * tf.clip_by_value(process["PlaceHolder_Dict"]["Cycle_Filter"] - current_Cycle, 0, 1);
-                    
+                            layer_Activation_Dict[layer_Name_List[0]] = tf.clip_by_value(process["PlaceHolder_Dict"][order_Index] + tf.random_normal(tf.shape(process["PlaceHolder_Dict"][order_Index]), 0, SD), 0, 1) * process["PlaceHolder_Dict"]["Probability_Filter"];
+
                     elif order_Code == Order_Code.Activation_Calculation_Sigmoid:
                         damage_Type, SD = process["Layer_Control_Dict"][layer_Name_List[0]];
                         if damage_Type == Damage_Type.On:
-                            layer_Activation_Dict[layer_Name_List[0]] = tf.sigmoid((layer_Activation_Stroage_Dict[layer_Name_List[0]] + self.biasMatrix_Dict[layer_Name_List[0]]) * self.config_Variables_Dict["Momentum"]) * process["PlaceHolder_Dict"]["Probability_Filter"] * tf.clip_by_value(process["PlaceHolder_Dict"]["Cycle_Filter"] - current_Cycle, 0, 1);
+                            layer_Activation_Dict[layer_Name_List[0]] = tf.sigmoid((layer_Activation_Stroage_Dict[layer_Name_List[0]] + self.biasMatrix_Dict[layer_Name_List[0]]) * self.config_Variables_Dict["Momentum"]) * process["PlaceHolder_Dict"]["Probability_Filter"];
                         elif damage_Type == Damage_Type.Off:
                             layer_Activation_Dict[layer_Name_List[0]] = tf.zeros(tf.shape(layer_Activation_Stroage_Dict[layer_Name_List[0]]));
                         elif damage_Type == Damage_Type.Damaged:
-                            layer_Activation_Dict[layer_Name_List[0]] = tf.clip_by_value(tf.sigmoid((layer_Activation_Stroage_Dict[layer_Name_List[0]] + self.biasMatrix_Dict[layer_Name_List[0]]) * self.config_Variables_Dict["Momentum"]) + tf.random_normal(tf.shape(layer_Activation_Stroage_Dict[layer_Name_List[0]]), 0, SD), 0, 1) * process["PlaceHolder_Dict"]["Probability_Filter"] * tf.clip_by_value(process["PlaceHolder_Dict"]["Cycle_Filter"] - current_Cycle, 0, 1);
+                            layer_Activation_Dict[layer_Name_List[0]] = tf.clip_by_value(tf.sigmoid((layer_Activation_Stroage_Dict[layer_Name_List[0]] + self.biasMatrix_Dict[layer_Name_List[0]]) * self.config_Variables_Dict["Momentum"]) + tf.random_normal(tf.shape(layer_Activation_Stroage_Dict[layer_Name_List[0]]), 0, SD), 0, 1) * process["PlaceHolder_Dict"]["Probability_Filter"];
 
                     elif order_Code == Order_Code.Activation_Calculation_Softmax:
                         damage_Type, SD = process["Layer_Control_Dict"][layer_Name_List[0]];
                         if damage_Type == Damage_Type.On:
-                            layer_Activation_Dict[layer_Name_List[0]] = tf.nn.softmax(layer_Activation_Stroage_Dict[layer_Name_List[0]] + self.biasMatrix_Dict[layer_Name_List[0]]) * process["PlaceHolder_Dict"]["Probability_Filter"] * tf.clip_by_value(process["PlaceHolder_Dict"]["Cycle_Filter"] - current_Cycle, 0, 1);
+                            layer_Activation_Dict[layer_Name_List[0]] = tf.nn.softmax(layer_Activation_Stroage_Dict[layer_Name_List[0]] + self.biasMatrix_Dict[layer_Name_List[0]]) * process["PlaceHolder_Dict"]["Probability_Filter"];
                         elif damage_Type == Damage_Type.Off:
                             layer_Activation_Dict[layer_Name_List[0]] = tf.zeros(tf.shape(layer_Activation_Stroage_Dict[layer_Name_List[0]]));
                         elif damage_Type == Damage_Type.Damaged:
-                            layer_Activation_Dict[layer_Name_List[0]] = tf.clip_by_value(tf.nn.softmax(layer_Activation_Stroage_Dict[layer_Name_List[0]] + self.biasMatrix_Dict[layer_Name_List[0]]) + tf.random_normal(tf.shape(layer_Activation_Stroage_Dict[layer_Name_List[0]]), 0, SD), 0, 1) * process["PlaceHolder_Dict"]["Probability_Filter"] * tf.clip_by_value(process["PlaceHolder_Dict"]["Cycle_Filter"] - current_Cycle, 0, 1);
+                            layer_Activation_Dict[layer_Name_List[0]] = tf.clip_by_value(tf.nn.softmax(layer_Activation_Stroage_Dict[layer_Name_List[0]] + self.biasMatrix_Dict[layer_Name_List[0]]) + tf.random_normal(tf.shape(layer_Activation_Stroage_Dict[layer_Name_List[0]]), 0, SD), 0, 1) * process["PlaceHolder_Dict"]["Probability_Filter"];
 
                     elif order_Code == Order_Code.Activation_Calculation_ReLU:
                         damage_Type, SD = process["Layer_Control_Dict"][layer_Name_List[0]];
                         if damage_Type == Damage_Type.On:
-                            layer_Activation_Dict[layer_Name_List[0]] = tf.nn.relu(layer_Activation_Stroage_Dict[layer_Name_List[0]] + self.biasMatrix_Dict[layer_Name_List[0]]) * process["PlaceHolder_Dict"]["Probability_Filter"] * tf.clip_by_value(process["PlaceHolder_Dict"]["Cycle_Filter"] - current_Cycle, 0, 1);
+                            layer_Activation_Dict[layer_Name_List[0]] = tf.nn.relu(layer_Activation_Stroage_Dict[layer_Name_List[0]] + self.biasMatrix_Dict[layer_Name_List[0]]) * process["PlaceHolder_Dict"]["Probability_Filter"];
                         elif damage_Type == Damage_Type.Off:
                             layer_Activation_Dict[layer_Name_List[0]] = tf.zeros(tf.shape(layer_Activation_Stroage_Dict[layer_Name_List[0]]));
                         elif damage_Type == Damage_Type.Damaged:
-                            layer_Activation_Dict[layer_Name_List[0]] = tf.clip_by_value(tf.nn.relu(layer_Activation_Stroage_Dict[layer_Name_List[0]] + self.biasMatrix_Dict[layer_Name_List[0]]) + tf.random_normal(tf.shape(layer_Activation_Stroage_Dict[layer_Name_List[0]]), 0, SD), 0, np.inf) * process["PlaceHolder_Dict"]["Probability_Filter"] * tf.clip_by_value(process["PlaceHolder_Dict"]["Cycle_Filter"] - current_Cycle, 0, 1);
+                            layer_Activation_Dict[layer_Name_List[0]] = tf.clip_by_value(tf.nn.relu(layer_Activation_Stroage_Dict[layer_Name_List[0]] + self.biasMatrix_Dict[layer_Name_List[0]]) + tf.random_normal(tf.shape(layer_Activation_Stroage_Dict[layer_Name_List[0]]), 0, SD), 0, np.inf) * process["PlaceHolder_Dict"]["Probability_Filter"];
 
                     elif order_Code == Order_Code.Activation_Send:
                         connection_Key = self.Extract_Connection(layer_Name_List[0], layer_Name_List[1]);
-                        
+
                         damage_Type, SD = process["Connection_Control_Dict"][connection_Key];
                         if damage_Type == Damage_Type.On:
                             if not layer_Name_List[1] in layer_Activation_Stroage_Dict.keys():
-                                layer_Activation_Stroage_Dict[layer_Name_List[1]] = tf.matmul(layer_Activation_Dict[layer_Name_List[0]], self.weightMatrix_Dict[connection_Key]);     
+                                layer_Activation_Stroage_Dict[layer_Name_List[1]] = tf.matmul(layer_Activation_Dict[layer_Name_List[0]], self.weightMatrix_Dict[connection_Key]);
                             else:
-                                layer_Activation_Stroage_Dict[layer_Name_List[1]] += tf.matmul(layer_Activation_Dict[layer_Name_List[0]], self.weightMatrix_Dict[connection_Key]);                                
+                                layer_Activation_Stroage_Dict[layer_Name_List[1]] += tf.matmul(layer_Activation_Dict[layer_Name_List[0]], self.weightMatrix_Dict[connection_Key]);
                         elif damage_Type == Damage_Type.Off:
                             if not layer_Name_List[1] in layer_Activation_Stroage_Dict.keys():   #If code is just 'continue', it may make a exception when model calcuate activation.
-                                layer_Activation_Stroage_Dict[layer_Name_List[1]] = tf.matmul(layer_Activation_Dict[layer_Name_List[0]], tf.zeros(tf.shape(self.weightMatrix_Dict[connection_Key])));     
+                                layer_Activation_Stroage_Dict[layer_Name_List[1]] = tf.matmul(layer_Activation_Dict[layer_Name_List[0]], tf.zeros(tf.shape(self.weightMatrix_Dict[connection_Key])));
                             else:
                                 continue;
                         elif damage_Type == Damage_Type.Damaged:
                             if not layer_Name_List[1] in layer_Activation_Stroage_Dict.keys():
-                                layer_Activation_Stroage_Dict[layer_Name_List[1]] = tf.matmul(layer_Activation_Dict[layer_Name_List[0]], self.weightMatrix_Dict[connection_Key] + tf.random_normal(tf.shape(self.weightMatrix_Dict[connection_Key]), 0, SD));     
+                                layer_Activation_Stroage_Dict[layer_Name_List[1]] = tf.matmul(layer_Activation_Dict[layer_Name_List[0]], self.weightMatrix_Dict[connection_Key] + tf.random_normal(tf.shape(self.weightMatrix_Dict[connection_Key]), 0, SD));
                             else:
                                 layer_Activation_Stroage_Dict[layer_Name_List[1]] += tf.matmul(layer_Activation_Dict[layer_Name_List[0]], self.weightMatrix_Dict[connection_Key] + tf.random_normal(tf.shape(self.weightMatrix_Dict[connection_Key]), 0, SD));
 
@@ -457,7 +550,7 @@ class HNet:
 
                     elif order_Code == Order_Code.Output_Layer_Error_Calculation_Softmax:
                         process["PlaceHolder_Dict"][order_Index] = tf.placeholder(tf.float32);
-                        layer_Error_Dict[layer_Name_List[0]] = process["PlaceHolder_Dict"][order_Index] - layer_Activation_Dict[layer_Name_List[0]] * process["PlaceHolder_Dict"]["Probability_Filter"] * tf.clip_by_value(process["PlaceHolder_Dict"]["Cycle_Filter"] - current_Cycle, 0, 1);
+                        layer_Error_Dict[layer_Name_List[0]] = (process["PlaceHolder_Dict"][order_Index] - layer_Activation_Dict[layer_Name_List[0]]) * process["PlaceHolder_Dict"]["Probability_Filter"] * tf.clip_by_value(process["PlaceHolder_Dict"]["Cycle_Filter"] - current_Cycle, 0, 1);
 
                     elif order_Code == Order_Code.Hidden_Layer_Error_Calculation_Sigmoid:
                         layer_Error_Dict[layer_Name_List[0]] = layer_Error_Stroage_Dict[layer_Name_List[0]] * layer_Activation_Dict[layer_Name_List[0]] * (1 - layer_Activation_Dict[layer_Name_List[0]]) * process["PlaceHolder_Dict"]["Probability_Filter"] * tf.clip_by_value(process["PlaceHolder_Dict"]["Cycle_Filter"] - current_Cycle, 0, 1);
@@ -471,9 +564,9 @@ class HNet:
                         damage_Type, SD = process["Connection_Control_Dict"][connection_Name];
                         if damage_Type == Damage_Type.On:
                             if not layer_Name_List[1] in layer_Error_Stroage_Dict.keys():
-                                layer_Error_Stroage_Dict[layer_Name_List[1]] = tf.matmul(layer_Error_Dict[layer_Name_List[0]], tf.transpose(self.weightMatrix_Dict[connection_Name]));     
+                                layer_Error_Stroage_Dict[layer_Name_List[1]] = tf.matmul(layer_Error_Dict[layer_Name_List[0]], tf.transpose(self.weightMatrix_Dict[connection_Name]));
                             else:
-                                layer_Error_Stroage_Dict[layer_Name_List[1]] += tf.matmul(layer_Error_Dict[layer_Name_List[0]], tf.transpose(self.weightMatrix_Dict[connection_Name]));                                
+                                layer_Error_Stroage_Dict[layer_Name_List[1]] += tf.matmul(layer_Error_Dict[layer_Name_List[0]], tf.transpose(self.weightMatrix_Dict[connection_Name]));
                         elif damage_Type == Damage_Type.Off:  #If code is just 'continue', it may make a exception when renew calcuate weight and bias.
                             if not layer_Name_List[0] in layer_Error_Dict.keys():
                                 layer_Error_Stroage_Dict[layer_Name_List[1]] = tf.zeros(tf.shape(layer_Activation_Dict[layer_Name_List[1]]));
@@ -481,7 +574,7 @@ class HNet:
                                 continue;
                         elif damage_Type == Damage_Type.Damaged:
                             if not layer_Name_List[0] in layer_Error_Dict.keys():
-                                layer_Error_Stroage_Dict[to_Layer_Name] = tf.matmul(layer_Activation_Dict[layer_Name_List[0]], tf.transpose(self.weightMatrix_Dict[connection_Name] + tf.random_normal(tf.shape(self.weightMatrix_Dict[connection_Name]), 0, SD)));     
+                                layer_Error_Stroage_Dict[to_Layer_Name] = tf.matmul(layer_Activation_Dict[layer_Name_List[0]], tf.transpose(self.weightMatrix_Dict[connection_Name] + tf.random_normal(tf.shape(self.weightMatrix_Dict[connection_Name]), 0, SD)));
                             else:
                                 layer_Error_Stroage_Dict[to_Layer_Name] += tf.matmul(layer_Activation_Dict[layer_Name_List[0]], tf.transpose(self.weightMatrix_Dict[connection_Name] + tf.random_normal(tf.shape(self.weightMatrix_Dict[connection_Name]), 0, SD)));
 
@@ -489,7 +582,7 @@ class HNet:
                         process["Tensor_List"].append(layer_Activation_Dict[layer_Name_List[0]]);
                         process["Extract_Activation_Tensor_Index_Dict"][order_Index] = len(process["Tensor_List"]) - 1;
                         process["Extract_Activation_Tensor_Cycle_Dict"][order_Index] = current_Cycle;
-                        
+
                     elif order_Code == Order_Code.Bias_Renewal:
                         process["Tensor_List"].append(tf.assign(self.biasMatrix_Dict[layer_Name_List[0]], (self.biasMatrix_Dict[layer_Name_List[0]] + self.config_Variables_Dict["Learning_Rate"] * tf.reduce_sum(layer_Error_Dict[layer_Name_List[0]], 0, True)) * (1-self.config_Variables_Dict["Decay_Rate"])));
 
@@ -498,7 +591,7 @@ class HNet:
                         to_Layer_Name = self.connection_Information_Dict[connection_Name_List[0]]["To_Layer_Name"];
                         process["Tensor_List"].append(tf.assign(self.weightMatrix_Dict[connection_Name_List[0]], (self.weightMatrix_Dict[connection_Name_List[0]] + self.config_Variables_Dict["Learning_Rate"] * tf.matmul(tf.transpose(layer_Activation_Dict[from_Layer_Name]),layer_Error_Dict[to_Layer_Name])) * (1-self.config_Variables_Dict["Decay_Rate"])));
 
-                    elif order_Code == Order_Code.Layer_Duplication:                        
+                    elif order_Code == Order_Code.Layer_Duplication:
                         if layer_Name_List[0] in layer_Activation_Stroage_Dict.keys():
                             layer_Activation_Stroage_Dict[layer_Name_List[1]] = layer_Activation_Stroage_Dict[layer_Name_List[0]];
                         if layer_Name_List[0] in layer_Activation_Dict.keys():
@@ -542,7 +635,7 @@ class HNet:
 
                     elif order_Code == Order_Code.Cycle_Marker:
                         current_Cycle += 1;
-                    
+
                     elif order_Code == Order_Code.Uniform_Random_Activation_Insert:
                         shape = (tf.shape(process["PlaceHolder_Dict"]["Probability_Filter"])[0], self.layer_Information_Dict[layer_Name_List[0]]["Unit"]);
                         damage_Type, SD = process["Layer_Control_Dict"][layer_Name_List[0]];
@@ -564,24 +657,29 @@ class HNet:
                             layer_Activation_Dict[layer_Name_List[0]] = tf.clip_by_value(tf.abs(tf.random_normal(shape, 0, order_Variable_List[0])) + tf.random_normal(shape, 0, SD), 0, 1) * process["PlaceHolder_Dict"]["Probability_Filter"] * tf.clip_by_value(process["PlaceHolder_Dict"]["Cycle_Filter"] - current_Cycle, 0, 1);
 
                     elif order_Code == Order_Code.End_and_Initialize:
+                        # For no-reset
+                        for layer_Key in self.layer_Information_Dict.keys():
+                            layer_Information = self.layer_Information_Dict[layer_Key];
+                            if not layer_Information["Reset"]:
+                                process["Tensor_List"].append(tf.assign(self.NoResetLayer_Dict[layer_Key], tf.reduce_mean(layer_Activation_Dict[layer_Key], axis=0, keep_dims=True)));
                         continue;
-    
+
     def Learn(self):
         for learning_Setup_Index in range(self.current_Learning_Setup_Index, len(self.learning_Setup_List)):
             learning_Setup = self.learning_Setup_List[learning_Setup_Index];
-            if self.current_LearningSetup_Epoch == 0:                
+            if self.current_LearningSetup_Epoch == 0:
                 self.Run_Test(learning_Setup);
             for epoch in range(self.current_LearningSetup_Epoch, learning_Setup["Training_Epoch"]):
                 self.Run_Training(learning_Setup);
                 self.Run_SaveCurrentWeight();
-                
+
                 self.current_Total_Epoch += 1;
                 self.current_LearningSetup_Epoch += 1;
 
                 if self.current_LearningSetup_Epoch % learning_Setup["Test_Timing"] == 0:
                     self.Run_Test(learning_Setup);
 
-                if self.pause_Status:                    
+                if self.pause_Status:
                     break;
 
             if self.pause_Status:
@@ -589,7 +687,7 @@ class HNet:
             else:
                 self.current_Learning_Setup_Index += 1;
                 self.current_LearningSetup_Epoch = 0;
-        
+
         if not self.pause_Status:
             self.Test_Result_Save();    #Auto Save
             self.pause_Status = True;
@@ -601,11 +699,11 @@ class HNet:
             shuffle(training_Matching_Index_List);
 
         training_Data_List = [];
-        for training_Matching_Index in training_Matching_Index_List:                        
-            training_Matching_Information = learning_Setup["Training_Matching_List"][training_Matching_Index];                    
+        for training_Matching_Index in training_Matching_Index_List:
+            training_Matching_Information = learning_Setup["Training_Matching_List"][training_Matching_Index];
             pattern_Pack = self.pattern_Pack_Dict[training_Matching_Information["Pattern_Pack_Name"]];
             process = self.process_Dict[training_Matching_Information["Process_Name"]];
-            
+
             probability_Filter = np.round(pattern_Pack["Probability"] + 0.5 - np.random.rand(pattern_Pack["Count"], 1));
 
             pattern_Index_List = list(range(pattern_Pack["Count"]));
@@ -625,8 +723,8 @@ class HNet:
                         continue;
                     feed_Dict[process["PlaceHolder_Dict"][order_Index]] = pattern_Pack[training_Matching_Information["Assign"][order_Index]][selected_Pattern_Index_List];
 
-                training_Data_List_at_Single_Matching.append((process["Tensor_List"], feed_Dict));                
-            
+                training_Data_List_at_Single_Matching.append((process["Tensor_List"], feed_Dict));
+
             training_Data_List.extend(training_Data_List_at_Single_Matching);
 
         if learning_Setup["Shuffle_Mode"] == Shuffle_Mode.Random_All:
@@ -636,7 +734,7 @@ class HNet:
             self.tf_Session.run(tensor_List, feed_dict=feed_Dict);
 
     def Run_Test(self, learning_Setup):
-        for test_Matching_Information in learning_Setup["Test_Matching_List"]:                    
+        for test_Matching_Information in learning_Setup["Test_Matching_List"]:
             pattern_Pack = self.pattern_Pack_Dict[test_Matching_Information["Pattern_Pack_Name"]];
             process = self.process_Dict[test_Matching_Information["Process_Name"]];
 
@@ -647,16 +745,17 @@ class HNet:
             feed_Dict[process["PlaceHolder_Dict"]["Cycle_Filter"]] = pattern_Pack["Cycle"];
             for order_Index in process["PlaceHolder_Dict"].keys():
                 if order_Index in ["Probability_Filter", "Cycle_Filter"]:
-                    continue; 
+                    continue;
                 feed_Dict[process["PlaceHolder_Dict"][order_Index]] = pattern_Pack[test_Matching_Information["Assign"][order_Index]];
 
             result = self.tf_Session.run(process["Tensor_List"], feed_dict=feed_Dict);
-            for order_Index in process["Extract_Activation_Tensor_Index_Dict"]:                
+            for order_Index in process["Extract_Activation_Tensor_Index_Dict"]:
                 for target_Pattern_Name, extract_Order_Index, extract_Data_Type  in test_Matching_Information["Extract_Data"]:
                     if order_Index == extract_Order_Index:
-                        result_Key = (extract_Data_Type, self.current_Total_Epoch, learning_Setup["Name"], self.current_LearningSetup_Epoch, process["Extract_Activation_Tensor_Cycle_Dict"][order_Index], test_Matching_Information["Pattern_Pack_Name"], target_Pattern_Name, test_Matching_Information["Process_Name"], order_Index);                        
+                        result_Key = (extract_Data_Type, self.current_Total_Epoch, learning_Setup["Name"], self.current_LearningSetup_Epoch, process["Extract_Activation_Tensor_Cycle_Dict"][order_Index], test_Matching_Information["Pattern_Pack_Name"], target_Pattern_Name, test_Matching_Information["Process_Name"], order_Index);
                         result_Tensor_Index = process["Extract_Activation_Tensor_Index_Dict"][order_Index];
                         self.extract_Result_Dict[result_Key] = result[result_Tensor_Index];
+
     def Run_SaveCurrentWeight(self):
         key_List = [];
         tensor_List = [];
@@ -670,23 +769,23 @@ class HNet:
 
         self.weight_Dict_for_Observation = {};
         for index in range(len(key_List)):
-            self.weight_Dict_for_Observation[key_List[index]] = weight_Data_List[index];        
+            self.weight_Dict_for_Observation[key_List[index]] = weight_Data_List[index];
 
     def Test_Result_Save(self, save_Directory = None):
-        if save_Directory is None:        
+        if save_Directory is None:
             save_Directory = time.strftime('%Y%m%d %H%M%S', time.localtime(time.time())) + " Auto Save";
         if not os.path.isdir(save_Directory):
             os.mkdir(save_Directory);
-        
+
         with open(save_Directory + "/Model_Information.txt", "w", encoding="utf8") as save_Stream:
             save_Stream.write(self.Extract_Simulator_Information());
-        
+
         self.Raw_Activation_Save(save_Directory);
         self.Mean_Squared_Error_Save(save_Directory);
         self.Cross_Entropy_Save(save_Directory);
         self.Semantic_Stress_Save(save_Directory);
         self.WeightAndBias_Save(save_Directory + "/Weight_and_Bias.HNet_Model")
-    
+
     def Raw_Activation_Save(self, save_Directory):
         extract_Data_Row_List = [];
         extract_Data_Row_List.append("Total Epoch\tLearning Setup\tEpoch in Learning Setup\tCycle\tPattern Pack\tUisng Process\tOrder Index\tLayer\tName\tProbability\tRaw Activation");
@@ -696,7 +795,7 @@ class HNet:
                 continue;
             data_Key = (extract_Data_Type, total_Epoch, learning_Setup_Name, learning_Setup_Epoch, cycle, pattern_Pack_Name, pattern_Name, process_Name, order_Index);
             raw_Data = self.extract_Result_Dict[data_Key];
-            
+
             patternPack = self.pattern_Pack_Dict[pattern_Pack_Name];
             process = self.process_Dict[process_Name];
 
@@ -706,69 +805,69 @@ class HNet:
 
             for index in range(raw_Data.shape[0]):
                 extract_Data_Row_List.append(
-                    str(total_Epoch) + "\t" + 
-                    learning_Setup_Name + "\t" + 
+                    str(total_Epoch) + "\t" +
+                    learning_Setup_Name + "\t" +
                     str(learning_Setup_Epoch) + "\t" +
-                    str(cycle) + "\t" + 
+                    str(cycle) + "\t" +
                     pattern_Pack_Name + "\t" +
-                    process_Name + "\t" + 
-                    str(order_Index) + "\t" + 
-                    layer_Name + "\t" + 
-                    name_List[index] + "\t" + 
-                    str(probability_List[index]) + "\t" + 
+                    process_Name + "\t" +
+                    str(order_Index) + "\t" +
+                    layer_Name + "\t" +
+                    name_List[index] + "\t" +
+                    str(probability_List[index]) + "\t" +
                     "\t".join([str(x) for x in raw_Data[index]]));
-        
+
         if len(extract_Data_Row_List) > 1:
             with open(save_Directory + "/Raw_Activation.txt", "w", encoding="utf8") as save_Stream:
-                save_Stream.write("\n".join(extract_Data_Row_List));        
+                save_Stream.write("\n".join(extract_Data_Row_List));
 
     def Mean_Squared_Error_Save(self, save_Directory):
         extract_Data_Row_List = [];
         extract_Data_Row_List.append("Total Epoch\tLearning Setup\tEpoch in Learning Setup\tCycle\tPattern Pack\tTarget Pattern\tUisng Process\tOrder Index\tLayer\tName\tProbability\tMean Squared Error");
-        
+
         for extract_Data_Type, total_Epoch, learning_Setup_Name, learning_Setup_Epoch, cycle, pattern_Pack_Name, pattern_Name, process_Name, order_Index in self.extract_Result_Dict.keys():
             if not extract_Data_Type == Extract_Data_Type.Mean_Squared_Error:
                 continue;
             data_Key = (extract_Data_Type, total_Epoch, learning_Setup_Name, learning_Setup_Epoch, cycle, pattern_Pack_Name, pattern_Name, process_Name, order_Index);
             raw_Data = self.extract_Result_Dict[data_Key];
-            
+
             patternPack = self.pattern_Pack_Dict[pattern_Pack_Name];
             process = self.process_Dict[process_Name];
-            
+
             layer_Name = process["Order_List"][order_Index][1][0];
             name_List = patternPack["Name"];
             probability_List = patternPack["Probability"].ravel();
-            mean_Squared_Error = np.sqrt(np.mean((patternPack[pattern_Name] - raw_Data) ** 2, axis=1));             
-            
+            mean_Squared_Error = np.sqrt(np.mean((patternPack[pattern_Name] - raw_Data) ** 2, axis=1));
+
             for index in range(len(mean_Squared_Error)):
                 extract_Data_Row_List.append(
-                    str(total_Epoch) + "\t" + 
-                    learning_Setup_Name + "\t" + 
+                    str(total_Epoch) + "\t" +
+                    learning_Setup_Name + "\t" +
                     str(learning_Setup_Epoch) + "\t" +
-                    str(cycle) + "\t" + 
-                    pattern_Pack_Name + "\t" + 
-                    pattern_Name + "\t" + 
-                    process_Name + "\t" + 
-                    str(order_Index) + "\t" + 
-                    layer_Name + "\t" + 
-                    name_List[index] + "\t" + 
-                    str(probability_List[index]) + "\t" + 
+                    str(cycle) + "\t" +
+                    pattern_Pack_Name + "\t" +
+                    pattern_Name + "\t" +
+                    process_Name + "\t" +
+                    str(order_Index) + "\t" +
+                    layer_Name + "\t" +
+                    name_List[index] + "\t" +
+                    str(probability_List[index]) + "\t" +
                     str(mean_Squared_Error[index]));
-        
+
         if len(extract_Data_Row_List) > 1:
             with open(save_Directory + "/Mean_Squared_Error.txt", "w", encoding="utf8") as save_Stream:
                 save_Stream.write("\n".join(extract_Data_Row_List));
-        
+
     def Cross_Entropy_Save(self, save_Directory):
         extract_Data_Row_List = [];
         extract_Data_Row_List.append("Total Epoch\tLearning Setup\tEpoch in Learning Setup\tCycle\tPattern Pack\tTarget Pattern\tUisng Process\tOrder Index\tLayer\tName\tProbability\tCross Entropy");
 
-        for extract_Data_Type, total_Epoch, learning_Setup_Name, learning_Setup_Epoch, cycle, pattern_Pack_Name, pattern_Name, process_Name, order_Index in self.extract_Result_Dict.keys():            
+        for extract_Data_Type, total_Epoch, learning_Setup_Name, learning_Setup_Epoch, cycle, pattern_Pack_Name, pattern_Name, process_Name, order_Index in self.extract_Result_Dict.keys():
             if not extract_Data_Type == Extract_Data_Type.Cross_Entropy:
                 continue;
             data_Key = (extract_Data_Type, total_Epoch, learning_Setup_Name, learning_Setup_Epoch, cycle, pattern_Pack_Name, pattern_Name, process_Name, order_Index);
             raw_Data = self.extract_Result_Dict[data_Key];
-            
+
             patternPack = self.pattern_Pack_Dict[pattern_Pack_Name];
             process = self.process_Dict[process_Name];
 
@@ -779,17 +878,17 @@ class HNet:
 
             for index in range(len(cross_Entropy)):
                 extract_Data_Row_List.append(
-                    str(total_Epoch) + "\t" + 
-                    learning_Setup_Name + "\t" + 
+                    str(total_Epoch) + "\t" +
+                    learning_Setup_Name + "\t" +
                     str(learning_Setup_Epoch) + "\t" +
-                    str(cycle) + "\t" + 
-                    pattern_Pack_Name + "\t" + 
-                    pattern_Name + "\t" + 
-                    process_Name + "\t" + 
-                    str(order_Index) + "\t" + 
-                    layer_Name + "\t" + 
-                    name_List[index] + "\t" + 
-                    str(probability_List[index]) + "\t" + 
+                    str(cycle) + "\t" +
+                    pattern_Pack_Name + "\t" +
+                    pattern_Name + "\t" +
+                    process_Name + "\t" +
+                    str(order_Index) + "\t" +
+                    layer_Name + "\t" +
+                    name_List[index] + "\t" +
+                    str(probability_List[index]) + "\t" +
                     str(cross_Entropy[index]));
 
         if len(extract_Data_Row_List) > 1:
@@ -800,12 +899,12 @@ class HNet:
         extract_Data_Row_List = [];
         extract_Data_Row_List.append("Total Epoch\tLearning Setup\tEpoch in Learning Setup\tCycle\tPattern Pack\tUisng Process\tOrder Index\tLayer\tName\tProbability\tSemantic Stress");
 
-        for extract_Data_Type, total_Epoch, learning_Setup_Name, learning_Setup_Epoch, cycle, pattern_Pack_Name, pattern_Name, process_Name, order_Index in self.extract_Result_Dict.keys():            
+        for extract_Data_Type, total_Epoch, learning_Setup_Name, learning_Setup_Epoch, cycle, pattern_Pack_Name, pattern_Name, process_Name, order_Index in self.extract_Result_Dict.keys():
             if not extract_Data_Type == Extract_Data_Type.Semantic_Stress:
                 continue;
             data_Key = (extract_Data_Type, total_Epoch, learning_Setup_Name, learning_Setup_Epoch, cycle, pattern_Pack_Name, pattern_Name, process_Name, order_Index);
             raw_Data = self.extract_Result_Dict[data_Key];
-            
+
             patternPack = self.pattern_Pack_Dict[pattern_Pack_Name];
             process = self.process_Dict[process_Name];
 
@@ -816,23 +915,22 @@ class HNet:
 
             for index in range(len(semantic_Stress)):
                 extract_Data_Row_List.append(
-                    str(total_Epoch) + "\t" + 
-                    learning_Setup_Name + "\t" + 
+                    str(total_Epoch) + "\t" +
+                    learning_Setup_Name + "\t" +
                     str(learning_Setup_Epoch) + "\t" +
-                    str(cycle) + "\t" +  
+                    str(cycle) + "\t" +
                     pattern_Pack_Name + "\t" +
-                    process_Name + "\t" + 
-                    str(order_Index) + "\t" + 
-                    layer_Name + "\t" + 
-                    name_List[index] + "\t" + 
-                    str(probability_List[index]) + "\t" + 
+                    process_Name + "\t" +
+                    str(order_Index) + "\t" +
+                    layer_Name + "\t" +
+                    name_List[index] + "\t" +
+                    str(probability_List[index]) + "\t" +
                     str(semantic_Stress[index]));
 
         if len(extract_Data_Row_List) > 1:
             with open(save_Directory + "/Semantic_Stress.txt", "w", encoding="utf8") as save_Stream:
                 save_Stream.write("\n".join(extract_Data_Row_List));
 
-    
     def Extract_Simulator_Information(self):
         information_Text_List = [];
 
@@ -892,14 +990,14 @@ class HNet:
                 if not order_Variable_List is None:
                     variable_Text = " Vals:(" + ", ".join([str(x) for x in order_Variable_List]) + ")";
                 else:
-                    variable_Text = "";                
-                if not layer_Name_List is None:                
+                    variable_Text = "";
+                if not layer_Name_List is None:
                     information_Text_List.append("  └" + str(order_Index) + ": " + str(order_Code)[11:] + " (" + ", ".join([layer for layer in layer_Name_List]) + ")" + variable_Text);
-                elif not connection_Name_List is None:                
+                elif not connection_Name_List is None:
                     information_Text_List.append("  └" + str(order_Index) + ": " + str(order_Code)[11:] + " (" + ", ".join([connection for connection in connection_Name_List]) + ")" + variable_Text);
                 else:
-                    information_Text_List.append("  └" + str(order_Index) + ": " + str(order_Code)[11:] + variable_Text);            
-                order_Index += 1;                
+                    information_Text_List.append("  └" + str(order_Index) + ": " + str(order_Code)[11:] + variable_Text);
+                order_Index += 1;
         information_Text_List.append("");
 
         information_Text_List.append("▶Learning Setup");
@@ -927,10 +1025,10 @@ class HNet:
                 information_Text_List.append("   └Pattern Pack: " + test_Matching["Pattern_Pack_Name"]);
                 information_Text_List.append("   └Assign: " + test_Matching["Pattern_Pack_Name"]);
                 for order_Index in test_Matching["Assign"].keys():
-                    information_Text_List.append("    └" + str(order_Index) + " ← " + test_Matching["Assign"][order_Index]);                
+                    information_Text_List.append("    └" + str(order_Index) + " ← " + test_Matching["Assign"][order_Index]);
                 information_Text_List.append("   └Extract Data: " + test_Matching["Pattern_Pack_Name"]);
                 for pattern, order_Index, extract_Type in test_Matching["Extract_Data"]:
-                    extract_Layer_Name = self.process_Dict[test_Matching["Process_Name"]]["Order_List"][order_Index][1][0];                
+                    extract_Layer_Name = self.process_Dict[test_Matching["Process_Name"]]["Order_List"][order_Index][1][0];
                     if extract_Type == Extract_Data_Type.Raw_Activation:
                         information_Text_List.append("    └" + "Raw Activation(L: " + extract_Layer_Name + "(" + str(order_Index) + ")" +")");
                     elif extract_Type == Extract_Data_Type.Mean_Squared_Error:

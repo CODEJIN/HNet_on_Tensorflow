@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>HJ_Net with Tensorflow 0.9.0.0</string>
+   <string>HNet on Tensorflow 0.9.1.0</string>
   </property>
   <widget class="QPushButton" name="structureSetup_Button">
    <property name="geometry">

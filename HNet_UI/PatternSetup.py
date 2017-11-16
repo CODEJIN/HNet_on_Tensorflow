@@ -45,6 +45,21 @@ class Ui_Dialog(object):
         self.patternPackInformation_TextEdit = QtWidgets.QTextEdit(Dialog)
         self.patternPackInformation_TextEdit.setGeometry(QtCore.QRect(180, 10, 471, 192))
         self.patternPackInformation_TextEdit.setObjectName("patternPackInformation_TextEdit")
+        self.frame_3 = QtWidgets.QFrame(Dialog)
+        self.frame_3.setGeometry(QtCore.QRect(380, 250, 181, 21))
+        self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_3.setObjectName("frame_3")
+        self.fileTypeWide_RadioButton = QtWidgets.QRadioButton(self.frame_3)
+        self.fileTypeWide_RadioButton.setGeometry(QtCore.QRect(10, 0, 51, 17))
+        self.fileTypeWide_RadioButton.setChecked(True)
+        self.fileTypeWide_RadioButton.setObjectName("fileTypeWide_RadioButton")
+        self.fileTypeLong_RadioButton = QtWidgets.QRadioButton(self.frame_3)
+        self.fileTypeLong_RadioButton.setGeometry(QtCore.QRect(70, 0, 51, 17))
+        self.fileTypeLong_RadioButton.setObjectName("fileTypeLong_RadioButton")
+        self.fileTypePickle_RadioButton = QtWidgets.QRadioButton(self.frame_3)
+        self.fileTypePickle_RadioButton.setGeometry(QtCore.QRect(130, 0, 51, 17))
+        self.fileTypePickle_RadioButton.setObjectName("fileTypePickle_RadioButton")
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -63,6 +78,9 @@ class Ui_Dialog(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
+        self.fileTypeWide_RadioButton.setText(_translate("Dialog", "Wide"))
+        self.fileTypeLong_RadioButton.setText(_translate("Dialog", "Long"))
+        self.fileTypePickle_RadioButton.setText(_translate("Dialog", "Pickle"))
 
 
 if __name__ == "__main__":

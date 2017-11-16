@@ -387,7 +387,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>4</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="bp_Tap">
     <attribute name="title">
@@ -555,7 +555,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="Image_Resources.qrc">:/example/BP.png</pixmap>
+      <pixmap>:/example/BP.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -708,7 +708,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="Image_Resources.qrc">:/example/BPTT.png</pixmap>
+      <pixmap>:/example/BPTT.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -747,7 +747,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QLabel" name="bpttHiddenLayer_Label_2">
+    <widget class="QLabel" name="bpttTick_Label">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -763,6 +763,53 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
+    <widget class="QLabel" name="bpttInitialReset_Label">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>80</y>
+       <width>61</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Initial Reset</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="bpttInitialReset_CheckBox">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>84</y>
+       <width>16</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <zorder>frame_2</zorder>
+    <zorder>bpttHiddenLayer_Label</zorder>
+    <zorder>bpttTrainingApply_Button</zorder>
+    <zorder>bpttTestApply_Button</zorder>
+    <zorder>bpttOutputLayer_Label</zorder>
+    <zorder>bpttInputLayer_Label</zorder>
+    <zorder>bpttOutputLayer_ComboBox</zorder>
+    <zorder>bpttExampleGraph_Label</zorder>
+    <zorder>bpttInputLayer_LineEdit</zorder>
+    <zorder>bpttHiddenLayer_LineEdit</zorder>
+    <zorder>bpttTick_LineEdit</zorder>
+    <zorder>bpttTick_Label</zorder>
+    <zorder>bpttErrorSigmoid_RadioButton</zorder>
+    <zorder>bpttInitialReset_Label</zorder>
+    <zorder>bpttInitialReset_CheckBox</zorder>
    </widget>
    <widget class="QWidget" name="srn_Tap">
     <attribute name="title">
@@ -966,7 +1013,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="Image_Resources.qrc">:/example/SRN.png</pixmap>
+      <pixmap>:/example/SRN.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>

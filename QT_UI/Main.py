@@ -120,7 +120,7 @@ class Ui_main_Dialog(object):
 
     def retranslateUi(self, main_Dialog):
         _translate = QtCore.QCoreApplication.translate
-        main_Dialog.setWindowTitle(_translate("main_Dialog", "HJ_Net with Tensorflow 0.9.0.0"))
+        main_Dialog.setWindowTitle(_translate("main_Dialog", "HNet on Tensorflow 0.9.1.0"))
         self.structureSetup_Button.setText(_translate("main_Dialog", "Structure Setup"))
         self.exit_Button.setText(_translate("main_Dialog", "Exit"))
         self.patternSetup_Button.setText(_translate("main_Dialog", "Pattern Setup"))

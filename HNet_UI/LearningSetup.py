@@ -303,6 +303,10 @@ class Ui_Dialog(object):
         self.extractDataType_Label.setGeometry(QtCore.QRect(250, 444, 60, 13))
         self.extractDataType_Label.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.extractDataType_Label.setObjectName("extractDataType_Label")
+        self.extractDataAutoAssign_Button = QtWidgets.QPushButton(self.testPatternMatching_GroupBox)
+        self.extractDataAutoAssign_Button.setEnabled(False)
+        self.extractDataAutoAssign_Button.setGeometry(QtCore.QRect(300, 470, 81, 30))
+        self.extractDataAutoAssign_Button.setObjectName("extractDataAutoAssign_Button")
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -369,6 +373,7 @@ class Ui_Dialog(object):
         self.extractDataType_ComboBox.setItemText(2, _translate("Dialog", "Cross Entropy"))
         self.extractDataType_ComboBox.setItemText(3, _translate("Dialog", "Semantic Stress"))
         self.extractDataType_Label.setText(_translate("Dialog", "Ext. Type"))
+        self.extractDataAutoAssign_Button.setText(_translate("Dialog", "Auto Assign"))
 
 
 if __name__ == "__main__":
