@@ -850,8 +850,12 @@ class HNet_GUI:
         elif self.pattern_Setup_UI.fileTypePickle_RadioButton.isChecked():
             file_Type = "Pickle";
 
-        self.simulator.Pattern_Pack_Load(self.pattern_Setup_UI.packName_LineEdit.text(), self.pattern_Setup_UI.filePath_LineEdit.text(), file_Type);
-        self.Pattern_Setup_UI_Pattern_Pack_Changed();
+        try:
+            if not self.simulator.Pattern_Pack_Load(self.pattern_Setup_UI.packName_LineEdit.text(), self.pattern_Setup_UI.filePath_LineEdit.text(), file_Type):
+                raise Exception();
+            self.Pattern_Setup_UI_Pattern_Pack_Changed();
+        except:
+            QtWidgets.QMessageBox.warning(None, 'Warning!', "this data file is broken or is not compatible with selected type.");
 
     def Pattern_Setup_UI_delete_Button_Clicked(self):
         if self.pattern_Setup_UI.patternPack_ListWidget.currentRow() < 0:
