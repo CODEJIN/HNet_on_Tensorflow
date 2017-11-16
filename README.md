@@ -1,4 +1,4 @@
-# HNet on Tensorflow ver 0.9.0.1
+# HNet on Tensorflow ver 0.9.1.0
 
 # File
 HNet on Tensorflow is constructed by the below files.
