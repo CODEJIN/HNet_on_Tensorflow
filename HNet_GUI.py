@@ -2471,6 +2471,10 @@ class HNet_GUI:
             if len(candidate_Pattern_List4) == 1:
                 self.current_Training_Matching_Information["Assign"][index] = candidate_Pattern_List4[0];
                 continue;
+            candidate_Pattern_List5 = list(set(candidate_Pattern_List2) & set(candidate_Pattern_List3));
+            if len(candidate_Pattern_List5) == 1:
+                self.current_Training_Matching_Information["Assign"][index] = candidate_Pattern_List5[0];
+                continue;
             else:
                 assign_Fail_Index_List.append(index);
 
@@ -2611,6 +2615,10 @@ class HNet_GUI:
             if len(candidate_Pattern_List4) == 1:
                 self.current_Test_Matching_Information["Assign"][index] = candidate_Pattern_List4[0];
                 continue;
+            candidate_Pattern_List5 = list(set(candidate_Pattern_List2) & set(candidate_Pattern_List3));
+            if len(candidate_Pattern_List5) == 1:
+                self.current_Test_Matching_Information["Assign"][index] = candidate_Pattern_List5[0];
+                continue;
             else:
                 assign_Fail_Index_List.append(index);
 
@@ -2732,7 +2740,6 @@ class HNet_GUI:
             candidate_Pattern_List2 = [];
             for pattern_Name in candidate_Pattern_List1:
                 if pattern_Name in layer_List[0] or layer_List[0] in pattern_Name:
-                    print(pattern_Name, layer_List[0])
                     candidate_Pattern_List2.append(pattern_Name);
             if len(candidate_Pattern_List2) == 1:
                 self.current_Test_Matching_Information["Extract_Data"].append((candidate_Pattern_List2[0], index, Extract_Data_Type.Mean_Squared_Error));
@@ -2756,6 +2763,13 @@ class HNet_GUI:
                 self.current_Test_Matching_Information["Extract_Data"].append((candidate_Pattern_List4[0], index, Extract_Data_Type.Mean_Squared_Error));
                 self.current_Test_Matching_Information["Extract_Data"].append((candidate_Pattern_List4[0], index, Extract_Data_Type.Cross_Entropy));
                 continue;
+
+            candidate_Pattern_List5 = list(set(candidate_Pattern_List2) & set(candidate_Pattern_List3));
+            if len(candidate_Pattern_List5) == 1:
+                self.current_Test_Matching_Information["Extract_Data"].append((candidate_Pattern_List5[0], index, Extract_Data_Type.Mean_Squared_Error));
+                self.current_Test_Matching_Information["Extract_Data"].append((candidate_Pattern_List5[0], index, Extract_Data_Type.Cross_Entropy));
+                continue;
+
             else:
                 assign_Fail_Index_List.append(index);
 

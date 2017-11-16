@@ -788,7 +788,7 @@ class HNet:
 
     def Raw_Activation_Save(self, save_Directory):
         extract_Data_Row_List = [];
-        extract_Data_Row_List.append("Total Epoch\tLearning Setup\tEpoch in Learning Setup\tCycle\tPattern Pack\tUisng Process\tOrder Index\tLayer\tName\tProbability\tRaw Activation");
+        extract_Data_Row_List.append("Total_Epoch\tLearning_Setup\tEpoch_in_Learning_Setup\tCycle\tPattern_Pack\tUisng_Process\tOrder_Index\tLayer\tName\tProbability\tPattern_Assign_Cycle\tRaw_Activation");
 
         for extract_Data_Type, total_Epoch, learning_Setup_Name, learning_Setup_Epoch, cycle, pattern_Pack_Name, pattern_Name, process_Name, order_Index in self.extract_Result_Dict.keys():
             if not extract_Data_Type == Extract_Data_Type.Raw_Activation:
@@ -802,6 +802,7 @@ class HNet:
             layer_Name = process["Order_List"][order_Index][1][0];
             name_List = patternPack["Name"];
             probability_List = patternPack["Probability"].ravel();
+            pattern_Cycle_List = patternPack["Cycle"].ravel();
 
             for index in range(raw_Data.shape[0]):
                 extract_Data_Row_List.append(
@@ -815,6 +816,7 @@ class HNet:
                     layer_Name + "\t" +
                     name_List[index] + "\t" +
                     str(probability_List[index]) + "\t" +
+                    str(pattern_Cycle_List[index]) + "\t" +
                     "\t".join([str(x) for x in raw_Data[index]]));
 
         if len(extract_Data_Row_List) > 1:
@@ -823,7 +825,7 @@ class HNet:
 
     def Mean_Squared_Error_Save(self, save_Directory):
         extract_Data_Row_List = [];
-        extract_Data_Row_List.append("Total Epoch\tLearning Setup\tEpoch in Learning Setup\tCycle\tPattern Pack\tTarget Pattern\tUisng Process\tOrder Index\tLayer\tName\tProbability\tMean Squared Error");
+        extract_Data_Row_List.append("Total Epoch\tLearning Setup\tEpoch in Learning Setup\tCycle\tPattern Pack\tTarget Pattern\tUisng Process\tOrder Index\tLayer\tName\tProbability\tPattern_Assign_Cycle\tMean Squared Error");
 
         for extract_Data_Type, total_Epoch, learning_Setup_Name, learning_Setup_Epoch, cycle, pattern_Pack_Name, pattern_Name, process_Name, order_Index in self.extract_Result_Dict.keys():
             if not extract_Data_Type == Extract_Data_Type.Mean_Squared_Error:
@@ -837,6 +839,7 @@ class HNet:
             layer_Name = process["Order_List"][order_Index][1][0];
             name_List = patternPack["Name"];
             probability_List = patternPack["Probability"].ravel();
+            pattern_Cycle_List = patternPack["Cycle"].ravel();
             mean_Squared_Error = np.sqrt(np.mean((patternPack[pattern_Name] - raw_Data) ** 2, axis=1));
 
             for index in range(len(mean_Squared_Error)):
@@ -852,6 +855,7 @@ class HNet:
                     layer_Name + "\t" +
                     name_List[index] + "\t" +
                     str(probability_List[index]) + "\t" +
+                    str(pattern_Cycle_List[index]) + "\t" +
                     str(mean_Squared_Error[index]));
 
         if len(extract_Data_Row_List) > 1:
@@ -860,7 +864,7 @@ class HNet:
 
     def Cross_Entropy_Save(self, save_Directory):
         extract_Data_Row_List = [];
-        extract_Data_Row_List.append("Total Epoch\tLearning Setup\tEpoch in Learning Setup\tCycle\tPattern Pack\tTarget Pattern\tUisng Process\tOrder Index\tLayer\tName\tProbability\tCross Entropy");
+        extract_Data_Row_List.append("Total Epoch\tLearning Setup\tEpoch in Learning Setup\tCycle\tPattern Pack\tTarget Pattern\tUisng Process\tOrder Index\tLayer\tName\tProbability\tPattern_Assign_Cycle\tCross Entropy");
 
         for extract_Data_Type, total_Epoch, learning_Setup_Name, learning_Setup_Epoch, cycle, pattern_Pack_Name, pattern_Name, process_Name, order_Index in self.extract_Result_Dict.keys():
             if not extract_Data_Type == Extract_Data_Type.Cross_Entropy:
@@ -874,6 +878,7 @@ class HNet:
             layer_Name = process["Order_List"][order_Index][1][0];
             name_List = patternPack["Name"];
             probability_List = patternPack["Probability"].ravel();
+            pattern_Cycle_List = patternPack["Cycle"].ravel();
             cross_Entropy = -(np.mean(patternPack[pattern_Name] * np.log(raw_Data) + (1 - patternPack[pattern_Name]) * np.log(1 - raw_Data), axis = 1));
 
             for index in range(len(cross_Entropy)):
@@ -889,6 +894,7 @@ class HNet:
                     layer_Name + "\t" +
                     name_List[index] + "\t" +
                     str(probability_List[index]) + "\t" +
+                    str(pattern_Cycle_List[index]) + "\t" +
                     str(cross_Entropy[index]));
 
         if len(extract_Data_Row_List) > 1:
@@ -897,7 +903,7 @@ class HNet:
 
     def Semantic_Stress_Save(self, save_Directory):
         extract_Data_Row_List = [];
-        extract_Data_Row_List.append("Total Epoch\tLearning Setup\tEpoch in Learning Setup\tCycle\tPattern Pack\tUisng Process\tOrder Index\tLayer\tName\tProbability\tSemantic Stress");
+        extract_Data_Row_List.append("Total Epoch\tLearning Setup\tEpoch in Learning Setup\tCycle\tPattern Pack\tUisng Process\tOrder Index\tLayer\tName\tProbability\tPattern_Assign_Cycle\tSemantic Stress");
 
         for extract_Data_Type, total_Epoch, learning_Setup_Name, learning_Setup_Epoch, cycle, pattern_Pack_Name, pattern_Name, process_Name, order_Index in self.extract_Result_Dict.keys():
             if not extract_Data_Type == Extract_Data_Type.Semantic_Stress:
@@ -911,6 +917,7 @@ class HNet:
             layer_Name = process["Order_List"][order_Index][1][0];
             name_List = patternPack["Name"];
             probability_List = patternPack["Probability"].ravel();
+            pattern_Cycle_List = patternPack["Cycle"].ravel();
             semantic_Stress = np.mean(raw_Data * np.log2(raw_Data) + (1 - raw_Data) * np.log2(1 - raw_Data) + 1, axis = 1);
 
             for index in range(len(semantic_Stress)):
@@ -925,6 +932,7 @@ class HNet:
                     layer_Name + "\t" +
                     name_List[index] + "\t" +
                     str(probability_List[index]) + "\t" +
+                    str(pattern_Cycle_List[index]) + "\t" +
                     str(semantic_Stress[index]));
 
         if len(extract_Data_Row_List) > 1:
