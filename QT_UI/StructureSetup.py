@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'StructureSetup.ui'
 #
-# Created by: PyQt5 UI code generator 5.7
+# Created by: PyQt5 UI code generator 5.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -194,6 +194,44 @@ class Ui_Dialog(object):
         self.structureSRNInitialReset_CheckBox.setChecked(True)
         self.structureSRNInitialReset_CheckBox.setObjectName("structureSRNInitialReset_CheckBox")
         self.structureWidget.addTab(self.basicStructureSRN_Tap, "")
+        self.basicStructureLinear_Tap = QtWidgets.QWidget()
+        self.basicStructureLinear_Tap.setObjectName("basicStructureLinear_Tap")
+        self.structureLinearOutputLayerSize_LineEdit = QtWidgets.QLineEdit(self.basicStructureLinear_Tap)
+        self.structureLinearOutputLayerSize_LineEdit.setEnabled(True)
+        self.structureLinearOutputLayerSize_LineEdit.setGeometry(QtCore.QRect(120, 70, 155, 20))
+        self.structureLinearOutputLayerSize_LineEdit.setObjectName("structureLinearOutputLayerSize_LineEdit")
+        self.structureLinearHiddenLayerSize_LineEdit = QtWidgets.QLineEdit(self.basicStructureLinear_Tap)
+        self.structureLinearHiddenLayerSize_LineEdit.setEnabled(True)
+        self.structureLinearHiddenLayerSize_LineEdit.setGeometry(QtCore.QRect(120, 40, 155, 20))
+        self.structureLinearHiddenLayerSize_LineEdit.setObjectName("structureLinearHiddenLayerSize_LineEdit")
+        self.structureLinearOutputLayerSize_Label = QtWidgets.QLabel(self.basicStructureLinear_Tap)
+        self.structureLinearOutputLayerSize_Label.setGeometry(QtCore.QRect(10, 70, 101, 16))
+        self.structureLinearOutputLayerSize_Label.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.structureLinearOutputLayerSize_Label.setObjectName("structureLinearOutputLayerSize_Label")
+        self.structureLinearHiddenLayerCount_LineEdit = QtWidgets.QLineEdit(self.basicStructureLinear_Tap)
+        self.structureLinearHiddenLayerCount_LineEdit.setEnabled(True)
+        self.structureLinearHiddenLayerCount_LineEdit.setGeometry(QtCore.QRect(314, 40, 41, 20))
+        self.structureLinearHiddenLayerCount_LineEdit.setObjectName("structureLinearHiddenLayerCount_LineEdit")
+        self.structureLinearHiddenLayerSize_Label = QtWidgets.QLabel(self.basicStructureLinear_Tap)
+        self.structureLinearHiddenLayerSize_Label.setGeometry(QtCore.QRect(10, 40, 101, 16))
+        self.structureLinearHiddenLayerSize_Label.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.structureLinearHiddenLayerSize_Label.setObjectName("structureLinearHiddenLayerSize_Label")
+        self.structureLinearInputLayerSize_Label = QtWidgets.QLabel(self.basicStructureLinear_Tap)
+        self.structureLinearInputLayerSize_Label.setGeometry(QtCore.QRect(10, 10, 101, 16))
+        self.structureLinearInputLayerSize_Label.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.structureLinearInputLayerSize_Label.setObjectName("structureLinearInputLayerSize_Label")
+        self.structureLinearInputLayerSize_LineEdit = QtWidgets.QLineEdit(self.basicStructureLinear_Tap)
+        self.structureLinearInputLayerSize_LineEdit.setEnabled(True)
+        self.structureLinearInputLayerSize_LineEdit.setGeometry(QtCore.QRect(120, 10, 155, 20))
+        self.structureLinearInputLayerSize_LineEdit.setObjectName("structureLinearInputLayerSize_LineEdit")
+        self.structureLinearMake_Button = QtWidgets.QPushButton(self.basicStructureLinear_Tap)
+        self.structureLinearMake_Button.setGeometry(QtCore.QRect(300, 120, 150, 31))
+        self.structureLinearMake_Button.setObjectName("structureLinearMake_Button")
+        self.structureLinearHiddenLayerCount_Label = QtWidgets.QLabel(self.basicStructureLinear_Tap)
+        self.structureLinearHiddenLayerCount_Label.setGeometry(QtCore.QRect(286, 43, 16, 16))
+        self.structureLinearHiddenLayerCount_Label.setAlignment(QtCore.Qt.AlignCenter)
+        self.structureLinearHiddenLayerCount_Label.setObjectName("structureLinearHiddenLayerCount_Label")
+        self.structureWidget.addTab(self.basicStructureLinear_Tap, "")
         self.basicStructureCustom_Tap = QtWidgets.QWidget()
         self.basicStructureCustom_Tap.setObjectName("basicStructureCustom_Tap")
         self.customLayer_GroupBox = QtWidgets.QGroupBox(self.basicStructureCustom_Tap)
@@ -277,7 +315,7 @@ class Ui_Dialog(object):
         self.layerDelete_Button.setObjectName("layerDelete_Button")
 
         self.retranslateUi(Dialog)
-        self.structureWidget.setCurrentIndex(1)
+        self.structureWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
@@ -317,6 +355,12 @@ class Ui_Dialog(object):
         self.structureSRNInputLayerSize_Label.setText(_translate("Dialog", "Input Layer Size"))
         self.structureSRNInitialReset_Label.setText(_translate("Dialog", "Initial Reset"))
         self.structureWidget.setTabText(self.structureWidget.indexOf(self.basicStructureSRN_Tap), _translate("Dialog", "SRN"))
+        self.structureLinearOutputLayerSize_Label.setText(_translate("Dialog", "Output Layer Size"))
+        self.structureLinearHiddenLayerSize_Label.setText(_translate("Dialog", "Hidden Layer Size"))
+        self.structureLinearInputLayerSize_Label.setText(_translate("Dialog", "Input Layer Size"))
+        self.structureLinearMake_Button.setText(_translate("Dialog", "Make"))
+        self.structureLinearHiddenLayerCount_Label.setText(_translate("Dialog", "x"))
+        self.structureWidget.setTabText(self.structureWidget.indexOf(self.basicStructureLinear_Tap), _translate("Dialog", "Linear"))
         self.customLayer_GroupBox.setTitle(_translate("Dialog", "Layer"))
         self.layerAdd_Button.setText(_translate("Dialog", "Add"))
         self.layerUnit_Label.setText(_translate("Dialog", "Unit"))
