@@ -233,6 +233,7 @@ class HNet_GUI:
         self.structure_Setup_UI.structureBPMake_Button.clicked.connect(self.Structure_Setup_UI_structureBPMake_Button_Clicked);
         self.structure_Setup_UI.structureBPTTMake_Button.clicked.connect(self.Structure_Setup_UI_structureBPTTMake_Button_Clicked);
         self.structure_Setup_UI.structureSRNMake_Button.clicked.connect(self.Structure_Setup_UI_structureSRNMake_Button_Clicked);
+        self.structure_Setup_UI.structureLinearMake_Button.clicked.connect(self.Structure_Setup_UI_structureLinearMake_Button_Clicked);
         self.structure_Setup_UI.layerAdd_Button.clicked.connect(self.Structure_Setup_UI_layerAdd_Button_Clicked);
         self.structure_Setup_UI.layerDelete_Button.clicked.connect(self.Structure_Setup_UI_layerDelete_Button_Clicked);
         self.structure_Setup_UI.connectionAdd_Button.clicked.connect(self.Structure_Setup_UI_connectionAdd_Button_Clicked);
@@ -709,6 +710,39 @@ class HNet_GUI:
         self.structure_Setup_UI.structureSRNInputLayerSize_LineEdit.setText("");
         self.structure_Setup_UI.structureSRNHiddenLayerSize_LineEdit.setText("");
         self.structure_Setup_UI.structureSRNOutputLayerSize_LineEdit.setText("");
+
+        self.Structure_Setup_UI_Structure_Changed();
+
+    def Structure_Setup_UI_structureLinearMake_Button_Clicked(self):
+        if self.structure_Setup_UI.structureLinearInputLayerSize_LineEdit.text() == "":
+            self.structure_Setup_UI.structureLinearInputLayerSize_LineEdit.setFocus();
+            return;
+        elif self.structure_Setup_UI.structureLinearHiddenLayerSize_LineEdit.text() == "":
+            self.structure_Setup_UI.structureLinearHiddenLayerSize_LineEdit.setFocus();
+            return;
+        elif self.structure_Setup_UI.structureLinearHiddenLayerCount_LineEdit.text() == "":
+            self.structure_Setup_UI.structureLinearHiddenLayerCount_LineEdit.setFocus();
+            return;
+        elif self.structure_Setup_UI.structureLinearOutputLayerSize_LineEdit.text() == "":
+            self.structure_Setup_UI.structureLinearOutputLayerSize_LineEdit.setFocus();
+            return;
+
+        hidden_Count = int(self.structure_Setup_UI.structureLinearHiddenLayerCount_LineEdit.text());
+
+        self.simulator.Structure_Layer_Assign(name="Input", unit=int(self.structure_Setup_UI.structureLinearInputLayerSize_LineEdit.text()), reset=True);
+        for hidden_Index in range(1, hidden_Count + 1):            
+            self.simulator.Structure_Layer_Assign(name="Hidden_{}".format(hidden_Index), unit=int(self.structure_Setup_UI.structureLinearHiddenLayerSize_LineEdit.text()), reset=True);
+        self.simulator.Structure_Layer_Assign(name="Output", unit=int(self.structure_Setup_UI.structureLinearOutputLayerSize_LineEdit.text()), reset=True);
+
+        self.simulator.Structure_Connection_Assign(name = "IH1", from_Layer_Name = "Input", to_Layer_Name = "Hidden_1");
+        for hidden_Index in range(1, hidden_Count):
+            self.simulator.Structure_Connection_Assign(name = "H{}H{}".format(hidden_Index, hidden_Index + 1), from_Layer_Name = "Hidden_{}".format(hidden_Index), to_Layer_Name = "Hidden_{}".format(hidden_Index + 1));        
+        self.simulator.Structure_Connection_Assign(name = "H{}O".format(hidden_Count), from_Layer_Name = "Hidden_{}".format(hidden_Count), to_Layer_Name = "Output");
+
+        self.structure_Setup_UI.structureLinearInputLayerSize_LineEdit.setText("");
+        self.structure_Setup_UI.structureLinearHiddenLayerSize_LineEdit.setText("");
+        self.structure_Setup_UI.structureLinearHiddenLayerCount_LineEdit.setText("");
+        self.structure_Setup_UI.structureLinearOutputLayerSize_LineEdit.setText("");
 
         self.Structure_Setup_UI_Structure_Changed();
 
