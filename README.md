@@ -49,5 +49,5 @@ This program is not guaranteed to work in python 2.x.
 
 For using, it need to install several modules on Python 3.x.
 
-pip install -r requirements.txt
+    pip install -r requirements.txt
 
