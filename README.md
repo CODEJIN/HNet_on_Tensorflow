@@ -49,15 +49,5 @@ This program is not guaranteed to work in python 2.x.
 
 For using, it need to install several modules on Python 3.x.
 
-<h2>1. Tensorflow</h2>
-
-<h3>GPU</h3>
-pip install tensorflow-gpu
-
-<h3>CPU only</h3>
-pip install tensorflow
-
-<h2>2. Matplotlib</h2>
-
-pip install matplotlib
+pip install -r requirements.txt
 
