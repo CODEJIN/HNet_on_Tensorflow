@@ -7,6 +7,7 @@ HNet_Core.py<br>
 HNet_Enum.py<br>
 HNet_GUI.py<br>
 HNet v1.0 Manual.pdf<br>
+requirements.txt<br>
 HNet_UI/__ init __.py<br>
 HNet_UI/About.py<br>
 HNet_UI/Image_Resources_rc.py<br>
@@ -32,6 +33,10 @@ Examples/SRN/SRN.HNet_Structure<br>
 Examples/SRN/MoreLess.txt<br>
 Examples/SRN/SRN.HNet_Process<br>
 Examples/SRN/SRN.HNet_LearningSetup<br>
+Examples/MLP/XOR5.HNet_Structure<br>
+Examples/MLP/XOR5.txt<br>
+Examples/MLP/XOR5.HNet_Process<br>
+Examples/MLP/XOR5.HNet_LearningSetup<br>
 Examples/Macro/BP.HNetGUI_Model_Data_for_Macro<br>
 Examples/Macro/BPTT.HNetGUI_Model_Data_for_Macro<br>
 Examples/Macro/SRN.HNetGUI_Model_Data_for_Macro<br>
@@ -49,15 +54,5 @@ This program is not guaranteed to work in python 2.x.
 
 For using, it need to install several modules on Python 3.x.
 
-<h2>1. Tensorflow</h2>
-
-<h3>GPU</h3>
-pip install tensorflow-gpu
-
-<h3>CPU only</h3>
-pip install tensorflow
-
-<h2>2. Matplotlib</h2>
-
-pip install matplotlib
+    pip install -r requirements.txt
 

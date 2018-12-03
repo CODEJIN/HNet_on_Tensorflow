@@ -33,28 +33,34 @@ from enum import Enum;
 
 class Order_Code(Enum):
     Input_Layer_Acitvation_Insert = 0;
-    Activation_Calculation_Sigmoid = 1;
-    Activation_Calculation_Softmax = 2;
-    Activation_Calculation_ReLU = 3;
-    Activation_Send = 4;
-    Output_Layer_Error_Calculation_Sigmoid = 5;
-    Output_Layer_Error_Calculation_Softmax = 6;
-    Hidden_Layer_Error_Calculation_Sigmoid = 7;
-    Hidden_Layer_Error_Calculation_ReLU = 8;
-    Error_Send = 9;
-    Activation_Extract = 10;
-    Bias_Renewal = 11;
-    Weight_Renewal = 12;
-    Layer_Duplication = 13;
-    Connection_Duplication = 14;
-    Transposed_Connection_Duplication = 15;
-    Bias_Equalization = 16;
-    Weight_Equalization = 17;    
-    Layer_Initialize = 18;
-    Cycle_Marker = 19
-    Uniform_Random_Activation_Insert = 20;
-    Normal_Random_Activation_Insert = 21;
-    End_and_Initialize = 22;
+    Activation_Calculation_Linear = 1;
+    Activation_Calculation_Sigmoid = 2;
+    Activation_Calculation_Softmax = 3;
+    Activation_Calculation_Tanh = 4;
+    Activation_Calculation_ReLU = 5;
+    Activation_Send = 6;
+    Output_Layer_Error_Calculation_Linear = 7;
+    Output_Layer_Error_Calculation_Sigmoid = 8;
+    Output_Layer_Error_Calculation_Softmax = 9;
+    Output_Layer_Error_Calculation_Tanh = 10;
+    Hidden_Layer_Error_Calculation_Linear = 11;
+    Hidden_Layer_Error_Calculation_Sigmoid = 12;
+    Hidden_Layer_Error_Calculation_Tanh = 13;
+    Hidden_Layer_Error_Calculation_ReLU = 14;
+    Error_Send = 15;
+    Activation_Extract = 16;
+    Bias_Renewal = 17;
+    Weight_Renewal = 18;
+    Layer_Duplication = 19;
+    Connection_Duplication = 20;
+    Transposed_Connection_Duplication = 21;
+    Bias_Equalization = 22;
+    Weight_Equalization = 23;    
+    Layer_Initialize = 24;
+    Cycle_Marker = 25;
+    Uniform_Random_Activation_Insert = 26;
+    Normal_Random_Activation_Insert = 27;
+    End_and_Initialize = 28;
 
 class Damage_Type(Enum):
     On = 0;

@@ -37,7 +37,7 @@ from tensorflow.python.client import device_lib;
 
 class HNet:
     def __init__(self):
-        self.tf_Session = tf.Session();
+        self.tf_Session = tf.Session(config=tf.ConfigProto(allow_soft_placement=True));
 
         self.config_Variables_Dict = {};
         self.layer_Information_Dict = {};
@@ -496,6 +496,15 @@ class HNet:
                             layer_Activation_Dict[layer_Name_List[0]] = tf.zeros(tf.shape(process["PlaceHolder_Dict"][order_Index]));
                         elif damage_Type == Damage_Type.Damaged:
                             layer_Activation_Dict[layer_Name_List[0]] = tf.clip_by_value(process["PlaceHolder_Dict"][order_Index] + tf.random_normal(tf.shape(process["PlaceHolder_Dict"][order_Index]), 0, SD), 0, 1) * process["PlaceHolder_Dict"]["Probability_Filter"];
+                            
+                    elif order_Code == Order_Code.Activation_Calculation_Linear:
+                        damage_Type, SD = process["Layer_Control_Dict"][layer_Name_List[0]];
+                        if damage_Type == Damage_Type.On:
+                            layer_Activation_Dict[layer_Name_List[0]] = ((layer_Activation_Stroage_Dict[layer_Name_List[0]] + self.biasMatrix_Dict[layer_Name_List[0]]) * self.config_Variables_Dict["Momentum"]) * process["PlaceHolder_Dict"]["Probability_Filter"];
+                        elif damage_Type == Damage_Type.Off:
+                            layer_Activation_Dict[layer_Name_List[0]] = tf.zeros(tf.shape(layer_Activation_Stroage_Dict[layer_Name_List[0]]));
+                        elif damage_Type == Damage_Type.Damaged:
+                            layer_Activation_Dict[layer_Name_List[0]] = ((layer_Activation_Stroage_Dict[layer_Name_List[0]] + self.biasMatrix_Dict[layer_Name_List[0]]) * self.config_Variables_Dict["Momentum"] + tf.random_normal(tf.shape(layer_Activation_Stroage_Dict[layer_Name_List[0]]), 0, SD)) * process["PlaceHolder_Dict"]["Probability_Filter"];
 
                     elif order_Code == Order_Code.Activation_Calculation_Sigmoid:
                         damage_Type, SD = process["Layer_Control_Dict"][layer_Name_List[0]];
@@ -514,6 +523,15 @@ class HNet:
                             layer_Activation_Dict[layer_Name_List[0]] = tf.zeros(tf.shape(layer_Activation_Stroage_Dict[layer_Name_List[0]]));
                         elif damage_Type == Damage_Type.Damaged:
                             layer_Activation_Dict[layer_Name_List[0]] = tf.clip_by_value(tf.nn.softmax(layer_Activation_Stroage_Dict[layer_Name_List[0]] + self.biasMatrix_Dict[layer_Name_List[0]]) + tf.random_normal(tf.shape(layer_Activation_Stroage_Dict[layer_Name_List[0]]), 0, SD), 0, 1) * process["PlaceHolder_Dict"]["Probability_Filter"];
+
+                    elif order_Code == Order_Code.Activation_Calculation_Tanh:
+                        damage_Type, SD = process["Layer_Control_Dict"][layer_Name_List[0]];
+                        if damage_Type == Damage_Type.On:
+                            layer_Activation_Dict[layer_Name_List[0]] = tf.tanh(layer_Activation_Stroage_Dict[layer_Name_List[0]] + self.biasMatrix_Dict[layer_Name_List[0]]) * process["PlaceHolder_Dict"]["Probability_Filter"];
+                        elif damage_Type == Damage_Type.Off:
+                            layer_Activation_Dict[layer_Name_List[0]] = tf.zeros(tf.shape(layer_Activation_Stroage_Dict[layer_Name_List[0]]));
+                        elif damage_Type == Damage_Type.Damaged:
+                            layer_Activation_Dict[layer_Name_List[0]] = tf.clip_by_value(tf.tanh(layer_Activation_Stroage_Dict[layer_Name_List[0]] + self.biasMatrix_Dict[layer_Name_List[0]]) + tf.random_normal(tf.shape(layer_Activation_Stroage_Dict[layer_Name_List[0]]), 0, SD), 0, np.inf) * process["PlaceHolder_Dict"]["Probability_Filter"];
 
                     elif order_Code == Order_Code.Activation_Calculation_ReLU:
                         damage_Type, SD = process["Layer_Control_Dict"][layer_Name_List[0]];
@@ -544,6 +562,10 @@ class HNet:
                             else:
                                 layer_Activation_Stroage_Dict[layer_Name_List[1]] += tf.matmul(layer_Activation_Dict[layer_Name_List[0]], self.weightMatrix_Dict[connection_Key] + tf.random_normal(tf.shape(self.weightMatrix_Dict[connection_Key]), 0, SD));
 
+                    elif order_Code == Order_Code.Output_Layer_Error_Calculation_Linear:
+                        process["PlaceHolder_Dict"][order_Index] = tf.placeholder(tf.float32);
+                        layer_Error_Dict[layer_Name_List[0]] = (process["PlaceHolder_Dict"][order_Index] - layer_Activation_Dict[layer_Name_List[0]]) * process["PlaceHolder_Dict"]["Probability_Filter"] * tf.clip_by_value(process["PlaceHolder_Dict"]["Cycle_Filter"] - current_Cycle, 0, 1);
+
                     elif order_Code == Order_Code.Output_Layer_Error_Calculation_Sigmoid:
                         process["PlaceHolder_Dict"][order_Index] = tf.placeholder(tf.float32);
                         layer_Error_Dict[layer_Name_List[0]] = (process["PlaceHolder_Dict"][order_Index] - layer_Activation_Dict[layer_Name_List[0]]) * layer_Activation_Dict[layer_Name_List[0]] * (1 - layer_Activation_Dict[layer_Name_List[0]]) * process["PlaceHolder_Dict"]["Probability_Filter"] * tf.clip_by_value(process["PlaceHolder_Dict"]["Cycle_Filter"] - current_Cycle, 0, 1);
@@ -552,11 +574,21 @@ class HNet:
                         process["PlaceHolder_Dict"][order_Index] = tf.placeholder(tf.float32);
                         layer_Error_Dict[layer_Name_List[0]] = (process["PlaceHolder_Dict"][order_Index] - layer_Activation_Dict[layer_Name_List[0]]) * process["PlaceHolder_Dict"]["Probability_Filter"] * tf.clip_by_value(process["PlaceHolder_Dict"]["Cycle_Filter"] - current_Cycle, 0, 1);
 
+                    elif order_Code == Order_Code.Output_Layer_Error_Calculation_Tanh:
+                        process["PlaceHolder_Dict"][order_Index] = tf.placeholder(tf.float32);
+                        layer_Error_Dict[layer_Name_List[0]] = (process["PlaceHolder_Dict"][order_Index] - layer_Activation_Dict[layer_Name_List[0]]) * (1 - tf.pow(layer_Activation_Dict[layer_Name_List[0]], 2)) * process["PlaceHolder_Dict"]["Probability_Filter"] * tf.clip_by_value(process["PlaceHolder_Dict"]["Cycle_Filter"] - current_Cycle, 0, 1);
+
+                    elif order_Code == Order_Code.Hidden_Layer_Error_Calculation_Linear:
+                        layer_Error_Dict[layer_Name_List[0]] = layer_Error_Stroage_Dict[layer_Name_List[0]] * process["PlaceHolder_Dict"]["Probability_Filter"] * tf.clip_by_value(process["PlaceHolder_Dict"]["Cycle_Filter"] - current_Cycle, 0, 1);
+
                     elif order_Code == Order_Code.Hidden_Layer_Error_Calculation_Sigmoid:
                         layer_Error_Dict[layer_Name_List[0]] = layer_Error_Stroage_Dict[layer_Name_List[0]] * layer_Activation_Dict[layer_Name_List[0]] * (1 - layer_Activation_Dict[layer_Name_List[0]]) * process["PlaceHolder_Dict"]["Probability_Filter"] * tf.clip_by_value(process["PlaceHolder_Dict"]["Cycle_Filter"] - current_Cycle, 0, 1);
 
+                    elif order_Code == Order_Code.Hidden_Layer_Error_Calculation_Tanh:
+                        layer_Error_Dict[layer_Name_List[0]] = layer_Error_Stroage_Dict[layer_Name_List[0]] * (1 - tf.pow(layer_Activation_Dict[layer_Name_List[0]], 2)) * process["PlaceHolder_Dict"]["Probability_Filter"] * tf.clip_by_value(process["PlaceHolder_Dict"]["Cycle_Filter"] - current_Cycle, 0, 1);
+
                     elif order_Code == Order_Code.Hidden_Layer_Error_Calculation_ReLU:
-                        layer_Error_Dict[layer_Name_List[0]] = layer_Error_Dict[layer_Name_List[0]] * tf.sign(layer_Activation_Dict[layer_Name_List[0]]) * process["PlaceHolder_Dict"]["Probability_Filter"] * tf.clip_by_value(process["PlaceHolder_Dict"]["Cycle_Filter"] - current_Cycle, 0, 1);
+                        layer_Error_Dict[layer_Name_List[0]] = layer_Error_Stroage_Dict[layer_Name_List[0]] * tf.sign(layer_Activation_Dict[layer_Name_List[0]]) * process["PlaceHolder_Dict"]["Probability_Filter"] * tf.clip_by_value(process["PlaceHolder_Dict"]["Cycle_Filter"] - current_Cycle, 0, 1);
 
                     elif order_Code == Order_Code.Error_Send:
                         connection_Name = self.Extract_Connection(layer_Name_List[1], layer_Name_List[0]);
@@ -879,7 +911,8 @@ class HNet:
             name_List = patternPack["Name"];
             probability_List = patternPack["Probability"].ravel();
             pattern_Cycle_List = patternPack["Cycle"].ravel();
-            cross_Entropy = -(np.mean(patternPack[pattern_Name] * np.log(raw_Data) + (1 - patternPack[pattern_Name]) * np.log(1 - raw_Data), axis = 1));
+            
+            cross_Entropy = -(np.mean(patternPack[pattern_Name] * np.log(raw_Data + 1e-8) + (1 - patternPack[pattern_Name]) * np.log(1 - raw_Data + 1e-8), axis = 1));
 
             for index in range(len(cross_Entropy)):
                 extract_Data_Row_List.append(
@@ -918,7 +951,7 @@ class HNet:
             name_List = patternPack["Name"];
             probability_List = patternPack["Probability"].ravel();
             pattern_Cycle_List = patternPack["Cycle"].ravel();
-            semantic_Stress = np.mean(raw_Data * np.log2(raw_Data) + (1 - raw_Data) * np.log2(1 - raw_Data) + 1, axis = 1);
+            semantic_Stress = np.mean(raw_Data * np.log2(raw_Data + 1e-8) + (1 - raw_Data) * np.log2(1 - raw_Data + 1e-8) + 1, axis = 1);
 
             for index in range(len(semantic_Stress)):
                 extract_Data_Row_List.append(
