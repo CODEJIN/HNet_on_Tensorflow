@@ -911,7 +911,8 @@ class HNet:
             name_List = patternPack["Name"];
             probability_List = patternPack["Probability"].ravel();
             pattern_Cycle_List = patternPack["Cycle"].ravel();
-            cross_Entropy = -(np.mean(patternPack[pattern_Name] * np.log(raw_Data) + (1 - patternPack[pattern_Name]) * np.log(1 - raw_Data), axis = 1));
+            
+            cross_Entropy = -(np.mean(patternPack[pattern_Name] * np.log(raw_Data + 1e-8) + (1 - patternPack[pattern_Name]) * np.log(1 - raw_Data + 1e-8), axis = 1));
 
             for index in range(len(cross_Entropy)):
                 extract_Data_Row_List.append(
@@ -950,7 +951,7 @@ class HNet:
             name_List = patternPack["Name"];
             probability_List = patternPack["Probability"].ravel();
             pattern_Cycle_List = patternPack["Cycle"].ravel();
-            semantic_Stress = np.mean(raw_Data * np.log2(raw_Data) + (1 - raw_Data) * np.log2(1 - raw_Data) + 1, axis = 1);
+            semantic_Stress = np.mean(raw_Data * np.log2(raw_Data + 1e-8) + (1 - raw_Data) * np.log2(1 - raw_Data + 1e-8) + 1, axis = 1);
 
             for index in range(len(semantic_Stress)):
                 extract_Data_Row_List.append(

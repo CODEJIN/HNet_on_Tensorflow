@@ -20,7 +20,7 @@ from HNet_Enum import *;
 from HNet_Core import *;
 from HNet_UI import *;
 import numpy as np;
-import sys;
+import os, sys;
 from enum import Enum;
 from PyQt5 import QtCore, QtGui, QtWidgets;
 import matplotlib;
@@ -30,8 +30,10 @@ from matplotlib.figure import Figure;
 import _thread as thread;
 import tensorflow as tf;
 from tensorflow.python.client import device_lib;
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 import _pickle as pickle;
 from copy import deepcopy
+
 
 
 class Progress_Display_Canvas(FigureCanvas):    #Refer: https://www.boxcontrol.net/embedding-matplotlib-plot-on-pyqt5-gui.html
@@ -39,9 +41,8 @@ class Progress_Display_Canvas(FigureCanvas):    #Refer: https://www.boxcontrol.n
         self.fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = self.fig.add_subplot(111)
         # We want the axes cleared every time plot() is called
-        self.axes.hold(False)
-        #self.compute_initial_figure()
-
+        self.axes.clear();
+        
         FigureCanvas.__init__(self, self.fig)
         self.setParent(parent)
 
@@ -53,7 +54,7 @@ class Progress_Display_Canvas(FigureCanvas):    #Refer: https://www.boxcontrol.n
     def Update_Figure(self, xTicks, averaged_Result_Array, yAxis):
         self.fig.clear();
         self.axes = self.fig.add_subplot(111);
-        self.axes.hold(False);
+        self.axes.clear();
 
         self.axes.plot(xTicks, averaged_Result_Array, 'black');
         self.axes.set_xlim([0, np.max(xTicks)]);
@@ -66,7 +67,7 @@ class Progress_Display_Canvas(FigureCanvas):    #Refer: https://www.boxcontrol.n
     def Update_Figure_using_Cycle(self, xTicks, averaged_Result_List, yAxis, max_Cycle):
         self.fig.clear();
         self.axes = self.fig.add_subplot(111);
-        self.axes.hold(False);
+        self.axes.clear();
 
         imShow = self.axes.imshow(averaged_Result_List, interpolation='nearest', vmin=yAxis[0], vmax=yAxis[1], aspect='auto', cmap="coolwarm");
         self.fig.colorbar(imShow);
@@ -81,8 +82,7 @@ class Weight_Display_Canvas(FigureCanvas):    #Refer: https://www.boxcontrol.net
         self.fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = self.fig.add_subplot(111)
         # We want the axes cleared every time plot() is called
-        self.axes.hold(False)
-        #self.compute_initial_figure()
+        self.axes.clear();
 
         FigureCanvas.__init__(self, self.fig)
         self.setParent(parent)
@@ -96,7 +96,7 @@ class Weight_Display_Canvas(FigureCanvas):    #Refer: https://www.boxcontrol.net
     def Update_Figure(self, fromLayerName, toLayerName, weightMatrix):
         self.fig.clear();
         self.axes = self.fig.add_subplot(111);
-        self.axes.hold(False);
+        self.axes.clear();
 
         #imShow = self.axes.imshow(averaged_Result_List, interpolation='nearest', vmin=yAxis[0], vmax=yAxis[1], cmap="coolwarm");
         imShow = self.axes.imshow(weightMatrix, interpolation='nearest', aspect='auto', cmap="coolwarm");
@@ -108,18 +108,6 @@ class Weight_Display_Canvas(FigureCanvas):    #Refer: https://www.boxcontrol.net
 
 class HNet_GUI:
     def __init__(self):
-        # guiFont = QtGui.QFont();
-        # guiFont.setFamily('Arial')
-        # guiFont.setFixedPitch(True)
-        # if sys.platform == "win32":
-        #     guiFont.setPointSize(8);
-        # elif sys.platform in ["linux", "linux2"]:
-        #     guiFont.setPointSize(7);
-        # elif sys.platform == "darwin":
-        #     guiFont.setFamily("Lucida Grande");
-        #     guiFont.setPointSize(11);
-        # QtWidgets.QApplication.setFont(guiFont);
-
         self.simulator = HNet();
         app = QtWidgets.QApplication(sys.argv)
         self.QT_Windows_Initialize();
@@ -1161,7 +1149,7 @@ class HNet_GUI:
             self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Sigmoid, [hidden_Layer], None, None));
         elif self.process_Setup_UI.bpHiddenTypeTanh_RadioButton.isChecked():
             self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Tanh, [hidden_Layer], None, None));
-        elif self.process_Setup_UI.bpHiddenTypeRelu_RadioButton.isChecked():
+        elif self.process_Setup_UI.bpHiddenTypeReLU_RadioButton.isChecked():
             self.current_Process_Order_List.append((Order_Code.Activation_Calculation_ReLU, [hidden_Layer], None, None));        
         self.current_Process_Order_List.append((Order_Code.Activation_Send, [hidden_Layer, output_Layer], None, None));
         if self.process_Setup_UI.bpOutputTypeLinear_RadioButton.isChecked():
@@ -1183,7 +1171,7 @@ class HNet_GUI:
             self.current_Process_Order_List.append((Order_Code.Hidden_Layer_Error_Calculation_Sigmoid, [hidden_Layer], None, None));
         elif self.process_Setup_UI.bpHiddenTypeTanh_RadioButton.isChecked():
             self.current_Process_Order_List.append((Order_Code.Hidden_Layer_Error_Calculation_Tanh, [hidden_Layer], None, None));
-        elif self.process_Setup_UI.bpHiddenTypeRelu_RadioButton.isChecked():
+        elif self.process_Setup_UI.bpHiddenTypeReLU_RadioButton.isChecked():
             self.current_Process_Order_List.append((Order_Code.Hidden_Layer_Error_Calculation_ReLU, [hidden_Layer], None, None));
         self.current_Process_Order_List.append((Order_Code.Weight_Renewal, None, [input_to_Hidden_Connection], None));
         self.current_Process_Order_List.append((Order_Code.Weight_Renewal, None, [hidden_to_Output_Connection], None));
@@ -1219,7 +1207,7 @@ class HNet_GUI:
             self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Sigmoid, [hidden_Layer], None, None));
         elif self.process_Setup_UI.bpHiddenTypeTanh_RadioButton.isChecked():
             self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Tanh, [hidden_Layer], None, None));
-        elif self.process_Setup_UI.bpHiddenTypeRelu_RadioButton.isChecked():
+        elif self.process_Setup_UI.bpHiddenTypeReLU_RadioButton.isChecked():
             self.current_Process_Order_List.append((Order_Code.Activation_Calculation_ReLU, [hidden_Layer], None, None));        
         self.current_Process_Order_List.append((Order_Code.Activation_Send, [hidden_Layer, output_Layer], None, None));
         if self.process_Setup_UI.bpOutputTypeLinear_RadioButton.isChecked():
@@ -1297,7 +1285,7 @@ class HNet_GUI:
                 self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Sigmoid, [hidden_Layer_List[index]], None, None));
             elif self.process_Setup_UI.bpttHiddenTypeTanh_RadioButton.isChecked():
                 self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Tanh, [hidden_Layer_List[index]], None, None));
-            elif self.process_Setup_UI.bpttHiddenTypeRelu_RadioButton.isChecked():
+            elif self.process_Setup_UI.bpttHiddenTypeReLU_RadioButton.isChecked():
                 self.current_Process_Order_List.append((Order_Code.Activation_Calculation_ReLU, [hidden_Layer_List[index]], None, None));
             self.current_Process_Order_List.append((Order_Code.Activation_Send, [hidden_Layer_List[index], hidden_Layer_List[index + 1]], None, None));        
         if self.process_Setup_UI.bpttHiddenTypeLinear_RadioButton.isChecked():
@@ -1306,7 +1294,7 @@ class HNet_GUI:
             self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Sigmoid, [hidden_Layer_List[-1]], None, None));
         elif self.process_Setup_UI.bpttHiddenTypeTanh_RadioButton.isChecked():
             self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Tanh, [hidden_Layer_List[-1]], None, None));
-        elif self.process_Setup_UI.bpttHiddenTypeRelu_RadioButton.isChecked():
+        elif self.process_Setup_UI.bpttHiddenTypeReLU_RadioButton.isChecked():
             self.current_Process_Order_List.append((Order_Code.Activation_Calculation_ReLU, [hidden_Layer_List[-1]], None, None));        
         self.current_Process_Order_List.append((Order_Code.Activation_Send, [hidden_Layer_List[-1], output_Layer], None, None));        
         if self.process_Setup_UI.bpttOutputTypeLinear_RadioButton.isChecked():
@@ -1329,7 +1317,7 @@ class HNet_GUI:
                 self.current_Process_Order_List.append((Order_Code.Hidden_Layer_Error_Calculation_Sigmoid, [hidden_Layer_List[index]], None, None));
             elif self.process_Setup_UI.bpttHiddenTypeTanh_RadioButton.isChecked():
                 self.current_Process_Order_List.append((Order_Code.Hidden_Layer_Error_Calculation_Tanh, [hidden_Layer_List[index]], None, None));
-            elif self.process_Setup_UI.bpttHiddenTypeRelu_RadioButton.isChecked():
+            elif self.process_Setup_UI.bpttHiddenTypeReLU_RadioButton.isChecked():
                 self.current_Process_Order_List.append((Order_Code.Hidden_Layer_Error_Calculation_ReLU, [hidden_Layer_List[index]], None, None));
             self.current_Process_Order_List.append((Order_Code.Error_Send, [hidden_Layer_List[index], hidden_Layer_List[index - 1]], None, None));
         if self.process_Setup_UI.bpttHiddenTypeLinear_RadioButton.isChecked():
@@ -1338,7 +1326,7 @@ class HNet_GUI:
             self.current_Process_Order_List.append((Order_Code.Hidden_Layer_Error_Calculation_Sigmoid, [hidden_Layer_List[0]], None, None));
         elif self.process_Setup_UI.bpttHiddenTypeTanh_RadioButton.isChecked():
             self.current_Process_Order_List.append((Order_Code.Hidden_Layer_Error_Calculation_Tanh, [hidden_Layer_List[0]], None, None));
-        elif self.process_Setup_UI.bpttHiddenTypeRelu_RadioButton.isChecked():
+        elif self.process_Setup_UI.bpttHiddenTypeReLU_RadioButton.isChecked():
             self.current_Process_Order_List.append((Order_Code.Hidden_Layer_Error_Calculation_ReLU, [hidden_Layer_List[0]], None, None));
         for input_to_Hidden_Connection in input_to_Hidden_Connection_List:
             self.current_Process_Order_List.append((Order_Code.Weight_Renewal, None, [input_to_Hidden_Connection], None));
@@ -1410,7 +1398,7 @@ class HNet_GUI:
                 self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Sigmoid, [hidden_Layer_List[index]], None, None));
             elif self.process_Setup_UI.bpttHiddenTypeTanh_RadioButton.isChecked():
                 self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Tanh, [hidden_Layer_List[index]], None, None));
-            elif self.process_Setup_UI.bpttHiddenTypeRelu_RadioButton.isChecked():
+            elif self.process_Setup_UI.bpttHiddenTypeReLU_RadioButton.isChecked():
                 self.current_Process_Order_List.append((Order_Code.Activation_Calculation_ReLU, [hidden_Layer_List[index]], None, None));
             self.current_Process_Order_List.append((Order_Code.Activation_Send, [hidden_Layer_List[index], hidden_Layer_List[index + 1]], None, None));
         if self.process_Setup_UI.bpttHiddenTypeLinear_RadioButton.isChecked():
@@ -1419,7 +1407,7 @@ class HNet_GUI:
             self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Sigmoid, [hidden_Layer_List[-1]], None, None));
         elif self.process_Setup_UI.bpttHiddenTypeTanh_RadioButton.isChecked():
             self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Tanh, [hidden_Layer_List[-1]], None, None));
-        elif self.process_Setup_UI.bpttHiddenTypeRelu_RadioButton.isChecked():
+        elif self.process_Setup_UI.bpttHiddenTypeReLU_RadioButton.isChecked():
             self.current_Process_Order_List.append((Order_Code.Activation_Calculation_ReLU, [hidden_Layer_List[-1]], None, None));    
         self.current_Process_Order_List.append((Order_Code.Activation_Send, [hidden_Layer_List[-1], output_Layer], None, None));
         if self.process_Setup_UI.bpttOutputTypeLinear_RadioButton.isChecked():
@@ -1497,7 +1485,7 @@ class HNet_GUI:
                 self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Sigmoid, [hidden_Layer], None, None));
             elif self.process_Setup_UI.srnHiddenTypeTanh_RadioButton.isChecked():
                 self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Tanh, [hidden_Layer], None, None));
-            elif self.process_Setup_UI.srnHiddenTypeRelu_RadioButton.isChecked():
+            elif self.process_Setup_UI.srnHiddenTypeReLU_RadioButton.isChecked():
                 self.current_Process_Order_List.append((Order_Code.Activation_Calculation_ReLU, [hidden_Layer], None, None));
             self.current_Process_Order_List.append((Order_Code.Activation_Send, [hidden_Layer, output_Layer], None, None));
             if self.process_Setup_UI.srnOutputTypeLinear_RadioButton.isChecked():
@@ -1519,7 +1507,7 @@ class HNet_GUI:
                 self.current_Process_Order_List.append((Order_Code.Hidden_Layer_Error_Calculation_Sigmoid, [hidden_Layer], None, None));
             elif self.process_Setup_UI.srnHiddenTypeTanh_RadioButton.isChecked():
                 self.current_Process_Order_List.append((Order_Code.Hidden_Layer_Error_Calculation_Tanh, [hidden_Layer], None, None));
-            elif self.process_Setup_UI.srnHiddenTypeRelu_RadioButton.isChecked():
+            elif self.process_Setup_UI.srnHiddenTypeReLU_RadioButton.isChecked():
                 self.current_Process_Order_List.append((Order_Code.Hidden_Layer_Error_Calculation_ReLU, [hidden_Layer], None, None));
             self.current_Process_Order_List.append((Order_Code.Weight_Renewal, None, [input_to_Hidden_Connection], None));
             if cycle != 0:
@@ -1575,7 +1563,7 @@ class HNet_GUI:
                 self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Sigmoid, [hidden_Layer], None, None));
             elif self.process_Setup_UI.srnHiddenTypeTanh_RadioButton.isChecked():
                 self.current_Process_Order_List.append((Order_Code.Activation_Calculation_Tanh, [hidden_Layer], None, None));
-            elif self.process_Setup_UI.srnHiddenTypeRelu_RadioButton.isChecked():
+            elif self.process_Setup_UI.srnHiddenTypeReLU_RadioButton.isChecked():
                 self.current_Process_Order_List.append((Order_Code.Activation_Calculation_ReLU, [hidden_Layer], None, None));
             self.current_Process_Order_List.append((Order_Code.Activation_Send, [hidden_Layer, output_Layer], None, None));
             if self.process_Setup_UI.srnOutputTypeLinear_RadioButton.isChecked():
@@ -3573,7 +3561,7 @@ class HNet_GUI:
 
             if not total_Epoch in raw_Cross_Entropy_Dict.keys():
                 raw_Cross_Entropy_Dict[total_Epoch] = [];
-            raw_Cross_Entropy_Dict[total_Epoch].append(-(np.mean(target_Pattern * np.log(raw_Data) + (1 - target_Pattern) * np.log(1 - raw_Data))));
+            raw_Cross_Entropy_Dict[total_Epoch].append(-(np.mean(target_Pattern * np.log(raw_Data + 1e-8) + (1 - target_Pattern) * np.log(1 - raw_Data + 1e-8))));
 
         xTick_List = self.Learning_UI_Simulator_Extract_All_Test_Timing_for_Graph();
 
@@ -3596,7 +3584,7 @@ class HNet_GUI:
 
             if not total_Epoch in raw_Semantic_Stress_Dict.keys():
                 raw_Semantic_Stress_Dict[total_Epoch] = [];
-            raw_Semantic_Stress_Dict[total_Epoch].append(np.mean(raw_Data * np.log2(raw_Data) + (1-raw_Data) * np.log2(1-raw_Data) + 1));
+            raw_Semantic_Stress_Dict[total_Epoch].append(np.mean(raw_Data * np.log2(raw_Data + 1e-8) + (1-raw_Data) * np.log2(1-raw_Data + 1e-8) + 1));
 
         xTick_List = self.Learning_UI_Simulator_Extract_All_Test_Timing_for_Graph();
 
