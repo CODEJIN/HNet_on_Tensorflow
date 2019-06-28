@@ -4,6 +4,7 @@
 
 HNet on Tensorflow is composed of the following files,
 
+<pre>
 HNet_Core.py
 HNet_Enum.py
 HNet_GUI.py
@@ -19,9 +20,11 @@ HNet_UI/Main.py
 HNet_UI/PatternSetup.py
 HNet_UI/ProcessSetup.py
 HNet_UI/StructureSetup.py
+</pre>
 
 In addition, there are some example files in the 'examples' folder.
 
+<pre>
 Examples/BP/XOR5.HNet_Structure
 Examples/BP/XOR5.txt
 Examples/BP/XOR5.HNet_Process
@@ -41,12 +44,13 @@ Examples/MLP/XOR5.HNet_LearningSetup
 Examples/Macro/BP.HNetGUI_Model_Data_for_Macro
 Examples/Macro/BPTT.HNetGUI_Model_Data_for_Macro
 Examples/Macro/SRN.HNetGUI_Model_Data_for_Macro
+</pre>
 
 # License
 
 The core and enum files are licensed under the [Apache License 2.0](LICENSE).
 
-THe GUI/UI-related files are licensed under the GPL 3.0 only.
+THe GUI/UI-related files are licensed under the [GPL 3.0 only](COPYING).
 
 # Compatibility
 
