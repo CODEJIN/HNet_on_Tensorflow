@@ -1,58 +1,68 @@
 # HNet on Tensorflow ver 0.9.1.0
 
-# File
-HNet on Tensorflow is constructed by the below files.
+# Files
 
-HNet_Core.py<br>
-HNet_Enum.py<br>
-HNet_GUI.py<br>
-HNet v1.0 Manual.pdf<br>
-requirements.txt<br>
-HNet_UI/__ init __.py<br>
-HNet_UI/About.py<br>
-HNet_UI/Image_Resources_rc.py<br>
-HNet_UI/Learning.py<br>
-HNet_UI/LearningSetup.py<br>
-HNet_UI/Macro.py<br>
-HNet_UI/Main.py<br>
-HNet_UI/PatternSetup.py<br>
-HNet_UI/ProcessSetup.py<br>
-HNet_UI/StructureSetup.py<br>
+HNet on Tensorflow is composed of the following files,
 
-In addition, there are some example files at the 'examples' folder.
+<pre>
+HNet_Core.py
+HNet_Enum.py
+HNet_GUI.py
+HNet v1.0 Manual.pdf
+requirements.txt
+HNet_UI/__ init __.py
+HNet_UI/About.py
+HNet_UI/Image_Resources_rc.py
+HNet_UI/Learning.py
+HNet_UI/LearningSetup.py
+HNet_UI/Macro.py
+HNet_UI/Main.py
+HNet_UI/PatternSetup.py
+HNet_UI/ProcessSetup.py
+HNet_UI/StructureSetup.py
+</pre>
 
-Examples/BP/XOR5.HNet_Structure<br>
-Examples/BP/XOR5.txt<br>
-Examples/BP/XOR5.HNet_Process<br>
-Examples/BP/XOR5.HNet_LearningSetup<br>
-Examples/BPTT/BPTT.HNet_Structure<br>
-Examples/BPTT/MoreLess.txt<br>
-Examples/BPTT/BPTT.HNet_Process<br>
-Examples/BPTT/BPTT.HNet_LearningSetup<br>
-Examples/SRN/SRN.HNet_Structure<br>
-Examples/SRN/MoreLess.txt<br>
-Examples/SRN/SRN.HNet_Process<br>
-Examples/SRN/SRN.HNet_LearningSetup<br>
-Examples/MLP/XOR5.HNet_Structure<br>
-Examples/MLP/XOR5.txt<br>
-Examples/MLP/XOR5.HNet_Process<br>
-Examples/MLP/XOR5.HNet_LearningSetup<br>
-Examples/Macro/BP.HNetGUI_Model_Data_for_Macro<br>
-Examples/Macro/BPTT.HNetGUI_Model_Data_for_Macro<br>
-Examples/Macro/SRN.HNetGUI_Model_Data_for_Macro<br>
+In addition, there are some example files in the 'examples' folder.
+
+<pre>
+Examples/BP/XOR5.HNet_Structure
+Examples/BP/XOR5.txt
+Examples/BP/XOR5.HNet_Process
+Examples/BP/XOR5.HNet_LearningSetup
+Examples/BPTT/BPTT.HNet_Structure
+Examples/BPTT/MoreLess.txt
+Examples/BPTT/BPTT.HNet_Process
+Examples/BPTT/BPTT.HNet_LearningSetup
+Examples/SRN/SRN.HNet_Structure
+Examples/SRN/MoreLess.txt
+Examples/SRN/SRN.HNet_Process
+Examples/SRN/SRN.HNet_LearningSetup
+Examples/MLP/XOR5.HNet_Structure
+Examples/MLP/XOR5.txt
+Examples/MLP/XOR5.HNet_Process
+Examples/MLP/XOR5.HNet_LearningSetup
+Examples/Macro/BP.HNetGUI_Model_Data_for_Macro
+Examples/Macro/BPTT.HNetGUI_Model_Data_for_Macro
+Examples/Macro/SRN.HNetGUI_Model_Data_for_Macro
+</pre>
 
 # License
-The lincense of core and enum file is belong to Apache License 2.0.<br>
-THe lincense of GUI and UI files is belong to GPL 3.0.<br>
+
+The core and enum files are licensed under the [Apache License 2.0](LICENSE).
+
+THe GUI/UI-related files are licensed under the [GPL 3.0 only](COPYING).
 
 # Compatibility
-This code was tested at Python 3.5 and Tensorflow 0.12.1.<br>
-The PyQT is used for the GUI.<br>
-This program is not guaranteed to work in python 2.x.
 
-# Pre installed for using
+This code was tested using Python 3.5 and Tensorflow 0.12.1.
 
-For using, it need to install several modules on Python 3.x.
+The PyQT is used for the GUI.
+
+This program is not guaranteed to work under Python 2.x.
+
+# Dependencies
+
+Several modules are required for running on Python 3.x.
 
     pip install -r requirements.txt
 
